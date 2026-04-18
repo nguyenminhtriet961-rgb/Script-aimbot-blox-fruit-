@@ -13,7 +13,10 @@ local VirtualInputManager = game:GetService("VirtualInputManager")
 local LocalPlayer = Players.LocalPlayer
 local Camera = Workspace.CurrentCamera
 local Mouse = LocalPlayer:GetMouse()
-
+-- XÓA BẢNG ĐEN THUI BỊ KẸT TỪ LẦN CHẠY TRƯỚC
+if game:GetService("CoreGui"):FindFirstChild("MTRIET_LoginAuth") then
+    game:GetService("CoreGui").MTRIET_LoginAuth:Destroy()
+end
 -- Biến toàn cục để các Tab giao tiếp với nhau
 _G.InvisOn = false
 _G.AuraOn = false
