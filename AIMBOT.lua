@@ -1,7 +1,7 @@
 --[[
 	👑 MTRIET VIP - THE FINAL VERSION 👑
 	Tích hợp: Aimbot, Hitbox, ESP, Time Machine, Ghost Xịn, Inf Jump, TP Tool
-	Yêu cầu: Chị Đại MinT (Dược 4) - Vui lòng gõ chậm lại!
+	Yêu cầu: Chị Đại MinT (Dược 4) - Đã fix link Key!
 ]]
 
 local HttpService = game:GetService("HttpService")
@@ -15,9 +15,9 @@ local Camera = Workspace.CurrentCamera
 local Mouse = LocalPlayer:GetMouse()
 
 -- ==============================================================================
--- 🔑 KEY SYSTEM (GitHub Gist của nhóc Triết)
+-- 🔑 KEY SYSTEM (Link cập nhật mới nhất)
 -- ==============================================================================
-local KeyURL = "https://gist.githubusercontent.com/nguyenminhtriet961-rgb/d7926f773d015bfd58af1e0640b50350/raw"
+local KeyURL = "https://gist.githubusercontent.com/nguyenminhtriet961-rgb/d7926f773d015bfd58af1e0640b50350/raw/5493ed5b76c9a83aa2e12f2961f353d5c95c0fa9/keys.txt"
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
@@ -29,12 +29,25 @@ local Window = Rayfield:CreateWindow({
         Title = "XÁC THỰC MTRIET VIP",
         FileName = "MTRIET_Key_Final",
         SaveKey = true,
-        Key = {"MinT_VIP_2026"} 
+        Key = {"MinT_VIP_2026"} -- Vẫn giữ dự phòng, nhưng giờ link chính đã chạy
     }
 })
 
+-- Tự động lấy list 50 Key từ link mới
+pcall(function()
+    local rawText = game:HttpGet(KeyURL)
+    if rawText then
+        local newKeys = {"MinT_VIP_2026"}
+        for key in string.gmatch(rawText, "[^\r\n]+") do
+            table.insert(newKeys, key)
+        end
+        -- Ghi đè danh sách key của Rayfield
+        Window.KeySettings.Key = newKeys
+    end
+end)
+
 -- ==========================================
--- 👻 TAB: GHOST MODE (THEO CODE CHỊ GỬI)
+-- 👻 TAB: GHOST MODE & VẬN ĐỘNG
 -- ==========================================
 local TabGhost = Window:CreateTab("👻 Ghost & Invis")
 local invisOn = false
@@ -64,9 +77,11 @@ local function toggleInvis()
             local Weld = Instance.new("Weld", Seat)
             Weld.Part0, Weld.Part1 = Seat, char:FindFirstChild("Torso") or char:FindFirstChild("UpperTorso")
             Seat.CFrame = savedpos
+            Rayfield:Notify({Title = "Tàng Hình", Content = "Đã vào chế độ Ma (Phím Z)", Duration = 2})
         else
             setTransparency(char, 0)
             if workspace:FindFirstChild("invischair") then workspace.invischair:Destroy() end
+            Rayfield:Notify({Title = "Tàng Hình", Content = "Đã hiện hình", Duration = 2})
         end
     end
 end
@@ -248,8 +263,6 @@ TabOther:CreateButton({
 UserInputService.InputBegan:Connect(function(input, gpe)
     if gpe then return end
     if input.KeyCode == Enum.KeyCode.Z then toggleInvis()
-    elseif input.KeyCode == Enum.KeyCode.K then
-        -- Ẩn/Hiện Menu bằng phím K
     end
 end)
 
