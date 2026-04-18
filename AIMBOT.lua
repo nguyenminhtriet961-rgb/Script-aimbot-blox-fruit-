@@ -16,13 +16,23 @@ local Mouse = LocalPlayer:GetMouse()
 local KeyURL = "https://gist.githubusercontent.com/nguyenminhtriet961-rgb/d7926f773d015bfd58af1e0640b50350/raw/5493ed5b76c9a83aa2e12f2961f353d5c95c0fa9/keys.txt"
 
 -- ==============================================================================
--- 🔐 HỆ THỐNG ĐĂNG NHẬP
+-- 🔐 HỆ THỐNG ĐĂNG NHẬP (ĐÃ SỬA LỖI KHÔNG HIỆN MENU)
 -- ==============================================================================
 local LoginGui = Instance.new("ScreenGui")
 LoginGui.Name = "MTRIET_LoginAuth"
-pcall(function() LoginGui.Parent = CoreGui end)
+LoginGui.ResetOnSpawn = false -- Giữ menu không bị mất khi reset nhân vật
+
+-- Cơ chế chống lỗi tàng hình menu: Ưu tiên CoreGui, nếu xịt thì nhét vào PlayerGui
+local success = pcall(function() 
+    LoginGui.Parent = CoreGui 
+end)
+if not success then
+    LoginGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
+end
 
 local MainFrame = Instance.new("Frame", LoginGui)
+-- ... (Các phần ở dưới giữ nguyên)
+
 MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 MainFrame.Position = UDim2.new(0.5, -150, 0.5, -75)
 MainFrame.Size = UDim2.new(0, 300, 0, 160)
