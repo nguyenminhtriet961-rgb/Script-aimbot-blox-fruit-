@@ -260,7 +260,8 @@ if not AutoLoginSuccess then
     local MainFrame = Instance.new("Frame", LoginGui)
     MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
     MainFrame.Position = UDim2.new(0.5, -150, 0.5, -75)
-    MainFrame.Size = UDim2.new(0, 300, 160)
+    -- ĐÃ FIX LỖI THIẾU SỐ 0 Ở ĐÂY NÈ CHỊ ĐẠI:
+    MainFrame.Size = UDim2.new(0, 300, 0, 160) 
     Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 10)
 
     local Title = Instance.new("TextLabel", MainFrame)
@@ -311,7 +312,6 @@ if not AutoLoginSuccess then
                 local currentTime = os.time()
                 local expiryTime = currentTime + (24 * 60 * 60)
 
-                -- Kiểm tra hạn cũ
                 if isfile and readfile and isfile(fileName) then
                     local savedTime = tonumber(readfile(fileName))
                     if savedTime and currentTime > savedTime then
@@ -319,13 +319,12 @@ if not AutoLoginSuccess then
                         LoginBtn.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
                         return
                     else
-                        expiryTime = savedTime -- Giữ nguyên hạn cũ
+                        expiryTime = savedTime 
                     end
                 elseif writefile then
                     writefile(fileName, tostring(expiryTime))
                 end
 
-                -- Ghi đè file lưu Key hiện tại để mốt tự đăng nhập
                 if writefile then writefile(SavedKeyFile, key) end
 
                 LoadMainHub(expiryTime)
