@@ -8,8 +8,8 @@
 -- 🛑 ĐIỀN THÔNG TIN KEYAUTH CỦA CHỊ VÀO 3 DÒNG DƯỚI ĐÂY 🛑
 -- ==============================================================================
 local AppName = "Nguyenminhtriet961's Application" 
-local OwnerID = "CHỊ_DÁN_OWNER_ID_VÀO_ĐÂY" 
-local AppSecret = "CHỊ_DÁN_APP_SECRET_VÀO_ĐÂY" 
+local OwnerID = "lvS55SAKD3" 
+local AppSecret = "9445530cca8acedb89dcdb8cd00dfbec87f4d24eee2fbd59b5041babfe8cad06" 
 
 -- ==============================================================================
 -- 🔐 HỆ THỐNG ĐĂNG NHẬP (LOGIN GUI)
@@ -187,10 +187,19 @@ local function LoadMainHub()
     Rayfield:LoadConfiguration()
 end
 
--- Xử lý đăng nhập KeyAuth
+-- Xử lý đăng nhập KeyAuth (Đã Fix Lỗi Kẹt Nút)
 LoginBtn.MouseButton1Click:Connect(function()
     local key = KeyInput.Text
-    if key == "" then return end
+    
+    -- Xử lý mượt mà vụ khung nhập bị ảo do điện thoại
+    if key == "" or key:match("^%s*$") then 
+        LoginBtn.Text = "CHƯA NHẬP KEY KÌA!"
+        LoginBtn.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
+        task.wait(1.5)
+        LoginBtn.Text = "KÍCH HOẠT VIP"
+        LoginBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 215)
+        return 
+    end
     
     LoginBtn.Text = "ĐANG KIỂM TRA MÁY CHỦ..."
     LoginBtn.BackgroundColor3 = Color3.fromRGB(200, 150, 0)
