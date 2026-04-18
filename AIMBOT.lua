@@ -1,6 +1,6 @@
 --[[
     👑 MTRIET VIP - FULL GIST & LOCAL LOCK EDITION 👑
-    Đã được tối ưu hóa: Sửa Memory Leaks, Cleanup Events, Giảm CPU Usage.
+    Đã được tối ưu hóa: Sửa lỗi thiếu End, Fix Memory Leaks, Tối ưu ESP.
 ]]
 
 local CoreGui = game:GetService("CoreGui")
@@ -20,7 +20,7 @@ local KeyURL = "https://gist.githubusercontent.com/nguyenminhtriet961-rgb/d7926f
 -- ==============================================================================
 local LoginGui = Instance.new("ScreenGui")
 LoginGui.Name = "MTRIET_LoginAuth"
-pcall(function() LoginGui.Parent = CoreGui end) -- Tránh lỗi trên vài executor
+pcall(function() LoginGui.Parent = CoreGui end)
 
 local MainFrame = Instance.new("Frame", LoginGui)
 MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
@@ -58,10 +58,13 @@ LoginBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 LoginBtn.TextSize = 14
 Instance.new("UICorner", LoginBtn).CornerRadius = UDim.new(0, 6)
 
--- Các biến Connection để chống Leak Memory
-local NoclipConnection, HuntConnection, ESPConnection, AimbotConnection
+local NoclipConnection, HuntConnection, AimbotConnection
 local invisOn, ghostOn, ghostSpeed, noclipOn = false, false, 50, false
+local espLoop = false -- Dùng cho vòng lặp ESP tối ưu
 
+-- ==============================================================================
+-- 👑 GIAO DIỆN CHÍNH (MAIN HUB)
+-- ==============================================================================
 local function LoadMainHub()
     LoginGui:Destroy()
     local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
@@ -87,7 +90,7 @@ local function LoadMainHub()
             for _, p in ipairs(char:GetDescendants()) do if p:IsA("BasePart") and p.Name ~= "HumanoidRootPart" then p.Transparency = 0.5 end end
             local savedpos = char.HumanoidRootPart.CFrame
             task.wait()
-            char:MoveTo(Vector3.new(-25.95, 84, 3537.55))
+            char:MoveTo(Vector3.new(-25.95, 84, 3537.55)) -- Lưu ý: Tọa độ chết
             task.wait(0.15)
             
             local Seat = Instance.new("Seat")
@@ -102,7 +105,9 @@ local function LoadMainHub()
         else
             for _, p in ipairs(char:GetDescendants()) do if p:IsA("BasePart") and p.Name ~= "HumanoidRootPart" then p.Transparency = 0 end end
             if workspace:FindFirstChild("invischair") then workspace.invischair:Destroy() end
-            char.Humanoid:ChangeState(Enum.HumanoidStateType.GettingUp)
+            if char:FindFirstChild("Humanoid") then
+                char.Humanoid:ChangeState(Enum.HumanoidStateType.GettingUp)
+            end
             Rayfield:Notify({Title = "Tàng Hình", Content = "Đã hiện hình", Duration = 2})
         end
     end
@@ -161,10 +166,10 @@ local function LoadMainHub()
     TabCombat:CreateSlider({Name = "Size Hitbox", Range = {5, 50}, Increment = 1, CurrentValue = 15, Callback = function(v) SizeHB = v end})
     TabCombat:CreateToggle({Name = "Bật Hitbox Expander", CurrentValue = false, Callback = function(v) 
         _G.HB = v
-        if not v then -- Clean up khi tắt
+        if not v then
             for _, p in pairs(Players:GetPlayers()) do
                 if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
-                    p.Character.HumanoidRootPart.Size = Vector3.new(2, 2, 1) -- Size chuẩn
+                    p.Character.HumanoidRootPart.Size = Vector3.new(2, 2, 1)
                     p.Character.HumanoidRootPart.Transparency = 1
                     p.Character.HumanoidRootPart.CanCollide = true
                 end
@@ -187,24 +192,29 @@ local function LoadMainHub()
     end})
 
     -- ==========================================
-    -- 👁️ TAB: HIỂN THỊ (ESP HIGHLIGHT)
+    -- 👁️ TAB: HIỂN THỊ (ESP HIGHLIGHT) - ĐÃ TỐI ƯU
     -- ==========================================
     local TabESP = Window:CreateTab("👁️ ESP")
     TabESP:CreateToggle({Name = "Bật ESP Highlight", CurrentValue = false, Callback = function(v) 
+        espLoop = v
         if v then
-            ESPConnection = RunService.Heartbeat:Connect(function()
-                for _, p in pairs(Players:GetPlayers()) do 
-                    if p ~= LocalPlayer and p.Character then 
-                        local hl = p.Character:FindFirstChild("MTRIET_ESP") or Instance.new("Highlight")
-                        hl.Name = "MTRIET_ESP"
-                        hl.FillColor = p.TeamColor and p.TeamColor.Color or Color3.new(1,0,0)
-                        hl.FillTransparency = 0.5 
-                        hl.Parent = p.Character
-                    end 
+            task.spawn(function()
+                while espLoop do
+                    for _, p in pairs(Players:GetPlayers()) do 
+                        if p ~= LocalPlayer and p.Character then 
+                            if not p.Character:FindFirstChild("MTRIET_ESP") then
+                                local hl = Instance.new("Highlight")
+                                hl.Name = "MTRIET_ESP"
+                                hl.FillColor = p.TeamColor and p.TeamColor.Color or Color3.new(1,0,0)
+                                hl.FillTransparency = 0.5 
+                                hl.Parent = p.Character
+                            end
+                        end 
+                    end
+                    task.wait(1) -- Cập nhật 1 giây/lần thay vì 60 lần/giây để chống lag
                 end
             end)
         else
-            if ESPConnection then ESPConnection:Disconnect() ESPConnection = nil end
             for _, p in pairs(Players:GetPlayers()) do 
                 if p.Character and p.Character:FindFirstChild("MTRIET_ESP") then 
                     p.Character.MTRIET_ESP:Destroy() 
@@ -304,18 +314,17 @@ local function LoadMainHub()
         end
     end})
 
-  -- ==========================================
-    -- ⚔️ TAB: KILL AURA (PHIÊN BẢN TỐI ƯU HÓA CAO CẤP)
+    -- ==========================================
+    -- ⚔️ TAB: KILL AURA
     -- ==========================================
     local TabAura = Window:CreateTab("⚔️ Kill Aura")
     
     local AuraOn = false
-    local AuraRange = 1000 -- Tầm quét mặc định
-    local AuraAttackSpeed = 0.5 -- Tốc độ chém mặc định (giây)
+    local AuraRange = 1000
+    local AuraAttackSpeed = 0.5
     local AuraConnection
     local currentTarget = nil
 
-    -- Thêm tùy chỉnh Tầm Quét và Tốc Độ
     TabAura:CreateSlider({Name = "Tầm Quét Mục Tiêu (Range)", Range = {50, 5000}, Increment = 50, CurrentValue = 1000, Callback = function(v) AuraRange = v end})
     TabAura:CreateSlider({Name = "Tốc độ chém (Giây/Nhát)", Range = {0.1, 2}, Increment = 0.1, CurrentValue = 0.5, Callback = function(v) AuraAttackSpeed = v end})
 
@@ -323,20 +332,17 @@ local function LoadMainHub()
         AuraOn = Value
         
         if AuraOn then
-            -- 1. Kích hoạt tự động Tàng Hình
             if LocalPlayer.Character then
                 for _, p in ipairs(LocalPlayer.Character:GetDescendants()) do 
                     if p:IsA("BasePart") and p.Name ~= "HumanoidRootPart" then p.Transparency = 1 end 
                 end
             end
 
-            -- 2. Vòng lặp khóa CFrame (Bám sát liên tục mượt mà, chống rơi)
             AuraConnection = RunService.Heartbeat:Connect(function()
                 if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then return end
                 
                 local myPos = LocalPlayer.Character.HumanoidRootPart.Position
 
-                -- Tìm mục tiêu mới nếu mục tiêu hiện tại đã chết hoặc chưa có
                 if not currentTarget or not currentTarget:FindFirstChild("Humanoid") or currentTarget.Humanoid.Health <= 0 then
                     local shortest = AuraRange
                     local newTarget = nil
@@ -352,24 +358,16 @@ local function LoadMainHub()
                     currentTarget = newTarget
                 end
 
-                -- Nếu có mục tiêu, bám chặt lưng và bơm Hitbox
                 if currentTarget and currentTarget:FindFirstChild("HumanoidRootPart") then
                     local hrp = LocalPlayer.Character.HumanoidRootPart
-                    
-                    -- Dịch chuyển ra ngay sau lưng (cách 4 stud) và nhô cao lên xíu (2 stud) để không cạ đất
                     hrp.CFrame = currentTarget.HumanoidRootPart.CFrame * CFrame.new(0, 2, 4)
-                    
-                    -- CHỐNG RƠI: Khóa trọng lực của bản thân
                     hrp.Velocity = Vector3.zero 
-                    
-                    -- Bơm Hitbox đối thủ to ra để đảm bảo vũ khí chém trúng 100%
                     currentTarget.HumanoidRootPart.Size = Vector3.new(20, 20, 20)
                     currentTarget.HumanoidRootPart.Transparency = 0.8
                     currentTarget.HumanoidRootPart.CanCollide = false
                 end
             end)
 
-            -- 3. Vòng lặp Đánh & Đổi Vũ Khí (Chậm và chắc)
             task.spawn(function()
                 while AuraOn do
                     if currentTarget and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
@@ -380,12 +378,8 @@ local function LoadMainHub()
                         if #tools > 0 then
                             for _, tool in ipairs(tools) do
                                 if not AuraOn or not currentTarget then break end
-                                
-                                -- Trang bị và chém
                                 LocalPlayer.Character.Humanoid:EquipTool(tool)
                                 tool:Activate()
-                                
-                                -- Chờ một khoảng thời gian (theo thanh trượt) để game ghi nhận sát thương
                                 task.wait(AuraAttackSpeed) 
                             end
                         else
@@ -398,18 +392,15 @@ local function LoadMainHub()
             end)
 
         else
-            -- KHI TẮT AURA: Dọn dẹp tất cả
             if AuraConnection then AuraConnection:Disconnect() AuraConnection = nil end
             currentTarget = nil
             
-            -- Hiện hình lại
             if LocalPlayer.Character then
                 for _, p in ipairs(LocalPlayer.Character:GetDescendants()) do 
                     if p:IsA("BasePart") and p.Name ~= "HumanoidRootPart" then p.Transparency = 0 end 
                 end
             end
 
-            -- Trả lại Hitbox chuẩn cho toàn bộ server
             for _, p in pairs(Players:GetPlayers()) do
                 if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
                     p.Character.HumanoidRootPart.Size = Vector3.new(2, 2, 1)
@@ -419,9 +410,10 @@ local function LoadMainHub()
             end
         end
     end})
+end -- [ĐÃ FIX LỖI THIẾU END TẠI ĐÂY]
 
 -- ==========================================
--- LOGIC ĐĂNG NHẬP
+-- 🔐 LOGIC ĐĂNG NHẬP
 -- ==========================================
 LoginBtn.MouseButton1Click:Connect(function()
     local key = KeyInput.Text
@@ -450,7 +442,6 @@ LoginBtn.MouseButton1Click:Connect(function()
             local currentTime = os.time()
             local expiryTime = currentTime + (24 * 60 * 60)
 
-            -- An toàn khi kiểm tra File System
             if type(isfile) == "function" and type(readfile) == "function" and isfile(fileName) then
                 local savedTime = tonumber(readfile(fileName))
                 if savedTime and currentTime > savedTime then
@@ -467,7 +458,7 @@ LoginBtn.MouseButton1Click:Connect(function()
 
             LoadMainHub()
         else
-            LoginBtn.Text = "SAI KEY HOẶC KEY BỊ XÓA!"
+            LoginBtn.Text = "SAI KEY HOẶC BỊ XÓA!"
             LoginBtn.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
             task.wait(2)
             LoginBtn.Text = "KÍCH HOẠT VIP"
