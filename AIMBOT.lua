@@ -1,6 +1,6 @@
 --[[
-	👑 MTRIET VIP - FULL GIST & LOCAL LOCK EDITION 👑
-	Tích hợp: Aimbot, Hitbox, ESP, Time Machine, Ghost Xịn, Inf Jump, TP Tool
+	👑 MTRIET VIP - GIST AUTH & AUTO TP EDITION 👑
+	Tích hợp: Aimbot, Hitbox, ESP, Time Machine, Ghost Xịn, Auto TP (Bám đuôi)
 	Hệ thống bảo mật: GitHub Gist + Khóa 24h tại máy (Local Lock)
 ]]
 
@@ -13,7 +13,7 @@ local LocalPlayer = Players.LocalPlayer
 local Camera = Workspace.CurrentCamera
 local Mouse = LocalPlayer:GetMouse()
 
--- Link Gist chứa 50 Key của chị (Đã gắn sẵn link chuẩn lúc nãy)
+-- Link Gist chứa 50 Key của chị
 local KeyURL = "https://gist.githubusercontent.com/nguyenminhtriet961-rgb/d7926f773d015bfd58af1e0640b50350/raw/5493ed5b76c9a83aa2e12f2961f353d5c95c0fa9/keys.txt"
 
 -- ==============================================================================
@@ -70,6 +70,56 @@ local function LoadMainHub()
     })
 
     -- ==========================================
+    -- 🚀 TAB: SĂN NGƯỜI (CHỨC NĂNG MỚI CHỊ YÊU CẦU)
+    -- ==========================================
+    local TabHunt = Window:CreateTab("🚀 Săn Người")
+    local SelectedPlayer = nil
+    local LoopTP_On = false
+
+    -- Hàm lấy danh sách tên người chơi
+    local function GetPlayerNames()
+        local names = {}
+        for _, p in pairs(Players:GetPlayers()) do
+            if p ~= LocalPlayer then table.insert(names, p.Name) end
+        end
+        return names
+    end
+
+    local PlayerDropdown = TabHunt:CreateDropdown({
+        Name = "Chọn Người Chơi Đang Có Trong Máy Chủ",
+        Options = GetPlayerNames(),
+        CurrentOption = {""},
+        MultipleOptions = false,
+        Flag = "Dropdown_Players",
+        Callback = function(Option) SelectedPlayer = Option[1] end,
+    })
+
+    TabHunt:CreateButton({
+        Name = "🔄 Làm Mới Danh Sách Người Chơi",
+        Callback = function() PlayerDropdown:Refresh(GetPlayerNames(), true) end,
+    })
+
+    TabHunt:CreateToggle({
+        Name = "Bật Auto TP Liên Tục (Bám Đuôi)",
+        CurrentValue = false,
+        Callback = function(Value) LoopTP_On = Value end,
+    })
+
+    -- Vòng lặp bám đuôi siêu mượt
+    RunService.Heartbeat:Connect(function()
+        if LoopTP_On and SelectedPlayer then
+            local target = Players:FindFirstChild(SelectedPlayer)
+            if target and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
+                local char = LocalPlayer.Character
+                if char and char:FindFirstChild("HumanoidRootPart") then
+                    -- TP ra ngay phía sau lưng mục tiêu 3 stud để không bị kẹt vào người họ
+                    char.HumanoidRootPart.CFrame = target.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, 3)
+                end
+            end
+        end
+    end)
+
+    -- ==========================================
     -- 👻 TAB: GHOST MODE
     -- ==========================================
     local TabGhost = Window:CreateTab("👻 Ghost & Invis")
@@ -107,11 +157,10 @@ local function LoadMainHub()
     TabGhost:CreateToggle({Name = "Đi Xuyên Tường (Phím N)", CurrentValue = false, Callback = function(v) noclipOn = v; RunService.Stepped:Connect(function() if noclipOn and LocalPlayer.Character then for _, part in ipairs(LocalPlayer.Character:GetDescendants()) do if part:IsA("BasePart") then part.CanCollide = false end end end end) end})
 
     -- ==========================================
-    -- 🎯 TAB: COMBAT (AIMBOT & HITBOX)
+    -- 🎯 TAB: COMBAT & 👁️ TAB: ESP & ⏳ TAB: TIỆN ÍCH
     -- ==========================================
     local TabCombat = Window:CreateTab("🎯 Chiến Đấu")
     local AimOn = false
-
     TabCombat:CreateToggle({Name = "Aimbot (Auto Lock)", CurrentValue = false, Callback = function(v) AimOn = v end})
     RunService.RenderStepped:Connect(function()
         if AimOn then
@@ -133,32 +182,18 @@ local function LoadMainHub()
     TabCombat:CreateSlider({Name = "Size Hitbox", Range = {5, 50}, Increment = 1, CurrentValue = 15, Callback = function(v) SizeHB = v end})
     TabCombat:CreateToggle({Name = "Bật Hitbox Expander", CurrentValue = false, Callback = function(v) _G.HB = v; task.spawn(function() while _G.HB do for _, p in pairs(Players:GetPlayers()) do if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild("HumanoidRootPart") then p.Character.HumanoidRootPart.Size = Vector3.new(SizeHB, SizeHB, SizeHB); p.Character.HumanoidRootPart.Transparency = 0.7; p.Character.HumanoidRootPart.CanCollide = false end end task.wait(1) end end) end})
 
-    -- ==========================================
-    -- 👁️ TAB: HIỂN THỊ (ESP HIGHLIGHT)
-    -- ==========================================
     local TabESP = Window:CreateTab("👁️ ESP")
     local ESP_On = false
     TabESP:CreateToggle({Name = "Bật ESP Highlight", CurrentValue = false, Callback = function(v) ESP_On = v end})
     task.spawn(function() while true do if ESP_On then for _, p in pairs(Players:GetPlayers()) do if p ~= LocalPlayer and p.Character then local hl = p.Character:FindFirstChild("MTRIET_ESP") or Instance.new("Highlight", p.Character); hl.Name = "MTRIET_ESP"; hl.FillColor = p.TeamColor.Color; hl.FillTransparency = 0.5 end end else for _, p in pairs(Players:GetPlayers()) do if p.Character and p.Character:FindFirstChild("MTRIET_ESP") then p.Character.MTRIET_ESP:Destroy() end end end task.wait(1) end end)
 
-    -- ==========================================
-    -- ⏳ TAB: TIỆN ÍCH (TIME MACHINE & TP)
-    -- ==========================================
     local TabOther = Window:CreateTab("⏳ Tiện Ích")
-    local RecData, isRec = {}, false
-
-    TabOther:CreateToggle({Name = "Ghi Hình Hành Động", CurrentValue = false, Callback = function(v) isRec = v; if v then RecData = {} task.spawn(function() while isRec do if LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then table.insert(RecData, LocalPlayer.Character.HumanoidRootPart.CFrame) end task.wait(0.05) end end) end end})
-    TabOther:CreateButton({Name = "Phát Lại (Replay)", Callback = function() for i = 1, #RecData do LocalPlayer.Character.HumanoidRootPart.CFrame = RecData[i] task.wait(0.05) end end})
-    
     local InfJump = false
     TabOther:CreateToggle({Name = "Nhảy Vô Tận", CurrentValue = false, Callback = function(v) InfJump = v end})
     UserInputService.JumpRequest:Connect(function() if InfJump then LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping) end end)
 
     TabOther:CreateButton({Name = "Lấy Gậy Dịch Chuyển (TP Tool)", Callback = function() local Tool = Instance.new("Tool"); Tool.Name = "Gậy TP VIP"; Tool.RequiresHandle = false; Tool.Parent = LocalPlayer.Backpack; Tool.Activated:Connect(function() LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(Mouse.Hit.Position + Vector3.new(0,3,0)) end) end})
 
-    -- ==========================================
-    -- PHÍM TẮT HỖ TRỢ Z B N
-    -- ==========================================
     UserInputService.InputBegan:Connect(function(input, gpe)
         if gpe then return end
         if input.KeyCode == Enum.KeyCode.Z then toggleInvis()
@@ -227,3 +262,64 @@ LoginBtn.MouseButton1Click:Connect(function()
         LoginBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 215)
     end
 end)
+-- ==========================================
+    -- 🚀 TAB: SĂN NGƯỜI (AUTO TP BÁM ĐUÔI)
+    -- ==========================================
+    local TabHunt = Window:CreateTab("🚀 Săn Người")
+    local SelectedPlayer = nil
+    local LoopTP_On = false
+
+    -- Hàm lấy danh sách tên người chơi
+    local function GetPlayerNames()
+        local names = {}
+        for _, p in pairs(game:GetService("Players"):GetPlayers()) do
+            if p ~= game:GetService("Players").LocalPlayer then 
+                table.insert(names, p.Name) 
+            end
+        end
+        return names
+    end
+
+    -- Khung thả xuống để chọn người
+    local PlayerDropdown = TabHunt:CreateDropdown({
+        Name = "Chọn Người Chơi Đang Có Trong Máy Chủ",
+        Options = GetPlayerNames(),
+        CurrentOption = {""},
+        MultipleOptions = false,
+        Flag = "Dropdown_Players",
+        Callback = function(Option) 
+            SelectedPlayer = Option[1] 
+        end,
+    })
+
+    -- Nút làm mới lỡ có người mới vào server
+    TabHunt:CreateButton({
+        Name = "🔄 Làm Mới Danh Sách Người",
+        Callback = function() 
+            PlayerDropdown:Refresh(GetPlayerNames(), true) 
+        end,
+    })
+
+    -- Công tắc bật tắt TP liên tục
+    TabHunt:CreateToggle({
+        Name = "Bật Auto TP Liên Tục (Bám Đuôi)",
+        CurrentValue = false,
+        Callback = function(Value) 
+            LoopTP_On = Value 
+        end,
+    })
+
+    -- Vòng lặp bám đuôi siêu mượt bám sát lưng 3 stud
+    game:GetService("RunService").Heartbeat:Connect(function()
+        if LoopTP_On and SelectedPlayer then
+            local target = game:GetService("Players"):FindFirstChild(SelectedPlayer)
+            local LocalPlayer = game:GetService("Players").LocalPlayer
+            if target and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
+                local char = LocalPlayer.Character
+                if char and char:FindFirstChild("HumanoidRootPart") then
+                    -- TP ra ngay phía sau lưng mục tiêu 3 stud để không bị kẹt vào người họ
+                    char.HumanoidRootPart.CFrame = target.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, 3)
+                end
+            end
+        end
+    end)
