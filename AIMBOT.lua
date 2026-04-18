@@ -323,3 +323,168 @@ end)
             end
         end
     end)
+-- ==========================================
+    -- ⚔️ TAB: KILL AURA (ĐẤU TRƯỜNG PHÉP THUẬT)
+    -- ==========================================
+    local TabAura = Window:CreateTab("⚔️ Kill Aura (Auto Đánh)")
+    local AuraOn = false
+    
+    -- Nút bật tắt chế độ chém liên hoàn
+    TabAura:CreateToggle({
+        Name = "Bật Kill Aura (Đánh Thường Không Kẹt Chuột)",
+        CurrentValue = false,
+        Callback = function(Value)
+            AuraOn = Value
+        end,
+    })
+
+    -- Vòng lặp lõi của Aura
+    task.spawn(function()
+        while task.wait(0.05) do -- Tốc độ quét cực nhanh
+            if AuraOn and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                -- 1. Tìm mục tiêu ngẫu nhiên ở gần (trong bán kính 50 stud)
+                local target = nil
+                local shortestDistance = 50 
+                local myPos = LocalPlayer.Character.HumanoidRootPart.Position
+                
+                for _, p in pairs(Players:GetPlayers()) do
+                    if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild("HumanoidRootPart") and p.Character:FindFirstChild("Humanoid") and p.Character.Humanoid.Health > 0 then
+                        local dist = (p.Character.HumanoidRootPart.Position - myPos).Magnitude
+                        if dist < shortestDistance then
+                            shortestDistance = dist
+                            target = p.Character
+                        end
+                    end
+                end
+
+                -- 2. Dịch chuyển và xả skill
+                if target then
+                    -- TP ra thẳng sau lưng nó để tránh đòn
+                    LocalPlayer.Character.HumanoidRootPart.CFrame = target.HumanoidRootPart.CFrame * CFrame.new(0, 0, 3)
+                    
+                    -- 3. Quét toàn bộ vũ khí/skill đang có và xả liên tục
+                    local tools = {}
+                    -- Gom đồ trong Balo
+                    for _, item in ipairs(LocalPlayer.Backpack:GetChildren()) do
+                        if item:IsA("Tool") then table.insert(tools, item) end
+                    end
+                    -- Gom đồ đang cầm trên tay
+                    for _, item in ipairs(LocalPlayer.Character:GetChildren()) do
+                        if item:IsA("Tool") then table.insert(tools, item) end
+                    end
+
+                    -- Cơ chế Lách Delay & Không Kẹt Chuột
+                    if #tools > 0 then
+                        for _, tool in ipairs(tools) do
+                            if not AuraOn then break end
+                            -- Tự động chuyển qua vũ khí số 1, 2, 3...
+                            LocalPlayer.Character.Humanoid:EquipTool(tool)
+                            
+                            -- Lệnh ":Activate()" này xả chiêu thẳng vào hệ thống game
+                            -- KHÔNG can thiệp vào con chuột vật lý của chị -> Chị vẫn xoay camera bình thường!
+                            tool:Activate() 
+                            
+                            -- Đợi xíu để chiêu kịp tung ra trước khi đổi món khác
+                            task.wait(0.05) 
+                        end
+                    end
+                end
+            end
+        end
+    end)
+-- ==========================================
+-- 🛡️ CHỨC NĂNG ANTI-AFK (CHỐNG VĂNG GAME)
+-- ==========================================
+local VirtualUser = game:GetService("VirtualUser")
+LocalPlayer.Idled:Connect(function()
+    VirtualUser:CaptureController()
+    VirtualUser:ClickButton2(Vector2.new())
+    print("Đã ngăn chặn AFK thành công!")
+end)
+-- ==========================================
+    -- 💎 TAB: SIÊU CẤP TỰ ĐỘNG (FULL LOGIC)
+    -- ==========================================
+    local TabSuper = Window:CreateTab("💎 Siêu Cấp Tự Động")
+    local AutoAll = false
+
+    TabSuper:CreateToggle({
+        Name = "Bật Chế Độ Tự Động Toàn Phần",
+        CurrentValue = false,
+        Callback = function(v) AutoAll = v end,
+    })
+
+    -- Vòng lặp điều khiển thông minh
+    task.spawn(function()
+        while task.wait(0.3) do
+            if AutoAll and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                
+                -- 1. ƯU TIÊN SỐ 1: KIỂM TRA BẢNG YES/NO (VÀO TRẬN ĐẤU)
+                local playerGui = LocalPlayer:FindFirstChild("PlayerGui")
+                local foundInvite = false
+                if playerGui then
+                    for _, v in pairs(playerGui:GetDescendants()) do
+                        -- Quét tìm nút Yes hoặc Accept đang hiện trên màn hình
+                        if v:IsA("TextButton") and (v.Text == "Yes" or v.Text == "Accept") and v.Visible and v.Parent.Visible then
+                            foundInvite = true
+                            -- Giả lập bấm nút
+                            local pos = v.AbsolutePosition
+                            local size = v.AbsoluteSize
+                            game:GetService("VirtualUser"):ClickButton1(Vector2.new(pos.X + size.X/2, pos.Y + size.Y/2))
+                            
+                            -- Thông báo vào trận
+                            Rayfield:Notify({Title = "Đấu Trường", Content = "Đã chấp nhận thách đấu! Bật Aura càn quét!", Duration = 3})
+                            
+                            -- Bật Kill Aura ngay lập tức khi vào trận
+                            _G.AuraOn = true
+                            break
+                        end
+                    end
+                end
+
+                -- 2. TRƯỜNG HỢP BÌNH THƯỜNG (KHI KHÔNG CÓ BẢNG MỜI)
+                if not foundInvite then
+                    
+                    -- A. QUÉT LINH HỒN (SOUULS) - Ưu tiên lượm trước
+                    local soul = nil
+                    for _, item in pairs(workspace:GetChildren()) do
+                        if item.Name == "Soul" or item:FindFirstChild("Soul") then
+                            soul = item break
+                        end
+                    end
+
+                    if soul then
+                        -- Tắt tàng hình để nhặt đồ (theo ý chị)
+                        if _G.InvisOn then _G.ToggleInvis() end 
+                        LocalPlayer.Character.HumanoidRootPart.CFrame = soul.CFrame
+                        task.wait(0.1)
+                        game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.E, false, game)
+                        task.wait(0.1)
+                        game:GetService("VirtualInputManager"):SendKeyEvent(false, Enum.KeyCode.E, false, game)
+                    
+                    else
+                        -- B. QUÉT KIM CƯƠNG (DIAMONDS)
+                        local diamond = nil
+                        for _, item in pairs(workspace:GetDescendants()) do
+                            if item.Name == "Diamond" or item.Name == "DiamondDrop" then
+                                diamond = item break
+                            end
+                        end
+
+                        if diamond then
+                            -- Nhặt kim cương thì bật tàng hình cho an toàn
+                            if not _G.InvisOn then _G.ToggleInvis() end 
+                            LocalPlayer.Character.HumanoidRootPart.CFrame = diamond.CFrame
+                            task.wait(0.2)
+                        
+                        else
+                            -- C. QUÉT NGƯỜI CHƠI (KILL PLAYERS)
+                            -- Nếu không có đồ để lượm thì đi săn người
+                            _G.AuraOn = true
+                            -- Luôn tàng hình khi săn người cho an toàn
+                            if not _G.InvisOn then _G.ToggleInvis() end 
+                        end
+                    end
+                end
+            end
+        end
+    end)
