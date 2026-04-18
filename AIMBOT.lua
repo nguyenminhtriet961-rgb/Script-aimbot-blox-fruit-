@@ -304,72 +304,121 @@ local function LoadMainHub()
         end
     end})
 
-    -- ==========================================
-    -- ⚔️ TAB: KILL AURA
+  -- ==========================================
+    -- ⚔️ TAB: KILL AURA (PHIÊN BẢN TỐI ƯU HÓA CAO CẤP)
     -- ==========================================
     local TabAura = Window:CreateTab("⚔️ Kill Aura")
-    local AuraOn = false
     
-    TabAura:CreateToggle({Name = "Bật Kill Aura", CurrentValue = false, Callback = function(Value)
+    local AuraOn = false
+    local AuraRange = 1000 -- Tầm quét mặc định
+    local AuraAttackSpeed = 0.5 -- Tốc độ chém mặc định (giây)
+    local AuraConnection
+    local currentTarget = nil
+
+    -- Thêm tùy chỉnh Tầm Quét và Tốc Độ
+    TabAura:CreateSlider({Name = "Tầm Quét Mục Tiêu (Range)", Range = {50, 5000}, Increment = 50, CurrentValue = 1000, Callback = function(v) AuraRange = v end})
+    TabAura:CreateSlider({Name = "Tốc độ chém (Giây/Nhát)", Range = {0.1, 2}, Increment = 0.1, CurrentValue = 0.5, Callback = function(v) AuraAttackSpeed = v end})
+
+    TabAura:CreateToggle({Name = "Bật Kill Aura (Tàng Hình + Chống Rơi + Hitbox)", CurrentValue = false, Callback = function(Value)
         AuraOn = Value
+        
         if AuraOn then
-            task.spawn(function()
-                while AuraOn do
-                    if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                        local target = nil
-                        local shortestDistance = 50 
-                        local myPos = LocalPlayer.Character.HumanoidRootPart.Position
-                        
-                        for _, p in pairs(Players:GetPlayers()) do
-                            if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild("HumanoidRootPart") and p.Character:FindFirstChild("Humanoid") and p.Character.Humanoid.Health > 0 then
-                                local dist = (p.Character.HumanoidRootPart.Position - myPos).Magnitude
-                                if dist < shortestDistance then
-                                    shortestDistance = dist
-                                    target = p.Character
-                                end
-                            end
-                        end
+            -- 1. Kích hoạt tự động Tàng Hình
+            if LocalPlayer.Character then
+                for _, p in ipairs(LocalPlayer.Character:GetDescendants()) do 
+                    if p:IsA("BasePart") and p.Name ~= "HumanoidRootPart" then p.Transparency = 1 end 
+                end
+            end
 
-                        if target then
-                            LocalPlayer.Character.HumanoidRootPart.CFrame = target.HumanoidRootPart.CFrame * CFrame.new(0, 0, 3)
-                            local tools = {}
-                            for _, item in ipairs(LocalPlayer.Backpack:GetChildren()) do if item:IsA("Tool") then table.insert(tools, item) end end
-                            for _, item in ipairs(LocalPlayer.Character:GetChildren()) do if item:IsA("Tool") then table.insert(tools, item) end end
+            -- 2. Vòng lặp khóa CFrame (Bám sát liên tục mượt mà, chống rơi)
+            AuraConnection = RunService.Heartbeat:Connect(function()
+                if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then return end
+                
+                local myPos = LocalPlayer.Character.HumanoidRootPart.Position
 
-                            if #tools > 0 then
-                                for _, tool in ipairs(tools) do
-                                    if not AuraOn then break end
-                                    LocalPlayer.Character.Humanoid:EquipTool(tool)
-                                    tool:Activate() 
-                                    task.wait(0.05) 
-                                end
+                -- Tìm mục tiêu mới nếu mục tiêu hiện tại đã chết hoặc chưa có
+                if not currentTarget or not currentTarget:FindFirstChild("Humanoid") or currentTarget.Humanoid.Health <= 0 then
+                    local shortest = AuraRange
+                    local newTarget = nil
+                    for _, p in pairs(Players:GetPlayers()) do
+                        if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild("HumanoidRootPart") and p.Character:FindFirstChild("Humanoid") and p.Character.Humanoid.Health > 0 then
+                            local dist = (p.Character.HumanoidRootPart.Position - myPos).Magnitude
+                            if dist < shortest then
+                                shortest = dist
+                                newTarget = p.Character
                             end
                         end
                     end
-                    task.wait(0.05) -- Chống treo máy
+                    currentTarget = newTarget
+                end
+
+                -- Nếu có mục tiêu, bám chặt lưng và bơm Hitbox
+                if currentTarget and currentTarget:FindFirstChild("HumanoidRootPart") then
+                    local hrp = LocalPlayer.Character.HumanoidRootPart
+                    
+                    -- Dịch chuyển ra ngay sau lưng (cách 4 stud) và nhô cao lên xíu (2 stud) để không cạ đất
+                    hrp.CFrame = currentTarget.HumanoidRootPart.CFrame * CFrame.new(0, 2, 4)
+                    
+                    -- CHỐNG RƠI: Khóa trọng lực của bản thân
+                    hrp.Velocity = Vector3.zero 
+                    
+                    -- Bơm Hitbox đối thủ to ra để đảm bảo vũ khí chém trúng 100%
+                    currentTarget.HumanoidRootPart.Size = Vector3.new(20, 20, 20)
+                    currentTarget.HumanoidRootPart.Transparency = 0.8
+                    currentTarget.HumanoidRootPart.CanCollide = false
                 end
             end)
+
+            -- 3. Vòng lặp Đánh & Đổi Vũ Khí (Chậm và chắc)
+            task.spawn(function()
+                while AuraOn do
+                    if currentTarget and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
+                        local tools = {}
+                        for _, item in ipairs(LocalPlayer.Backpack:GetChildren()) do if item:IsA("Tool") then table.insert(tools, item) end end
+                        for _, item in ipairs(LocalPlayer.Character:GetChildren()) do if item:IsA("Tool") then table.insert(tools, item) end end
+
+                        if #tools > 0 then
+                            for _, tool in ipairs(tools) do
+                                if not AuraOn or not currentTarget then break end
+                                
+                                -- Trang bị và chém
+                                LocalPlayer.Character.Humanoid:EquipTool(tool)
+                                tool:Activate()
+                                
+                                -- Chờ một khoảng thời gian (theo thanh trượt) để game ghi nhận sát thương
+                                task.wait(AuraAttackSpeed) 
+                            end
+                        else
+                            task.wait(0.1)
+                        end
+                    else
+                        task.wait(0.1)
+                    end
+                end
+            end)
+
+        else
+            -- KHI TẮT AURA: Dọn dẹp tất cả
+            if AuraConnection then AuraConnection:Disconnect() AuraConnection = nil end
+            currentTarget = nil
+            
+            -- Hiện hình lại
+            if LocalPlayer.Character then
+                for _, p in ipairs(LocalPlayer.Character:GetDescendants()) do 
+                    if p:IsA("BasePart") and p.Name ~= "HumanoidRootPart" then p.Transparency = 0 end 
+                end
+            end
+
+            -- Trả lại Hitbox chuẩn cho toàn bộ server
+            for _, p in pairs(Players:GetPlayers()) do
+                if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
+                    p.Character.HumanoidRootPart.Size = Vector3.new(2, 2, 1)
+                    p.Character.HumanoidRootPart.Transparency = 1
+                    p.Character.HumanoidRootPart.CanCollide = true
+                end
+            end
         end
     end})
-
-    -- ==========================================
-    -- PHÍM TẮT HỖ TRỢ Z B N
-    -- ==========================================
-    UserInputService.InputBegan:Connect(function(input, gpe)
-        if gpe then return end -- Bỏ qua nếu đang gõ chat
-        if input.KeyCode == Enum.KeyCode.Z then 
-            toggleInvis()
-        elseif input.KeyCode == Enum.KeyCode.B then 
-            ghostOn = not ghostOn
-            local hum = LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
-            if hum then hum.WalkSpeed = ghostOn and ghostSpeed or 16 end
-        elseif input.KeyCode == Enum.KeyCode.N then 
-            toggleNoclip(not noclipOn) -- Gọi qua hàm an toàn
-        end
-    end)
-    
-    Rayfield:LoadConfiguration()
-end
 
 -- ==========================================
 -- LOGIC ĐĂNG NHẬP
