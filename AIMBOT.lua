@@ -1,30 +1,28 @@
 --[[
-	👑 MTRIET VIP - KEYAUTH EDITION (HWID LOCK) 👑
+	👑 MTRIET VIP - FULL GIST & LOCAL LOCK EDITION 👑
 	Tích hợp: Aimbot, Hitbox, ESP, Time Machine, Ghost Xịn, Inf Jump, TP Tool
-	Hệ thống bảo mật: KeyAuth Server (Tự động khóa thiết bị & Hủy sau 24h)
+	Hệ thống bảo mật: GitHub Gist + Khóa 24h tại máy (Local Lock)
 ]]
 
--- ==============================================================================
--- 🛑 ĐIỀN THÔNG TIN KEYAUTH CỦA CHỊ VÀO 3 DÒNG DƯỚI ĐÂY 🛑
--- ==============================================================================
-local AppName = "Nguyenminhtriet961's Application" 
-local OwnerID = "lvS55SAKD3" 
-local AppSecret = "9445530cca8acedb89dcdb8cd00dfbec87f4d24eee2fbd59b5041babfe8cad06" 
-
--- ==============================================================================
--- 🔐 HỆ THỐNG ĐĂNG NHẬP (LOGIN GUI)
--- ==============================================================================
 local CoreGui = game:GetService("CoreGui")
 local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local Workspace = game:GetService("Workspace")
 local LocalPlayer = Players.LocalPlayer
+local Camera = Workspace.CurrentCamera
+local Mouse = LocalPlayer:GetMouse()
 
-local LoginGui = Instance.new("ScreenGui")
+-- Link Gist chứa 50 Key của chị (Đã gắn sẵn link chuẩn lúc nãy)
+local KeyURL = "https://gist.githubusercontent.com/nguyenminhtriet961-rgb/d7926f773d015bfd58af1e0640b50350/raw/5493ed5b76c9a83aa2e12f2961f353d5c95c0fa9/keys.txt"
+
+-- ==============================================================================
+-- 🔐 HỆ THỐNG ĐĂNG NHẬP
+-- ==============================================================================
+local LoginGui = Instance.new("ScreenGui", CoreGui)
 LoginGui.Name = "MTRIET_LoginAuth"
-LoginGui.Parent = CoreGui
-LoginGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
-local MainFrame = Instance.new("Frame")
-MainFrame.Parent = LoginGui
+local MainFrame = Instance.new("Frame", LoginGui)
 MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 MainFrame.Position = UDim2.new(0.5, -150, 0.5, -75)
 MainFrame.Size = UDim2.new(0, 300, 0, 160)
@@ -34,7 +32,7 @@ local Title = Instance.new("TextLabel", MainFrame)
 Title.BackgroundTransparency = 1
 Title.Size = UDim2.new(1, 0, 0, 40)
 Title.Font = Enum.Font.GothamBold
-Title.Text = "👑 MTRIET VIP - AUTHENTICATION"
+Title.Text = "👑 MTRIET VIP - GIST AUTH"
 Title.TextColor3 = Color3.fromRGB(255, 255, 255)
 Title.TextSize = 16
 
@@ -60,36 +58,19 @@ LoginBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 LoginBtn.TextSize = 14
 Instance.new("UICorner", LoginBtn).CornerRadius = UDim.new(0, 6)
 
--- Kết nối với máy chủ KeyAuth
-local KeyauthLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/KeyAuth/KeyAuth-Roblox/main/keyauth.lua"))()
-local KeyauthApp = KeyauthLib.new({
-    Name = AppName,
-    Ownerid = OwnerID,
-    Secret = AppSecret,
-    Version = "1.0"
-})
-KeyauthApp:Initialize()
-
--- Hàm tải Menu chính sau khi nhập đúng Key
 local function LoadMainHub()
     LoginGui:Destroy()
-    
     local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
     local Window = Rayfield:CreateWindow({
         Name = "👑 MTRIET VIP - ULTIMATE",
-        LoadingTitle = "Đã xác thực thiết bị thành công!",
-        LoadingSubtitle = "KeyAuth System - By Gemini",
+        LoadingTitle = "Xác thực thành công!",
+        LoadingSubtitle = "Hệ thống Gist 24h",
         ConfigurationSaving = { Enabled = true, FolderName = "MTRIET_VIP", FileName = "Config" },
         KeySystem = false 
     })
 
-    local RunService = game:GetService("RunService")
-    local Workspace = game:GetService("Workspace")
-    local UserInputService = game:GetService("UserInputService")
-    local Mouse = LocalPlayer:GetMouse()
-
     -- ==========================================
-    -- 👻 TAB: GHOST MODE (BẢN XỊN PHÍM Z, B, N)
+    -- 👻 TAB: GHOST MODE
     -- ==========================================
     local TabGhost = Window:CreateTab("👻 Ghost & Invis")
     local invisOn, noclipOn, ghostOn, ghostSpeed = false, false, false, 50
@@ -161,7 +142,7 @@ local function LoadMainHub()
     task.spawn(function() while true do if ESP_On then for _, p in pairs(Players:GetPlayers()) do if p ~= LocalPlayer and p.Character then local hl = p.Character:FindFirstChild("MTRIET_ESP") or Instance.new("Highlight", p.Character); hl.Name = "MTRIET_ESP"; hl.FillColor = p.TeamColor.Color; hl.FillTransparency = 0.5 end end else for _, p in pairs(Players:GetPlayers()) do if p.Character and p.Character:FindFirstChild("MTRIET_ESP") then p.Character.MTRIET_ESP:Destroy() end end end task.wait(1) end end)
 
     -- ==========================================
-    -- ⏳ TAB: TIỆN ÍCH (TIME MACHINE & TP TOOL)
+    -- ⏳ TAB: TIỆN ÍCH (TIME MACHINE & TP)
     -- ==========================================
     local TabOther = Window:CreateTab("⏳ Tiện Ích")
     local RecData, isRec = {}, false
@@ -175,7 +156,9 @@ local function LoadMainHub()
 
     TabOther:CreateButton({Name = "Lấy Gậy Dịch Chuyển (TP Tool)", Callback = function() local Tool = Instance.new("Tool"); Tool.Name = "Gậy TP VIP"; Tool.RequiresHandle = false; Tool.Parent = LocalPlayer.Backpack; Tool.Activated:Connect(function() LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(Mouse.Hit.Position + Vector3.new(0,3,0)) end) end})
 
-    -- Phím tắt hỗ trợ Z B N
+    -- ==========================================
+    -- PHÍM TẮT HỖ TRỢ Z B N
+    -- ==========================================
     UserInputService.InputBegan:Connect(function(input, gpe)
         if gpe then return end
         if input.KeyCode == Enum.KeyCode.Z then toggleInvis()
@@ -183,17 +166,14 @@ local function LoadMainHub()
         elseif input.KeyCode == Enum.KeyCode.N then noclipOn = not noclipOn; RunService.Stepped:Connect(function() if noclipOn and LocalPlayer.Character then for _, part in ipairs(LocalPlayer.Character:GetDescendants()) do if part:IsA("BasePart") then part.CanCollide = false end end end end)
         end
     end)
-
     Rayfield:LoadConfiguration()
 end
 
--- Xử lý đăng nhập KeyAuth (Đã Fix Lỗi Kẹt Nút)
+-- Logic kiểm tra Key trên Gist và lưu sổ đen
 LoginBtn.MouseButton1Click:Connect(function()
     local key = KeyInput.Text
-    
-    -- Xử lý mượt mà vụ khung nhập bị ảo do điện thoại
     if key == "" or key:match("^%s*$") then 
-        LoginBtn.Text = "CHƯA NHẬP KEY KÌA!"
+        LoginBtn.Text = "CHƯA NHẬP KEY!"
         LoginBtn.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
         task.wait(1.5)
         LoginBtn.Text = "KÍCH HOẠT VIP"
@@ -201,17 +181,46 @@ LoginBtn.MouseButton1Click:Connect(function()
         return 
     end
     
-    LoginBtn.Text = "ĐANG KIỂM TRA MÁY CHỦ..."
+    LoginBtn.Text = "ĐANG CHECK GIST..."
     LoginBtn.BackgroundColor3 = Color3.fromRGB(200, 150, 0)
 
-    local success, err = pcall(function()
-        KeyauthApp:license(key) 
-    end)
+    local success, rawText = pcall(function() return game:HttpGet(KeyURL) end)
+    
+    if success and rawText then
+        local isValid = false
+        for validKey in string.gmatch(rawText, "[^\r\n]+") do
+            if key == validKey then isValid = true break end
+        end
 
-    if success then
-        LoadMainHub()
+        if isValid then
+            local fileName = "MTRIET_Auth_" .. key .. ".txt"
+            local currentTime = os.time()
+            local expiryTime = currentTime + (24 * 60 * 60)
+
+            if isfile and readfile and isfile(fileName) then
+                local savedTime = tonumber(readfile(fileName))
+                if savedTime and currentTime > savedTime then
+                    LoginBtn.Text = "KEY ĐÃ HẾT HẠN!"
+                    LoginBtn.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
+                    task.wait(2)
+                    LoginBtn.Text = "KÍCH HOẠT VIP"
+                    LoginBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 215)
+                    return
+                end
+            elseif writefile then
+                writefile(fileName, tostring(expiryTime))
+            end
+
+            LoadMainHub()
+        else
+            LoginBtn.Text = "SAI KEY HOẶC KEY BỊ XÓA!"
+            LoginBtn.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
+            task.wait(2)
+            LoginBtn.Text = "KÍCH HOẠT VIP"
+            LoginBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 215)
+        end
     else
-        LoginBtn.Text = "LỖI KẾT NỐI/SAI KEY!"
+        LoginBtn.Text = "LỖI TẢI GITHUB!"
         LoginBtn.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
         task.wait(2)
         LoginBtn.Text = "KÍCH HOẠT VIP"
