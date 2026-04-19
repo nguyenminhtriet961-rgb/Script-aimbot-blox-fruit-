@@ -1,6 +1,6 @@
 --[[
     👑 MTRIET VIP - FULL GIST & LOCAL LOCK EDITION 👑
-    Đã được tối ưu hóa: Sửa lỗi thiếu End, Fix Memory Leaks, Tối ưu ESP.
+    Đã được tối ưu hóa: Sửa lỗi thiếu End, Fix Memory Leaks, Tối ưu ESP, Hit & Run Aura.
 ]]
 
 local CoreGui = game:GetService("CoreGui")
@@ -16,13 +16,12 @@ local Mouse = LocalPlayer:GetMouse()
 local KeyURL = "https://gist.githubusercontent.com/nguyenminhtriet961-rgb/d7926f773d015bfd58af1e0640b50350/raw/5493ed5b76c9a83aa2e12f2961f353d5c95c0fa9/keys.txt"
 
 -- ==============================================================================
--- 🔐 HỆ THỐNG ĐĂNG NHẬP (ĐÃ SỬA LỖI KHÔNG HIỆN MENU)
+-- 🔐 HỆ THỐNG ĐĂNG NHẬP
 -- ==============================================================================
 local LoginGui = Instance.new("ScreenGui")
 LoginGui.Name = "MTRIET_LoginAuth"
-LoginGui.ResetOnSpawn = false -- Giữ menu không bị mất khi reset nhân vật
+LoginGui.ResetOnSpawn = false
 
--- Cơ chế chống lỗi tàng hình menu: Ưu tiên CoreGui, nếu xịt thì nhét vào PlayerGui
 local success = pcall(function() 
     LoginGui.Parent = CoreGui 
 end)
@@ -31,8 +30,6 @@ if not success then
 end
 
 local MainFrame = Instance.new("Frame", LoginGui)
--- ... (Các phần ở dưới giữ nguyên)
-
 MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 MainFrame.Position = UDim2.new(0.5, -150, 0.5, -75)
 MainFrame.Size = UDim2.new(0, 300, 0, 160)
@@ -70,7 +67,7 @@ Instance.new("UICorner", LoginBtn).CornerRadius = UDim.new(0, 6)
 
 local NoclipConnection, HuntConnection, AimbotConnection
 local invisOn, ghostOn, ghostSpeed, noclipOn = false, false, 50, false
-local espLoop = false -- Dùng cho vòng lặp ESP tối ưu
+local espLoop = false 
 
 -- ==============================================================================
 -- 👑 GIAO DIỆN CHÍNH (MAIN HUB)
@@ -100,7 +97,7 @@ local function LoadMainHub()
             for _, p in ipairs(char:GetDescendants()) do if p:IsA("BasePart") and p.Name ~= "HumanoidRootPart" then p.Transparency = 0.5 end end
             local savedpos = char.HumanoidRootPart.CFrame
             task.wait()
-            char:MoveTo(Vector3.new(-25.95, 84, 3537.55)) -- Lưu ý: Tọa độ chết
+            char:MoveTo(Vector3.new(-25.95, 84, 3537.55))
             task.wait(0.15)
             
             local Seat = Instance.new("Seat")
@@ -202,7 +199,7 @@ local function LoadMainHub()
     end})
 
     -- ==========================================
-    -- 👁️ TAB: HIỂN THỊ (ESP HIGHLIGHT) - ĐÃ TỐI ƯU
+    -- 👁️ TAB: HIỂN THỊ (ESP HIGHLIGHT)
     -- ==========================================
     local TabESP = Window:CreateTab("👁️ ESP")
     TabESP:CreateToggle({Name = "Bật ESP Highlight", CurrentValue = false, Callback = function(v) 
@@ -221,7 +218,7 @@ local function LoadMainHub()
                             end
                         end 
                     end
-                    task.wait(1) -- Cập nhật 1 giây/lần thay vì 60 lần/giây để chống lag
+                    task.wait(1)
                 end
             end)
         else
@@ -282,7 +279,7 @@ local function LoadMainHub()
     end})
 
     -- ==========================================
-    -- 🚀 TAB: SĂN NGƯỜI (AUTO TP BÁM ĐUÔI)
+    -- 🚀 TAB: SĂN NGƯỜI
     -- ==========================================
     local TabHunt = Window:CreateTab("🚀 Săn Người")
     local SelectedPlayer = nil
@@ -325,7 +322,7 @@ local function LoadMainHub()
     end})
 
     -- ==========================================
-    -- ⚔️ TAB: KILL AURA
+    -- ⚔️ TAB: KILL AURA (HIT & RUN + ANTI VOID)
     -- ==========================================
     local TabAura = Window:CreateTab("⚔️ Kill Aura")
     
@@ -334,11 +331,12 @@ local function LoadMainHub()
     local AuraAttackSpeed = 0.5
     local AuraConnection
     local currentTarget = nil
+    local currentOffset = CFrame.new(0, 50, 0)
 
-    TabAura:CreateSlider({Name = "Tầm Quét Mục Tiêu (Range)", Range = {50, 5000}, Increment = 50, CurrentValue = 1000, Callback = function(v) AuraRange = v end})
+    TabAura:CreateSlider({Name = "Tầm Quét Mục Tiêu", Range = {50, 5000}, Increment = 50, CurrentValue = 1000, Callback = function(v) AuraRange = v end})
     TabAura:CreateSlider({Name = "Tốc độ chém (Giây/Nhát)", Range = {0.1, 2}, Increment = 0.1, CurrentValue = 0.5, Callback = function(v) AuraAttackSpeed = v end})
 
-    TabAura:CreateToggle({Name = "Bật Kill Aura (Tàng Hình + Chống Rơi + Hitbox)", CurrentValue = false, Callback = function(Value)
+    TabAura:CreateToggle({Name = "Bật Kill Aura (Bổ nhào & Chống rớt vực)", CurrentValue = false, Callback = function(Value)
         AuraOn = Value
         
         if AuraOn then
@@ -350,18 +348,26 @@ local function LoadMainHub()
 
             AuraConnection = RunService.Heartbeat:Connect(function()
                 if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then return end
-                
-                local myPos = LocalPlayer.Character.HumanoidRootPart.Position
+                local hrp = LocalPlayer.Character.HumanoidRootPart
+                local myPos = hrp.Position
+
+                if currentTarget and currentTarget:FindFirstChild("HumanoidRootPart") then
+                    if currentTarget.HumanoidRootPart.Position.Y < -50 then
+                        currentTarget = nil 
+                    end
+                end
 
                 if not currentTarget or not currentTarget:FindFirstChild("Humanoid") or currentTarget.Humanoid.Health <= 0 then
                     local shortest = AuraRange
                     local newTarget = nil
                     for _, p in pairs(Players:GetPlayers()) do
                         if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild("HumanoidRootPart") and p.Character:FindFirstChild("Humanoid") and p.Character.Humanoid.Health > 0 then
-                            local dist = (p.Character.HumanoidRootPart.Position - myPos).Magnitude
-                            if dist < shortest then
-                                shortest = dist
-                                newTarget = p.Character
+                            if p.Character.HumanoidRootPart.Position.Y > -50 then
+                                local dist = (p.Character.HumanoidRootPart.Position - myPos).Magnitude
+                                if dist < shortest then
+                                    shortest = dist
+                                    newTarget = p.Character
+                                end
                             end
                         end
                     end
@@ -369,9 +375,9 @@ local function LoadMainHub()
                 end
 
                 if currentTarget and currentTarget:FindFirstChild("HumanoidRootPart") then
-                    local hrp = LocalPlayer.Character.HumanoidRootPart
-                    hrp.CFrame = currentTarget.HumanoidRootPart.CFrame * CFrame.new(0, 2, 4)
+                    hrp.CFrame = currentTarget.HumanoidRootPart.CFrame * currentOffset
                     hrp.Velocity = Vector3.zero 
+                    
                     currentTarget.HumanoidRootPart.Size = Vector3.new(20, 20, 20)
                     currentTarget.HumanoidRootPart.Transparency = 0.8
                     currentTarget.HumanoidRootPart.CanCollide = false
@@ -388,14 +394,20 @@ local function LoadMainHub()
                         if #tools > 0 then
                             for _, tool in ipairs(tools) do
                                 if not AuraOn or not currentTarget then break end
+                                
                                 LocalPlayer.Character.Humanoid:EquipTool(tool)
+                                currentOffset = CFrame.new(0, 0, 4) 
+                                task.wait(0.05) 
                                 tool:Activate()
+                                
+                                currentOffset = CFrame.new(0, 50, 0)
                                 task.wait(AuraAttackSpeed) 
                             end
                         else
                             task.wait(0.1)
                         end
                     else
+                        currentOffset = CFrame.new(0, 50, 0) 
                         task.wait(0.1)
                     end
                 end
@@ -404,6 +416,7 @@ local function LoadMainHub()
         else
             if AuraConnection then AuraConnection:Disconnect() AuraConnection = nil end
             currentTarget = nil
+            currentOffset = CFrame.new(0, 50, 0)
             
             if LocalPlayer.Character then
                 for _, p in ipairs(LocalPlayer.Character:GetDescendants()) do 
@@ -420,7 +433,7 @@ local function LoadMainHub()
             end
         end
     end})
-end -- [ĐÃ FIX LỖI THIẾU END TẠI ĐÂY]
+end -- ĐÂY! CÁI CHỮ END EM PHẢI TỰ TAY THÊM VÀO ĐỂ ĐÓNG HÀM LOADMAINHUB LẠI ĐÂY!
 
 -- ==========================================
 -- 🔐 LOGIC ĐĂNG NHẬP
