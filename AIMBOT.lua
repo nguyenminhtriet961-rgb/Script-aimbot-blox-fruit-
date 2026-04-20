@@ -1,6 +1,6 @@
 --[[
-    👑 MTRIET VIP - FULL GIST & LOCAL LOCK EDITION 👑
-    Bản cập nhật: Tích hợp Fly Mobile VIP, Sửa lỗi Aura Hit & Run (Bám đuôi tới chết).
+    👑 MTRIET VIP - DIRECT EXECUTE EDITION (BẢN KHÔNG CẦN KEY) 👑
+    Bản cập nhật: Loại bỏ hệ thống Key, Tích hợp Fly Mobile VIP, Sửa lỗi Aura Hit & Run.
 ]]
 
 local CoreGui = game:GetService("CoreGui")
@@ -13,58 +13,6 @@ local LocalPlayer = Players.LocalPlayer
 local Camera = Workspace.CurrentCamera
 local Mouse = LocalPlayer:GetMouse()
 
-local KeyURL = "https://gist.githubusercontent.com/nguyenminhtriet961-rgb/d7926f773d015bfd58af1e0640b50350/raw/5493ed5b76c9a83aa2e12f2961f353d5c95c0fa9/keys.txt"
-
--- ==============================================================================
--- 🔐 HỆ THỐNG ĐĂNG NHẬP
--- ==============================================================================
-local LoginGui = Instance.new("ScreenGui")
-LoginGui.Name = "MTRIET_LoginAuth"
-LoginGui.ResetOnSpawn = false
-
-local success = pcall(function() 
-    LoginGui.Parent = CoreGui 
-end)
-if not success then
-    LoginGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
-end
-
-local MainFrame = Instance.new("Frame", LoginGui)
-MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-MainFrame.Position = UDim2.new(0.5, -150, 0.5, -75)
-MainFrame.Size = UDim2.new(0, 300, 0, 160)
-Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 10)
-
-local Title = Instance.new("TextLabel", MainFrame)
-Title.BackgroundTransparency = 1
-Title.Size = UDim2.new(1, 0, 0, 40)
-Title.Font = Enum.Font.GothamBold
-Title.Text = "👑 MTRIET VIP - GIST AUTH"
-Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-Title.TextSize = 16
-
-local KeyInput = Instance.new("TextBox", MainFrame)
-KeyInput.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-KeyInput.Position = UDim2.new(0.05, 0, 0.35, 0)
-KeyInput.Size = UDim2.new(0.9, 0, 0, 40)
-KeyInput.Font = Enum.Font.Gotham
-KeyInput.PlaceholderText = "Nhập mã Key vào đây..."
-KeyInput.Text = ""
-KeyInput.TextColor3 = Color3.fromRGB(255, 255, 255)
-KeyInput.TextSize = 14
-KeyInput.ClearTextOnFocus = false
-Instance.new("UICorner", KeyInput).CornerRadius = UDim.new(0, 6)
-
-local LoginBtn = Instance.new("TextButton", MainFrame)
-LoginBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 215)
-LoginBtn.Position = UDim2.new(0.25, 0, 0.7, 0)
-LoginBtn.Size = UDim2.new(0.5, 0, 0, 35)
-LoginBtn.Font = Enum.Font.GothamBold
-LoginBtn.Text = "KÍCH HOẠT VIP"
-LoginBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-LoginBtn.TextSize = 14
-Instance.new("UICorner", LoginBtn).CornerRadius = UDim.new(0, 6)
-
 local NoclipConnection, HuntConnection, AimbotConnection
 local invisOn, ghostOn, ghostSpeed, noclipOn = false, false, 50, false
 local espLoop = false 
@@ -73,12 +21,11 @@ local espLoop = false
 -- 👑 GIAO DIỆN CHÍNH (MAIN HUB)
 -- ==============================================================================
 local function LoadMainHub()
-    LoginGui:Destroy()
     local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
     local Window = Rayfield:CreateWindow({
         Name = "👑 MTRIET VIP - ULTIMATE",
-        LoadingTitle = "Xác thực thành công!",
-        LoadingSubtitle = "Hệ thống Gist 24h",
+        LoadingTitle = "Đã tải MTRIET VIP",
+        LoadingSubtitle = "Phiên bản không cần Key",
         ConfigurationSaving = { Enabled = true, FolderName = "MTRIET_VIP", FileName = "Config" },
         KeySystem = false 
     })
@@ -242,7 +189,6 @@ local function LoadMainHub()
             return
         end
 
-        -- Dán nguyên cục Fly VIP vào đây
         local main = Instance.new("ScreenGui")
         local Frame = Instance.new("Frame")
         local up = Instance.new("TextButton")
@@ -697,7 +643,7 @@ local function LoadMainHub()
     end})
 
     -- ==========================================
-    -- ⚔️ TAB: KILL AURA (ĐÃ XÓA CHECK TỌA ĐỘ Y DƯỚI VỰC)
+    -- ⚔️ TAB: KILL AURA
     -- ==========================================
     local TabAura = Window:CreateTab("⚔️ Kill Aura")
     
@@ -726,13 +672,11 @@ local function LoadMainHub()
                 local hrp = LocalPlayer.Character.HumanoidRootPart
                 local myPos = hrp.Position
 
-                -- KIỂM TRA MỤC TIÊU CÒN SỐNG HAY KHÔNG (BỎ CHẶN TỌA ĐỘ Y)
                 if not currentTarget or not currentTarget:FindFirstChild("Humanoid") or currentTarget.Humanoid.Health <= 0 then
                     local shortest = AuraRange
                     local newTarget = nil
                     for _, p in pairs(Players:GetPlayers()) do
                         if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild("HumanoidRootPart") and p.Character:FindFirstChild("Humanoid") and p.Character.Humanoid.Health > 0 then
-                            -- Quét mọi vị trí, mặc kệ mục tiêu nhảy vực hay chui xuống lòng đất
                             local dist = (p.Character.HumanoidRootPart.Position - myPos).Magnitude
                             if dist < shortest then
                                 shortest = dist
@@ -804,63 +748,7 @@ local function LoadMainHub()
     end})
 end
 
--- ==========================================
--- 🔐 LOGIC ĐĂNG NHẬP
--- ==========================================
-LoginBtn.MouseButton1Click:Connect(function()
-    local key = KeyInput.Text
-    if key == "" or key:match("^%s*$") then 
-        LoginBtn.Text = "CHƯA NHẬP KEY!"
-        LoginBtn.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
-        task.wait(1.5)
-        LoginBtn.Text = "KÍCH HOẠT VIP"
-        LoginBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 215)
-        return 
-    end
-    
-    LoginBtn.Text = "ĐANG CHECK GIST..."
-    LoginBtn.BackgroundColor3 = Color3.fromRGB(200, 150, 0)
-
-    local success, rawText = pcall(function() return game:HttpGet(KeyURL) end)
-    
-    if success and rawText then
-        local isValid = false
-        for validKey in string.gmatch(rawText, "[^\r\n]+") do
-            if key == validKey then isValid = true break end
-        end
-
-        if isValid then
-            local fileName = "MTRIET_Auth_" .. key .. ".txt"
-            local currentTime = os.time()
-            local expiryTime = currentTime + (24 * 60 * 60)
-
-            if type(isfile) == "function" and type(readfile) == "function" and isfile(fileName) then
-                local savedTime = tonumber(readfile(fileName))
-                if savedTime and currentTime > savedTime then
-                    LoginBtn.Text = "KEY ĐÃ HẾT HẠN!"
-                    LoginBtn.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
-                    task.wait(2)
-                    LoginBtn.Text = "KÍCH HOẠT VIP"
-                    LoginBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 215)
-                    return
-                end
-            elseif type(writefile) == "function" then
-                writefile(fileName, tostring(expiryTime))
-            end
-
-            LoadMainHub()
-        else
-            LoginBtn.Text = "SAI KEY HOẶC BỊ XÓA!"
-            LoginBtn.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
-            task.wait(2)
-            LoginBtn.Text = "KÍCH HOẠT VIP"
-            LoginBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 215)
-        end
-    else
-        LoginBtn.Text = "LỖI TẢI GITHUB!"
-        LoginBtn.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
-        task.wait(2)
-        LoginBtn.Text = "KÍCH HOẠT VIP"
-        LoginBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 215)
-    end
-end)
+-- ==============================================================================
+-- 🚀 CHẠY TRỰC TIẾP KHÔNG CẦN KEY
+-- ==============================================================================
+LoadMainHub()
