@@ -1,6 +1,6 @@
 --[[
     👑 MTRIET VIP - DIRECT EXECUTE EDITION (BẢN KHÔNG CẦN KEY) 👑
-    Bản cập nhật: Loại bỏ hệ thống Key, Tích hợp Fly Mobile VIP, Sửa lỗi Aura Hit & Run.
+    Bản cập nhật: Tích hợp Máy Lượm Đồ 3 Chế Độ & Fix Thăng Bằng Skill Aura.
 ]]
 
 local CoreGui = game:GetService("CoreGui")
@@ -25,7 +25,7 @@ local function LoadMainHub()
     local Window = Rayfield:CreateWindow({
         Name = "👑 MTRIET VIP - ULTIMATE",
         LoadingTitle = "Đã tải MTRIET VIP",
-        LoadingSubtitle = "Phiên bản không cần Key",
+        LoadingSubtitle = "Phiên bản đã fix thăng bằng & nhặt đồ",
         ConfigurationSaving = { Enabled = true, FolderName = "MTRIET_VIP", FileName = "Config" },
         KeySystem = false 
     })
@@ -177,6 +177,241 @@ local function LoadMainHub()
         end
     end})
 
+    -- ==========================================
+    -- 💎 TAB: MÁY LƯỢM K.CƯƠNG & LINH HỒN
+    -- ==========================================
+    local TabDrop = Window:CreateTab("💎 Máy Lượm")
+    local AutoGomMode = 0
+    local AFK_SkyPos = nil
+
+    TabDrop:CreateDropdown({
+        Name = "Chọn Chế Độ Nhặt",
+        Options = {"Tắt", "Chế độ 1: Bay lại nhặt", "Chế độ 2: Teleport nhặt", "Chế độ 3: AFK Trên Trời"},
+        CurrentOption = {"Tắt"},
+        Callback = function(Option)
+            if Option[1] == "Tắt" then 
+                AutoGomMode = 0
+                if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                    LocalPlayer.Character.HumanoidRootPart.Anchored = false
+                end
+            elseif Option[1] == "Chế độ 1: Bay lại nhặt" then 
+                AutoGomMode = 1
+                if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then LocalPlayer.Character.HumanoidRootPart.Anchored = false end
+            elseif Option[1] == "Chế độ 2: Teleport nhặt" then 
+                AutoGomMode = 2
+                if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then LocalPlayer.Character.HumanoidRootPart.Anchored = false end
+            elseif Option[1] == "Chế độ 3: AFK Trên Trời" then 
+                AutoGomMode = 3
+                if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                    AFK_SkyPos = LocalPlayer.Character.HumanoidRootPart.Position + Vector3.new(0, 500, 0)
+                    LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(AFK_SkyPos)
+                    LocalPlayer.Character.HumanoidRootPart.Anchored = true
+                end
+            end
+        end,
+    })
+
+    task.spawn(function()
+        while true do
+            task.wait(0.1)
+            if AutoGomMode == 0 then continue end
+            
+            local hrp = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+            if not hrp then continue end
+
+            for _, item in ipairs(workspace:GetDescendants()) do
+                local itemName = item.Name:lower()
+                if (itemName == "diamond" or itemName == "drop" or itemName:match("soul")) and item:IsA("BasePart") then
+                    local prompt = item:FindFirstChildWhichIsA("ProximityPrompt")
+                    local touch = item:FindFirstChild("TouchInterest")
+
+                    if AutoGomMode == 1 and (prompt or touch) then
+                        hrp.CFrame = item.CFrame * CFrame.new(0, 2, 0)
+                        task.wait(0.2)
+                        if prompt then fireproximityprompt(prompt) end
+                    elseif AutoGomMode == 2 and (prompt or touch) then
+                        local old = hrp.CFrame
+                        hrp.CFrame = item.CFrame
+                        task.wait(0.05)
+                        if prompt then fireproximityprompt(prompt) end
+                        hrp.CFrame = old
+                    elseif AutoGomMode == 3 and (prompt or touch) then
+                        hrp.Anchored = false
+                        hrp.CFrame = item.CFrame
+                        task.wait(0.05)
+                        if prompt then fireproximityprompt(prompt) end
+                        if touch and firetouchinterest then
+                            firetouchinterest(hrp, item, 0)
+                            task.wait()
+                            firetouchinterest(hrp, item, 1)
+                        end
+                        -- Trở về vị trí đóng băng trên trời
+                        hrp.CFrame = CFrame.new(AFK_SkyPos)
+                        hrp.Anchored = true
+                    end
+                end
+            end
+        end
+    end)
+
+    -- ==========================================
+    -- 🚀 TAB: SĂN NGƯỜI
+    -- ==========================================
+    local TabHunt = Window:CreateTab("🚀 Săn Người")
+    local SelectedPlayer = nil
+
+    local function GetPlayerNames()
+        local names = {}
+        for _, p in pairs(Players:GetPlayers()) do
+            if p ~= LocalPlayer then table.insert(names, p.Name) end
+        end
+        return names
+    end
+
+    local PlayerDropdown = TabHunt:CreateDropdown({
+        Name = "Chọn Người Chơi",
+        Options = GetPlayerNames(),
+        CurrentOption = {""},
+        MultipleOptions = false,
+        Flag = "Dropdown_Players",
+        Callback = function(Option) SelectedPlayer = Option[1] end,
+    })
+
+    TabHunt:CreateButton({Name = "🔄 Làm Mới Danh Sách", Callback = function() PlayerDropdown:Refresh(GetPlayerNames(), true) end})
+
+    TabHunt:CreateToggle({Name = "Bật Auto TP (Bám Đuôi)", CurrentValue = false, Callback = function(Value) 
+        if Value then
+            HuntConnection = RunService.Heartbeat:Connect(function()
+                if SelectedPlayer then
+                    local target = Players:FindFirstChild(SelectedPlayer)
+                    if target and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
+                        local char = LocalPlayer.Character
+                        if char and char:FindFirstChild("HumanoidRootPart") then
+                            char.HumanoidRootPart.CFrame = target.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, 3)
+                        end
+                    end
+                end
+            end)
+        else
+            if HuntConnection then HuntConnection:Disconnect() HuntConnection = nil end
+        end
+    end})
+
+    -- ==========================================
+    -- ⚔️ TAB: KILL AURA
+    -- ==========================================
+    local TabAura = Window:CreateTab("⚔️ Kill Aura")
+    
+    local AuraOn = false
+    local AuraRange = 1000
+    local AuraAttackSpeed = 0.5
+    local AuraConnection
+    local currentTarget = nil
+    local currentOffset = CFrame.new(0, 50, 0)
+
+    TabAura:CreateSlider({Name = "Tầm Quét Mục Tiêu", Range = {50, 5000}, Increment = 50, CurrentValue = 1000, Callback = function(v) AuraRange = v end})
+    TabAura:CreateSlider({Name = "Tốc độ chém (Giây/Nhát)", Range = {0.1, 2}, Increment = 0.1, CurrentValue = 0.5, Callback = function(v) AuraAttackSpeed = v end})
+
+    TabAura:CreateToggle({Name = "Bật Kill Aura (Đã Fix Thăng Bằng)", CurrentValue = false, Callback = function(Value)
+        AuraOn = Value
+        
+        if AuraOn then
+            if LocalPlayer.Character then
+                for _, p in ipairs(LocalPlayer.Character:GetDescendants()) do 
+                    if p:IsA("BasePart") and p.Name ~= "HumanoidRootPart" then p.Transparency = 1 end 
+                end
+            end
+
+            AuraConnection = RunService.Heartbeat:Connect(function()
+                if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then return end
+                local hrp = LocalPlayer.Character.HumanoidRootPart
+                local myPos = hrp.Position
+
+                if not currentTarget or not currentTarget:FindFirstChild("Humanoid") or currentTarget.Humanoid.Health <= 0 then
+                    local shortest = AuraRange
+                    local newTarget = nil
+                    for _, p in pairs(Players:GetPlayers()) do
+                        if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild("HumanoidRootPart") and p.Character:FindFirstChild("Humanoid") and p.Character.Humanoid.Health > 0 then
+                            local dist = (p.Character.HumanoidRootPart.Position - myPos).Magnitude
+                            if dist < shortest then
+                                shortest = dist
+                                newTarget = p.Character
+                            end
+                        end
+                    end
+                    currentTarget = newTarget
+                end
+
+                if currentTarget and currentTarget:FindFirstChild("HumanoidRootPart") then
+                    hrp.CFrame = currentTarget.HumanoidRootPart.CFrame * currentOffset
+                    
+                    -- ==========================================
+                    -- CODE FIX GIỮ THĂNG BẰNG, KHÔNG BỊ TRƯỢT/NGÃ
+                    -- ==========================================
+                    hrp.Velocity = Vector3.zero
+                    hrp.RotVelocity = Vector3.zero
+                    
+                    if LocalPlayer.Character.Humanoid:GetState() == Enum.HumanoidStateType.FallingDown or LocalPlayer.Character.Humanoid:GetState() == Enum.HumanoidStateType.Ragdoll then
+                        LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.GettingUp)
+                    end
+                    LocalPlayer.Character.Humanoid.PlatformStand = false
+                    
+                    currentTarget.HumanoidRootPart.Size = Vector3.new(20, 20, 20)
+                    currentTarget.HumanoidRootPart.Transparency = 0.8
+                    currentTarget.HumanoidRootPart.CanCollide = false
+                end
+            end)
+
+            task.spawn(function()
+                while AuraOn do
+                    if currentTarget and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
+                        local tools = {}
+                        for _, item in ipairs(LocalPlayer.Backpack:GetChildren()) do if item:IsA("Tool") then table.insert(tools, item) end end
+                        for _, item in ipairs(LocalPlayer.Character:GetChildren()) do if item:IsA("Tool") then table.insert(tools, item) end end
+
+                        if #tools > 0 then
+                            for _, tool in ipairs(tools) do
+                                if not AuraOn or not currentTarget then break end
+                                
+                                LocalPlayer.Character.Humanoid:EquipTool(tool)
+                                currentOffset = CFrame.new(0, 0, 4) 
+                                task.wait(0.05) 
+                                tool:Activate()
+                                
+                                currentOffset = CFrame.new(0, 50, 0)
+                                task.wait(AuraAttackSpeed) 
+                            end
+                        else
+                            task.wait(0.1)
+                        end
+                    else
+                        currentOffset = CFrame.new(0, 50, 0) 
+                        task.wait(0.1)
+                    end
+                end
+            end)
+
+        else
+            if AuraConnection then AuraConnection:Disconnect() AuraConnection = nil end
+            currentTarget = nil
+            currentOffset = CFrame.new(0, 50, 0)
+            
+            if LocalPlayer.Character then
+                for _, p in ipairs(LocalPlayer.Character:GetDescendants()) do 
+                    if p:IsA("BasePart") and p.Name ~= "HumanoidRootPart" then p.Transparency = 0 end 
+                end
+            end
+
+            for _, p in pairs(Players:GetPlayers()) do
+                if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
+                    p.Character.HumanoidRootPart.Size = Vector3.new(2, 2, 1)
+                    p.Character.HumanoidRootPart.Transparency = 1
+                    p.Character.HumanoidRootPart.CanCollide = true
+                end
+            end
+        end
+    end})
+    
     -- ==========================================
     -- ⏳ TAB: TIỆN ÍCH (TÍCH HỢP FLY GUI TẠI ĐÂY)
     -- ==========================================
@@ -597,154 +832,6 @@ local function LoadMainHub()
                 LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(Mouse.Hit.Position + Vector3.new(0,3,0)) 
             end
         end) 
-    end})
-
-    -- ==========================================
-    -- 🚀 TAB: SĂN NGƯỜI
-    -- ==========================================
-    local TabHunt = Window:CreateTab("🚀 Săn Người")
-    local SelectedPlayer = nil
-
-    local function GetPlayerNames()
-        local names = {}
-        for _, p in pairs(Players:GetPlayers()) do
-            if p ~= LocalPlayer then table.insert(names, p.Name) end
-        end
-        return names
-    end
-
-    local PlayerDropdown = TabHunt:CreateDropdown({
-        Name = "Chọn Người Chơi",
-        Options = GetPlayerNames(),
-        CurrentOption = {""},
-        MultipleOptions = false,
-        Flag = "Dropdown_Players",
-        Callback = function(Option) SelectedPlayer = Option[1] end,
-    })
-
-    TabHunt:CreateButton({Name = "🔄 Làm Mới Danh Sách", Callback = function() PlayerDropdown:Refresh(GetPlayerNames(), true) end})
-
-    TabHunt:CreateToggle({Name = "Bật Auto TP (Bám Đuôi)", CurrentValue = false, Callback = function(Value) 
-        if Value then
-            HuntConnection = RunService.Heartbeat:Connect(function()
-                if SelectedPlayer then
-                    local target = Players:FindFirstChild(SelectedPlayer)
-                    if target and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
-                        local char = LocalPlayer.Character
-                        if char and char:FindFirstChild("HumanoidRootPart") then
-                            char.HumanoidRootPart.CFrame = target.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, 3)
-                        end
-                    end
-                end
-            end)
-        else
-            if HuntConnection then HuntConnection:Disconnect() HuntConnection = nil end
-        end
-    end})
-
-    -- ==========================================
-    -- ⚔️ TAB: KILL AURA
-    -- ==========================================
-    local TabAura = Window:CreateTab("⚔️ Kill Aura")
-    
-    local AuraOn = false
-    local AuraRange = 1000
-    local AuraAttackSpeed = 0.5
-    local AuraConnection
-    local currentTarget = nil
-    local currentOffset = CFrame.new(0, 50, 0)
-
-    TabAura:CreateSlider({Name = "Tầm Quét Mục Tiêu", Range = {50, 5000}, Increment = 50, CurrentValue = 1000, Callback = function(v) AuraRange = v end})
-    TabAura:CreateSlider({Name = "Tốc độ chém (Giây/Nhát)", Range = {0.1, 2}, Increment = 0.1, CurrentValue = 0.5, Callback = function(v) AuraAttackSpeed = v end})
-
-    TabAura:CreateToggle({Name = "Bật Kill Aura (Bổ nhào & Bám đuôi tới chết)", CurrentValue = false, Callback = function(Value)
-        AuraOn = Value
-        
-        if AuraOn then
-            if LocalPlayer.Character then
-                for _, p in ipairs(LocalPlayer.Character:GetDescendants()) do 
-                    if p:IsA("BasePart") and p.Name ~= "HumanoidRootPart" then p.Transparency = 1 end 
-                end
-            end
-
-            AuraConnection = RunService.Heartbeat:Connect(function()
-                if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then return end
-                local hrp = LocalPlayer.Character.HumanoidRootPart
-                local myPos = hrp.Position
-
-                if not currentTarget or not currentTarget:FindFirstChild("Humanoid") or currentTarget.Humanoid.Health <= 0 then
-                    local shortest = AuraRange
-                    local newTarget = nil
-                    for _, p in pairs(Players:GetPlayers()) do
-                        if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild("HumanoidRootPart") and p.Character:FindFirstChild("Humanoid") and p.Character.Humanoid.Health > 0 then
-                            local dist = (p.Character.HumanoidRootPart.Position - myPos).Magnitude
-                            if dist < shortest then
-                                shortest = dist
-                                newTarget = p.Character
-                            end
-                        end
-                    end
-                    currentTarget = newTarget
-                end
-
-                if currentTarget and currentTarget:FindFirstChild("HumanoidRootPart") then
-                    hrp.CFrame = currentTarget.HumanoidRootPart.CFrame * currentOffset
-                    hrp.Velocity = Vector3.zero 
-                    
-                    currentTarget.HumanoidRootPart.Size = Vector3.new(20, 20, 20)
-                    currentTarget.HumanoidRootPart.Transparency = 0.8
-                    currentTarget.HumanoidRootPart.CanCollide = false
-                end
-            end)
-
-            task.spawn(function()
-                while AuraOn do
-                    if currentTarget and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
-                        local tools = {}
-                        for _, item in ipairs(LocalPlayer.Backpack:GetChildren()) do if item:IsA("Tool") then table.insert(tools, item) end end
-                        for _, item in ipairs(LocalPlayer.Character:GetChildren()) do if item:IsA("Tool") then table.insert(tools, item) end end
-
-                        if #tools > 0 then
-                            for _, tool in ipairs(tools) do
-                                if not AuraOn or not currentTarget then break end
-                                
-                                LocalPlayer.Character.Humanoid:EquipTool(tool)
-                                currentOffset = CFrame.new(0, 0, 4) 
-                                task.wait(0.05) 
-                                tool:Activate()
-                                
-                                currentOffset = CFrame.new(0, 50, 0)
-                                task.wait(AuraAttackSpeed) 
-                            end
-                        else
-                            task.wait(0.1)
-                        end
-                    else
-                        currentOffset = CFrame.new(0, 50, 0) 
-                        task.wait(0.1)
-                    end
-                end
-            end)
-
-        else
-            if AuraConnection then AuraConnection:Disconnect() AuraConnection = nil end
-            currentTarget = nil
-            currentOffset = CFrame.new(0, 50, 0)
-            
-            if LocalPlayer.Character then
-                for _, p in ipairs(LocalPlayer.Character:GetDescendants()) do 
-                    if p:IsA("BasePart") and p.Name ~= "HumanoidRootPart" then p.Transparency = 0 end 
-                end
-            end
-
-            for _, p in pairs(Players:GetPlayers()) do
-                if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
-                    p.Character.HumanoidRootPart.Size = Vector3.new(2, 2, 1)
-                    p.Character.HumanoidRootPart.Transparency = 1
-                    p.Character.HumanoidRootPart.CanCollide = true
-                end
-            end
-        end
     end})
 end
 
