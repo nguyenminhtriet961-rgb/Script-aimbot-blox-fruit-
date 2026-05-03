@@ -1,3 +1,10 @@
+--[[
+    👑 MTRIET VIP - ULTIMATE MASTER EDITION 👑
+    - Full Module: Hitbox Trắng, ESP, Ghost, Máy Lượm 4 Mode, Aura 3 Mode.
+    - Full Tiện ích: Bay, Jump, TP Người/Tọa độ, Xuất hồn, Lướt nhanh.
+    - Quick GUI nổi 4 nút cực xịn.
+]]
+
 local CoreGui = game:GetService("CoreGui")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -10,33 +17,48 @@ local LocalPlayer = Players.LocalPlayer
 local Camera = Workspace.CurrentCamera
 local Mouse = LocalPlayer:GetMouse()
 
--- Biến toàn cục
+-- ==================== BIẾN TOÀN CỤC ====================
 local NoclipConnection, HuntConnection, AimbotConnection, AuraConnection
 local invisOn, ghostOn, ghostSpeed, noclipOn = false, false, 50, false
 local espLoop = false 
 local AutoGomMode = "Tắt"
 local AFK_SkyPos = nil
 
--- Tọa độ Boss & Triệu Hồi
+-- Biến Aura
+local AuraOn = false
+local AuraMode = "Chế độ 1: Đứng đỉnh đầu xả Skill"
+local AuraRange = 1000
+local AuraDistance = 5
+local AuraHeight = 10
+local AuraSpeed = 0.5
+local MaxTargetHeight = 500  
+local MinTargetHeight = -50  
+local OrbitAngle = 0
+local currentTarget = nil
+
+-- Biến Boss King
 local TOA_DO_1 = CFrame.new(732.4, 22.5, -113.8)
 local TOA_DO_2 = CFrame.new(1379.3, -115.2, 64.4)
 local TOA_DO_3 = CFrame.new(1334.2, -115.2, 70.1)
 local TOA_DO_KHONG_GIAN = CFrame.new(391.8, 1285.3, 180.6)
 local BOSS_NAME = "King"
-local orbitAngle = 0
 
--- ==============================================================================
--- 🛠️ CÁC HÀM HỖ TRỢ DÙNG CHUNG
--- ==============================================================================
+-- Biến Dịch Chuyển & Tiện Ích
+local RecData, isRec, InfJump = {}, false, false
+local Waypoints = {}
+local CurrentWPName = "Chưa Đặt Tên"
+local SelectedWP = ""
+local RealBodyCFrame = nil 
+local TargetPlayerTP = ""
+
+-- ==================== CÁC HÀM HỖ TRỢ ====================
 local function DungVatPham(myTool, mode)
     local char = LocalPlayer.Character
     if not char or not char:FindFirstChild("Humanoid") or not myTool then return end
-    
     char.Humanoid:UnequipTools()
     task.wait(0.2)
     char.Humanoid:EquipTool(myTool)
     task.wait(0.3)
-    
     if mode == "SkillE" then
         pcall(function()
             VIM:SendKeyEvent(true, Enum.KeyCode.E, false, game)
@@ -49,37 +71,28 @@ local function DungVatPham(myTool, mode)
     end
 end
 
--- Hàm bay mượt có Noclip (Xuyên tường)
 local function BayMuotXuyenTuong(targetCFrame, speed)
     local char = LocalPlayer.Character
     if not char or not char:FindFirstChild("HumanoidRootPart") then return end
     local hrp = char.HumanoidRootPart
-    
     local distance = (hrp.Position - targetCFrame.Position).Magnitude
     local timeToFly = distance / speed
-    
     local tweenInfo = TweenInfo.new(timeToFly, Enum.EasingStyle.Linear)
     local tween = TweenService:Create(hrp, tweenInfo, {CFrame = targetCFrame})
-    
-    -- Tắt va chạm để bay xuyên tường
     local noclip
-    noclip = game:GetService("RunService").Stepped:Connect(function()
+    noclip = RunService.Stepped:Connect(function()
         for _, v in pairs(char:GetDescendants()) do
             if v:IsA("BasePart") then v.CanCollide = false end
         end
     end)
-    
     tween:Play()
     tween.Completed:Wait()
-    noclip:Disconnect() -- Tới nơi thì bật va chạm lại
+    noclip:Disconnect() 
 end
 
--- Hàm Siêu Chạm (Trị các vật phẩm khó nhặt như Linh Hồn)
 local function SuperTouch(targetPart)
     local char = LocalPlayer.Character
     if not char then return end
-    
-    -- 1. Chạm giả lập bằng tất cả các bộ phận trên cơ thể
     if firetouchinterest then
         for _, limb in ipairs(char:GetChildren()) do
             if limb:IsA("BasePart") then
@@ -91,16 +104,23 @@ local function SuperTouch(targetPart)
             end
         end
     end
-    
-    -- 2. Ép gia tốc vật lý nhẹ để máy chủ ghi nhận va chạm thật
     local hrp = char:FindFirstChild("HumanoidRootPart")
-    if hrp then
-        hrp.Velocity = Vector3.new(0, -10, 0) -- Ấn nhẹ nhân vật xuống
+    if hrp then hrp.Velocity = Vector3.new(0, -10, 0) end
+end
+
+local function SpamSkillKeys()
+    local keys = {Enum.KeyCode.Z, Enum.KeyCode.X, Enum.KeyCode.C, Enum.KeyCode.V}
+    for _, key in ipairs(keys) do
+        pcall(function()
+            VIM:SendKeyEvent(true, key, false, game)
+            task.wait(0.05)
+            VIM:SendKeyEvent(false, key, false, game)
+        end)
     end
 end
 
 -- ==============================================================================
--- 👑 GIAO DIỆN CHÍNH (MAIN HUB)
+-- 👑 GIAO DIỆN CHÍNH (RAYFIELD)
 -- ==============================================================================
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local Window = Rayfield:CreateWindow({
@@ -108,11 +128,6 @@ local Window = Rayfield:CreateWindow({
     LoadingTitle = "Đang kiểm tra bảo mật...",
     LoadingSubtitle = "Hệ thống yêu cầu nhập Key",
     ConfigurationSaving = { Enabled = true, FolderName = "MTRIET_VIP", FileName = "Config" },
-    Discord = {
-        Enabled = false,
-        Invite = "noinvitelink", 
-        RememberJoins = true 
-    },
     KeySystem = true,
     KeySettings = {
         Title = "🔑 Xác Thực Người Dùng",
@@ -121,7 +136,7 @@ local Window = Rayfield:CreateWindow({
         FileName = "MinTHub_Key",
         SaveKey = true,
         GrabKeyFromSite = false,
-        Key = {"suculu197834"}
+        Key = {"suculu197834"} 
     }
 })
 
@@ -268,9 +283,9 @@ TabCombat:CreateToggle({Name = "Bật ESP Highlight", CurrentValue = false, Call
     end
 end})
 
--- ==============================================================================
--- 💎 MODULE: MÁY LƯỢM ĐỒ 4 CHẾ ĐỘ (ĐÃ FIX SUPER TOUCH & YO-YO)
--- ==============================================================================
+-- ==========================================
+-- 💎 TAB: MÁY LƯỢM ĐỒ
+-- ==========================================
 local TabDrop = Window:CreateTab("💎 Máy Lượm Đồ")
 
 TabDrop:CreateDropdown({
@@ -310,15 +325,13 @@ task.spawn(function()
 
         for _, item in ipairs(Workspace:GetDescendants()) do
             local itemName = item.Name:lower()
-            if (itemName == "diamond" or itemName == "drop" or itemName:match("soul") or itemName:match("gem")) and item:IsA("BasePart") then
+            if itemName == "diamond" or itemName == "drop" or itemName:match("soul") or itemName:match("gem") then
                 local prompt = item:FindFirstChildWhichIsA("ProximityPrompt", true)
                 local touch = item:FindFirstChild("TouchInterest", true)
 
                 if prompt or touch then
                     local targetPart = item
-                    if item:IsA("Model") then
-                        targetPart = item.PrimaryPart or item:FindFirstChildWhichIsA("BasePart", true)
-                    end
+                    if item:IsA("Model") then targetPart = item.PrimaryPart or item:FindFirstChildWhichIsA("BasePart", true) end
 
                     if targetPart and targetPart:IsA("BasePart") then
                         if AutoGomMode == "Chế độ 1: Bay xuyên tường (Tween + Noclip)" then
@@ -334,7 +347,6 @@ task.spawn(function()
                             hrp.CFrame = targetPart.CFrame
                             task.wait(0.1)
                         elseif AutoGomMode == "Chế độ 4: Nam Châm (Hút đồ về người)" then
-                            -- Chế độ Yo-Yo
                             local oldPos = hrp.CFrame
                             hrp.CFrame = targetPart.CFrame
                             task.wait(0.05)
@@ -361,7 +373,130 @@ task.spawn(function()
 end)
 
 -- ==========================================
--- 🔮 TAB: MODULAR BOSS (TRIỆU HỒI & ĐÁNH KING)
+-- ⚔️ TAB: KILL AURA
+-- ==========================================
+local TabAura = Window:CreateTab("⚔️ Kill Aura")
+
+TabAura:CreateDropdown({
+    Name = "Chọn Chế Độ Đánh",
+    Options = {
+        "Chế độ 1: Đứng đỉnh đầu xả Skill", 
+        "Chế độ 2: Đánh Classic (Kiểu cũ)", 
+        "Chế độ 3: Xoay vòng tròn đánh thường"
+    },
+    CurrentOption = {"Chế độ 1: Đứng đỉnh đầu xả Skill"},
+    Callback = function(Option) AuraMode = Option[1] end,
+})
+
+TabAura:CreateSlider({Name = "Khoảng Cách (Xa/Gần)", Range = {0, 50}, Increment = 1, CurrentValue = 5, Callback = function(v) AuraDistance = v end})
+TabAura:CreateSlider({Name = "Chiều Cao (Trên đầu)", Range = {0, 50}, Increment = 1, CurrentValue = 10, Callback = function(v) AuraHeight = v end})
+TabAura:CreateSlider({Name = "Tốc Độ Đánh (Delay)", Range = {0.1, 3}, Increment = 0.1, CurrentValue = 0.5, Callback = function(v) AuraSpeed = v end})
+TabAura:CreateSlider({Name = "Tầm Quét Kẻ Địch (Range)", Range = {50, 5000}, Increment = 50, CurrentValue = 1000, Callback = function(v) AuraRange = v end})
+
+TabAura:CreateLabel("--- BỘ LỌC ĐỘ CAO MỤC TIÊU ---")
+TabAura:CreateSlider({Name = "Giới Hạn Cao Tối Đa (Max Y)", Range = {100, 2000}, Increment = 50, CurrentValue = 500, Callback = function(v) MaxTargetHeight = v end})
+TabAura:CreateSlider({Name = "Giới Hạn Thấp Tối Thiểu (Min Y)", Range = {-500, 100}, Increment = 10, CurrentValue = -50, Callback = function(v) MinTargetHeight = v end})
+
+TabAura:CreateToggle({Name = "🚀 Bật Kill Aura", CurrentValue = false, Callback = function(Value)
+    AuraOn = Value
+    if AuraOn then
+        AuraConnection = RunService.Heartbeat:Connect(function()
+            local char = LocalPlayer.Character
+            if not char or not char:FindFirstChild("HumanoidRootPart") then return end
+            local hrp = char.HumanoidRootPart
+            local myPos = hrp.Position
+
+            local targetInvalid = not currentTarget or not currentTarget:FindFirstChild("Humanoid") or currentTarget.Humanoid.Health <= 0
+            if currentTarget and currentTarget:FindFirstChild("HumanoidRootPart") then
+                local tY = currentTarget.HumanoidRootPart.Position.Y
+                if tY > MaxTargetHeight or tY < MinTargetHeight then targetInvalid = true end
+            end
+
+            if targetInvalid then
+                local shortest = AuraRange
+                local newTarget = nil
+                for _, p in pairs(Players:GetPlayers()) do
+                    if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild("HumanoidRootPart") and p.Character:FindFirstChild("Humanoid") and p.Character.Humanoid.Health > 0 then
+                        local tPos = p.Character.HumanoidRootPart.Position
+                        if tPos.Y <= MaxTargetHeight and tPos.Y >= MinTargetHeight then
+                            local dist = (tPos - myPos).Magnitude
+                            if dist < shortest then
+                                shortest = dist
+                                newTarget = p.Character
+                            end
+                        end
+                    end
+                end
+                currentTarget = newTarget
+            end
+
+            if currentTarget and currentTarget:FindFirstChild("HumanoidRootPart") then
+                local tCFrame = currentTarget.HumanoidRootPart.CFrame
+                local tPos = currentTarget.HumanoidRootPart.Position
+                hrp.Velocity = Vector3.zero 
+                
+                if AuraMode == "Chế độ 1: Đứng đỉnh đầu xả Skill" then
+                    hrp.CFrame = CFrame.new(tPos + Vector3.new(0, AuraHeight, 0), tPos)
+                elseif AuraMode == "Chế độ 2: Đánh Classic (Kiểu cũ)" then
+                    hrp.CFrame = tCFrame * CFrame.new(0, AuraHeight, AuraDistance)
+                elseif AuraMode == "Chế độ 3: Xoay vòng tròn đánh thường" then
+                    OrbitAngle = OrbitAngle + math.rad(5)
+                    local offset = Vector3.new(math.cos(OrbitAngle) * AuraDistance, AuraHeight, math.sin(OrbitAngle) * AuraDistance)
+                    hrp.CFrame = CFrame.new(tPos + offset, tPos)
+                end
+            end
+        end)
+
+        task.spawn(function()
+            while AuraOn do
+                local char = LocalPlayer.Character
+                if currentTarget and char and char:FindFirstChild("Humanoid") then
+                    local tools = {}
+                    for _, t in ipairs(LocalPlayer:WaitForChild("Backpack"):GetChildren()) do if t:IsA("Tool") then table.insert(tools, t) end end
+                    for _, t in ipairs(char:GetChildren()) do if t:IsA("Tool") then table.insert(tools, t) end end
+
+                    if #tools > 0 then
+                        if AuraMode == "Chế độ 1: Đứng đỉnh đầu xả Skill" then
+                            for i = 1, math.min(3, #tools) do
+                                if not AuraOn or not currentTarget then break end
+                                local myTool = tools[i]
+                                char.Humanoid:EquipTool(myTool)
+                                task.wait(0.2)
+                                SpamSkillKeys() 
+                                task.wait(AuraSpeed)
+                            end
+                        elseif AuraMode == "Chế độ 2: Đánh Classic (Kiểu cũ)" then
+                            for _, myTool in ipairs(tools) do
+                                if not AuraOn or not currentTarget then break end
+                                char.Humanoid:EquipTool(myTool)
+                                task.wait(0.1)
+                                pcall(function() myTool:Activate() end)
+                                task.wait(AuraSpeed)
+                            end
+                        elseif AuraMode == "Chế độ 3: Xoay vòng tròn đánh thường" then
+                            local myTool = tools[2] or tools[1]
+                            if myTool then
+                                char.Humanoid:EquipTool(myTool)
+                                pcall(function() myTool:Activate() end)
+                            end
+                            task.wait(AuraSpeed)
+                        end
+                    else
+                        task.wait(0.5)
+                    end
+                else
+                    task.wait(0.2)
+                end
+            end
+        end)
+    else
+        if AuraConnection then AuraConnection:Disconnect() AuraConnection = nil end
+        currentTarget = nil
+    end
+end})
+
+-- ==========================================
+-- 🔮 TAB: COMBO BOSS KING
 -- ==========================================
 local TabBoss = Window:CreateTab("🔮 Combo Boss")
 local TrieuHoiToggle 
@@ -465,17 +600,10 @@ TabBoss:CreateToggle({
     end
 })
 
--- ==============================================================================
--- ⏳ TAB: TIỆN ÍCH VIP & HỆ THỐNG DỊCH CHUYỂN XUẤT HỒN
--- ==============================================================================
+-- ==========================================
+-- ⏳ TAB: TIỆN ÍCH (UTILITIES)
+-- ==========================================
 local TabOther = Window:CreateTab("⏳ Tiện Ích VIP")
-
-local RecData, isRec, InfJump = {}, false, false
-local Waypoints = {}
-local CurrentWPName = "Chưa Đặt Tên"
-local SelectedWP = ""
-local RealBodyCFrame = nil 
-local TargetPlayerTP = ""
 
 TabOther:CreateSection("⭐ CÁC TIỆN ÍCH CƠ BẢN")
 
@@ -521,8 +649,25 @@ TabOther:CreateButton({Name = "🪄 Lấy Gậy Dịch Chuyển (TP Tool)", Call
     end) 
 end})
 
+TabOther:CreateButton({Name = "📋 COPY JOB ID SERVER NÀY", Callback = function() 
+    if setclipboard then setclipboard(game.JobId) end
+    Rayfield:Notify({Title = "Đã Copy!", Content = "Job ID đã lưu vào bộ nhớ.", Duration = 3})
+end})
+
+TabOther:CreateButton({Name = "📍 COPY TỌA ĐỘ CỦA BẠN ĐANG ĐỨNG", Callback = function() 
+    local char = LocalPlayer.Character
+    if char and char:FindFirstChild("HumanoidRootPart") then
+        local p = char.HumanoidRootPart.Position
+        local str = string.format("CFrame.new(%.1f, %.1f, %.1f)", p.X, p.Y, p.Z)
+        if setclipboard then setclipboard(str) end
+        Rayfield:Notify({Title = "Đã Copy!", Content = str, Duration = 5})
+    end
+end})
+
+TabOther:CreateSection("⏩ LƯỚT TỚI TRƯỚC")
+
 TabOther:CreateInput({
-    Name = "⏩ Lướt Tới Trước (Nhập Số Mét)",
+    Name = "Nhập Số Mét Lướt (Xuyên tường)",
     PlaceholderText = "Nhập số (VD: 50)...",
     RemoveTextAfterFocusLost = false,
     Callback = function(Text)
@@ -536,27 +681,6 @@ TabOther:CreateInput({
             Rayfield:Notify({Title = "Lỗi", Content = "Vui lòng nhập một con số hợp lệ!", Duration = 2})
         end
     end,
-})
-
-TabOther:CreateButton({
-    Name = "📋 COPY JOB ID SERVER NÀY", 
-    Callback = function() 
-        if setclipboard then setclipboard(game.JobId) end
-        Rayfield:Notify({Title = "Đã Copy!", Content = "Job ID đã lưu vào bộ nhớ.", Duration = 3})
-    end
-})
-
-TabOther:CreateButton({
-    Name = "📍 COPY TỌA ĐỘ CỦA CHỊ ĐANG ĐỨNG", 
-    Callback = function() 
-        local char = LocalPlayer.Character
-        if char and char:FindFirstChild("HumanoidRootPart") then
-            local p = char.HumanoidRootPart.Position
-            local str = string.format("CFrame.new(%.1f, %.1f, %.1f)", p.X, p.Y, p.Z)
-            if setclipboard then setclipboard(str) end
-            Rayfield:Notify({Title = "Đã Copy!", Content = str, Duration = 5})
-        end
-    end
 })
 
 TabOther:CreateSection("📍 THÊM TỌA ĐỘ DỊCH CHUYỂN MỚI")
@@ -605,10 +729,10 @@ TabOther:CreateInput({
                 Rayfield:Notify({Title = "Thành Công", Content = "Đã lưu tọa độ tay: " .. CurrentWPName, Duration = 3})
                 RefreshWPDropdown()
             else
-                Rayfield:Notify({Title = "Lỗi", Content = "Tọa độ không hợp lệ (Phải là số)!", Duration = 3})
+                Rayfield:Notify({Title = "Lỗi", Content = "Tọa độ không hợp lệ!", Duration = 3})
             end
         else
-            Rayfield:Notify({Title = "Lỗi", Content = "Hãy nhập đủ X, Y, Z cách nhau bằng dấu phẩy!", Duration = 3})
+            Rayfield:Notify({Title = "Lỗi", Content = "Nhập đủ X, Y, Z cách nhau bằng dấu phẩy!", Duration = 3})
         end
     end,
 })
@@ -738,7 +862,7 @@ TabOther:CreateButton({
 })
 
 -- ==============================================================================
--- 📱 MODULE: GIAO DIỆN NÚT NỔI NGOÀI MÀN HÌNH (QUICK GUI 4 NÚT)
+-- 📱 MENU NÚT NỔI NGOÀI MÀN HÌNH (QUICK GUI 4 NÚT)
 -- ==============================================================================
 local QuickGui = Instance.new("ScreenGui")
 local QuickFrame = Instance.new("Frame")
@@ -760,7 +884,7 @@ QuickFrame.Parent = QuickGui
 QuickFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 QuickFrame.BackgroundTransparency = 0.5
 QuickFrame.Position = UDim2.new(0, 10, 0.5, -60)
-QuickFrame.Size = UDim2.new(0, 130, 0, 135) -- Kéo dài ra cho đủ 4 nút
+QuickFrame.Size = UDim2.new(0, 130, 0, 135) 
 QuickFrame.Active = true
 QuickFrame.Draggable = true
 
