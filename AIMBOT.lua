@@ -1,9 +1,8 @@
 --[[
-    👑 MTRIET VIP - ULTIMATE MASTER EDITION 👑
-    - Full Module: Hitbox Trắng, ESP, Ghost, Máy Lượm 4 Mode.
-    - Skill Aura Tối Thượng: Tách biệt Di chuyển & Tấn công, chọn số lượng VP, Auto Click/Skill.
-    - Full Tiện ích: Bay, Jump, TP Tọa độ, Xuất hồn, Lướt nhanh.
-    - NEW Săn Người: Bám Đuôi (Follow) tùy chỉnh Tầm & Hướng 360 độ.
+    👑 MTRIET VIP - ULTIMATE MASTER EDITION (BẢN HOÀN THIỆN NHẤT) 👑
+    - Full Module: Hitbox mờ tàng hình, ESP, Ghost, Máy Lượm 4 Mode.
+    - Skill Aura Tối Thượng: Đổi target gần nhất, bật/tắt Max Y, Chế độ 2 Yo-Yo Drop.
+    - Full Tiện ích: Fly GUI, Jump, TP Tọa độ, Xuất hồn, Lướt nhanh, Bám đuôi.
     - Quick GUI nổi 4 nút cực xịn.
 ]]
 
@@ -28,7 +27,7 @@ local AFK_SkyPos = nil
 
 -- Biến Aura
 local AuraOn = false
-local AuraPosMode = "Đứng đỉnh đầu"
+local AuraMode = "Chế độ 1: Đứng đỉnh đầu xả Skill"
 local AuraMaxTools = 3
 local AuraAutoClick = true
 local AuraAutoSkills = false
@@ -36,10 +35,12 @@ local AuraRange = 1000
 local AuraDistance = 5
 local AuraHeight = 10
 local AuraSpeed = 0.5
+local FilterYOn = true
 local MaxTargetHeight = 500  
 local MinTargetHeight = -50  
 local OrbitAngle = 0
 local currentTarget = nil
+local isYoYoAttacking = false -- Dành riêng cho Chế độ 2
 
 -- Biến Boss King
 local TOA_DO_1 = CFrame.new(732.4, 22.5, -113.8)
@@ -48,7 +49,7 @@ local TOA_DO_3 = CFrame.new(1334.2, -115.2, 70.1)
 local TOA_DO_KHONG_GIAN = CFrame.new(391.8, 1285.3, 180.6)
 local BOSS_NAME = "King"
 
--- Biến Dịch Chuyển, Tiện Ích & Bám Đuôi
+-- Biến Dịch Chuyển & Săn Kẻ Địch
 local RecData, isRec, InfJump = {}, false, false
 local Waypoints = {}
 local CurrentWPName = "Chưa Đặt Tên"
@@ -200,7 +201,7 @@ TabGhost:CreateToggle({Name = "Xuyên Tường", CurrentValue = false, Callback 
 end})
 
 -- ==========================================
--- 🎯 TAB: COMBAT (HITBOX TRẮNG & AIMBOT)
+-- 🎯 TAB: COMBAT (HITBOX TRẮNG MỜ & AIMBOT)
 -- ==========================================
 local TabCombat = Window:CreateTab("🎯 Chiến Đấu")
 local SizeHB = 25
@@ -226,7 +227,7 @@ TabCombat:CreateToggle({Name = "Aimbot (Auto Lock)", CurrentValue = false, Callb
 end})
 
 TabCombat:CreateSlider({Name = "Size Hitbox", Range = {5, 100}, Increment = 1, CurrentValue = 25, Callback = function(v) SizeHB = v end})
-TabCombat:CreateToggle({Name = "Tăng Hitbox Trắng Trong Suốt", CurrentValue = false, Callback = function(v) 
+TabCombat:CreateToggle({Name = "Tăng Hitbox (Trắng Mờ Chống Mù)", CurrentValue = false, Callback = function(v) 
     _G.HB = v
     if not v then
         for _, p in pairs(Players:GetPlayers()) do
@@ -238,7 +239,7 @@ TabCombat:CreateToggle({Name = "Tăng Hitbox Trắng Trong Suốt", CurrentValue
         end
         for _, v in pairs(Workspace:GetDescendants()) do
             if v:IsA("Model") and v:FindFirstChild("Humanoid") and v.Name ~= LocalPlayer.Name and v:FindFirstChild("HumanoidRootPart") then
-                if v.HumanoidRootPart.Transparency == 0.5 then
+                if v.HumanoidRootPart.Transparency == 0.85 then
                     v.HumanoidRootPart.Size = Vector3.new(2, 2, 1)
                     v.HumanoidRootPart.Transparency = 1
                 end
@@ -255,8 +256,8 @@ TabCombat:CreateToggle({Name = "Tăng Hitbox Trắng Trong Suốt", CurrentValue
                     if hrp then
                         hrp.Size = Vector3.new(SizeHB, SizeHB, SizeHB)
                         hrp.Color = Color3.new(1, 1, 1) 
-                        hrp.Material = Enum.Material.Neon 
-                        hrp.Transparency = 0.5 
+                        hrp.Material = Enum.Material.SmoothPlastic -- Không dùng Neon nữa để dễ nhìn
+                        hrp.Transparency = 0.85 -- Mờ 85% tàng hình
                         hrp.CanCollide = false 
                     end
                 end 
@@ -382,19 +383,19 @@ task.spawn(function()
 end)
 
 -- ==========================================
--- ⚔️ TAB: KILL AURA 
+-- ⚔️ TAB: KILL AURA TỐI THƯỢNG
 -- ==========================================
 local TabAura = Window:CreateTab("⚔️ Kill Aura")
 
 TabAura:CreateDropdown({
-    Name = "Vị Trí Bay Quanh Địch (Aura Position)",
+    Name = "Vị Trí Bay Quanh Địch (Aura Mode)",
     Options = {
-        "Đứng đỉnh đầu", 
-        "Bám sau lưng (Classic)", 
-        "Xoay vòng tròn (Orbit)"
+        "Chế độ 1: Đứng đỉnh đầu xả Skill", 
+        "Chế độ 2: Rơi từ trời chém rồi giật lên (Yo-Yo)", 
+        "Chế độ 3: Xoay vòng tròn đánh thường"
     },
-    CurrentOption = {"Đứng đỉnh đầu"},
-    Callback = function(Option) AuraPosMode = Option[1] end,
+    CurrentOption = {"Chế độ 1: Đứng đỉnh đầu xả Skill"},
+    Callback = function(Option) AuraMode = Option[1] end,
 })
 
 TabAura:CreateSlider({Name = "Khoảng Cách (Xa/Gần)", Range = {0, 50}, Increment = 1, CurrentValue = 5, Callback = function(v) AuraDistance = v end})
@@ -408,6 +409,7 @@ TabAura:CreateToggle({Name = "Tự Động Đánh Thường (Click)", CurrentVal
 TabAura:CreateToggle({Name = "Tự Động Xả Phím Kỹ Năng (Z,X,C,V)", CurrentValue = false, Callback = function(v) AuraAutoSkills = v end})
 
 TabAura:CreateLabel("--- BỘ LỌC ĐỘ CAO MỤC TIÊU ---")
+TabAura:CreateToggle({Name = "Bật/Tắt Lọc Độ Cao (Max/Min Y)", CurrentValue = true, Callback = function(v) FilterYOn = v end})
 TabAura:CreateSlider({Name = "Giới Hạn Cao Tối Đa (Max Y)", Range = {100, 2000}, Increment = 50, CurrentValue = 500, Callback = function(v) MaxTargetHeight = v end})
 TabAura:CreateSlider({Name = "Giới Hạn Thấp Tối Thiểu (Min Y)", Range = {-500, 100}, Increment = 10, CurrentValue = -50, Callback = function(v) MinTargetHeight = v end})
 
@@ -420,40 +422,40 @@ TabAura:CreateToggle({Name = "🚀 Bật Kill Aura", CurrentValue = false, Callb
             local hrp = char.HumanoidRootPart
             local myPos = hrp.Position
 
-            local targetInvalid = not currentTarget or not currentTarget:FindFirstChild("Humanoid") or currentTarget.Humanoid.Health <= 0
-            if currentTarget and currentTarget:FindFirstChild("HumanoidRootPart") then
-                local tY = currentTarget.HumanoidRootPart.Position.Y
-                if tY > MaxTargetHeight or tY < MinTargetHeight then targetInvalid = true end
-            end
-
-            if targetInvalid then
-                local shortest = AuraRange
-                local newTarget = nil
-                for _, p in pairs(Players:GetPlayers()) do
-                    if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild("HumanoidRootPart") and p.Character:FindFirstChild("Humanoid") and p.Character.Humanoid.Health > 0 then
-                        local tPos = p.Character.HumanoidRootPart.Position
-                        if tPos.Y <= MaxTargetHeight and tPos.Y >= MinTargetHeight then
-                            local dist = (tPos - myPos).Magnitude
-                            if dist < shortest then
-                                shortest = dist
-                                newTarget = p.Character
-                            end
+            -- Luôn quét lại mục tiêu GẦN NHẤT
+            local shortest = AuraRange
+            local newTarget = nil
+            for _, p in pairs(Players:GetPlayers()) do
+                if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild("HumanoidRootPart") and p.Character:FindFirstChild("Humanoid") and p.Character.Humanoid.Health > 0 then
+                    local tPos = p.Character.HumanoidRootPart.Position
+                    local validY = true
+                    if FilterYOn then
+                        if tPos.Y > MaxTargetHeight or tPos.Y < MinTargetHeight then validY = false end
+                    end
+                    if validY then
+                        local dist = (tPos - myPos).Magnitude
+                        if dist < shortest then
+                            shortest = dist
+                            newTarget = p.Character
                         end
                     end
                 end
-                currentTarget = newTarget
             end
+            currentTarget = newTarget -- Luôn Update thằng gần nhất
 
             if currentTarget and currentTarget:FindFirstChild("HumanoidRootPart") then
                 local tCFrame = currentTarget.HumanoidRootPart.CFrame
                 local tPos = currentTarget.HumanoidRootPart.Position
                 hrp.Velocity = Vector3.zero 
                 
-                if AuraPosMode == "Đứng đỉnh đầu" then
+                if AuraMode == "Chế độ 1: Đứng đỉnh đầu xả Skill" then
                     hrp.CFrame = CFrame.new(tPos + Vector3.new(0, AuraHeight, 0), tPos)
-                elseif AuraPosMode == "Bám sau lưng (Classic)" then
-                    hrp.CFrame = tCFrame * CFrame.new(0, AuraHeight, AuraDistance)
-                elseif AuraPosMode == "Xoay vòng tròn (Orbit)" then
+                elseif AuraMode == "Chế độ 2: Rơi từ trời chém rồi giật lên (Yo-Yo)" then
+                    if not isYoYoAttacking then
+                        -- Treo lơ lửng chờ chém (AuraHeight + 30m)
+                        hrp.CFrame = CFrame.new(tPos + Vector3.new(0, AuraHeight + 30, 0), tPos)
+                    end
+                elseif AuraMode == "Chế độ 3: Xoay vòng tròn đánh thường" then
                     OrbitAngle = OrbitAngle + math.rad(5)
                     local offset = Vector3.new(math.cos(OrbitAngle) * AuraDistance, AuraHeight, math.sin(OrbitAngle) * AuraDistance)
                     hrp.CFrame = CFrame.new(tPos + offset, tPos)
@@ -469,21 +471,38 @@ TabAura:CreateToggle({Name = "🚀 Bật Kill Aura", CurrentValue = false, Callb
                     for _, t in ipairs(LocalPlayer:WaitForChild("Backpack"):GetChildren()) do if t:IsA("Tool") then table.insert(tools, t) end end
                     for _, t in ipairs(char:GetChildren()) do if t:IsA("Tool") then table.insert(tools, t) end end
 
-                    local maxT = math.min(AuraMaxTools, #tools)
-                    if maxT > 0 then
-                        for i = 1, maxT do
-                            if not AuraOn or not currentTarget then break end
-                            local myTool = tools[i]
+                    if AuraMode == "Chế độ 2: Rơi từ trời chém rồi giật lên (Yo-Yo)" then
+                        local myTool = tools[2] or tools[1]
+                        if myTool then
                             char.Humanoid:EquipTool(myTool)
-                            task.wait(0.1)
-                            
-                            if AuraAutoClick then pcall(function() myTool:Activate() end) end
-                            if AuraAutoSkills then SpamSkillKeys() end
-                            
-                            task.wait(AuraSpeed)
+                            isYoYoAttacking = true
+                            local hrp = char:FindFirstChild("HumanoidRootPart")
+                            if hrp and currentTarget and currentTarget:FindFirstChild("HumanoidRootPart") then
+                                hrp.CFrame = currentTarget.HumanoidRootPart.CFrame * CFrame.new(0, 0, AuraDistance)
+                                task.wait(0.1)
+                                if AuraAutoClick then pcall(function() myTool:Activate() end) end
+                                task.wait(0.15)
+                            end
+                            isYoYoAttacking = false
                         end
+                        task.wait(AuraSpeed)
                     else
-                        task.wait(0.5)
+                        local maxT = math.min(AuraMaxTools, #tools)
+                        if maxT > 0 then
+                            for i = 1, maxT do
+                                if not AuraOn or not currentTarget then break end
+                                local myTool = tools[i]
+                                char.Humanoid:EquipTool(myTool)
+                                task.wait(0.1)
+                                
+                                if AuraAutoClick then pcall(function() myTool:Activate() end) end
+                                if AuraAutoSkills then SpamSkillKeys() end
+                                
+                                task.wait(AuraSpeed)
+                            end
+                        else
+                            task.wait(0.5)
+                        end
                     end
                 else
                     task.wait(0.2)
@@ -608,6 +627,228 @@ local TabOther = Window:CreateTab("⏳ Tiện Ích VIP")
 
 TabOther:CreateSection("⭐ CÁC TIỆN ÍCH CƠ BẢN")
 
+TabOther:CreateButton({Name = "🚀 Mở Bảng Fly Mobile (VIP)", Callback = function() 
+    if LocalPlayer:WaitForChild("PlayerGui"):FindFirstChild("MTRIET_FlyGUI") then return end
+
+    local main = Instance.new("ScreenGui")
+    local Frame = Instance.new("Frame")
+    local up = Instance.new("TextButton")
+    local down = Instance.new("TextButton")
+    local onof = Instance.new("TextButton")
+    local TextLabel = Instance.new("TextLabel")
+    local plus = Instance.new("TextButton")
+    local speed = Instance.new("TextLabel")
+    local mine = Instance.new("TextButton")
+    local closebutton = Instance.new("TextButton")
+    local mini = Instance.new("TextButton")
+    local mini2 = Instance.new("TextButton")
+
+    main.Name = "MTRIET_FlyGUI"
+    main.Parent = LocalPlayer:WaitForChild("PlayerGui")
+    main.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    main.ResetOnSpawn = false
+
+    Frame.Parent = main
+    Frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+    Frame.BorderSizePixel = 0
+    Frame.Position = UDim2.new(0.1, 0, 0.4, 0)
+    Frame.Size = UDim2.new(0, 200, 0, 90)
+    Frame.Active = true 
+    Frame.Draggable = true
+    Instance.new("UICorner", Frame).CornerRadius = UDim.new(0, 8)
+    Instance.new("UIStroke", Frame).Color = Color3.fromRGB(0, 120, 215)
+    Instance.new("UIStroke", Frame).Thickness = 2
+
+    TextLabel.Parent = Frame
+    TextLabel.BackgroundTransparency = 1
+    TextLabel.Position = UDim2.new(0, 0, 0, 0)
+    TextLabel.Size = UDim2.new(1, 0, 0, 30)
+    TextLabel.Font = Enum.Font.GothamBold
+    TextLabel.Text = "FLY GUI V3 VIP"
+    TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    TextLabel.TextSize = 16
+
+    up.Parent = Frame; up.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    up.Position = UDim2.new(0.05, 0, 0.35, 0); up.Size = UDim2.new(0, 55, 0, 25)
+    up.Font = Enum.Font.GothamBold; up.Text = "UP"; up.TextColor3 = Color3.fromRGB(255, 255, 255); up.TextSize = 12
+    Instance.new("UICorner", up).CornerRadius = UDim.new(0, 4)
+
+    down.Parent = Frame; down.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    down.Position = UDim2.new(0.05, 0, 0.65, 0); down.Size = UDim2.new(0, 55, 0, 25)
+    down.Font = Enum.Font.GothamBold; down.Text = "DOWN"; down.TextColor3 = Color3.fromRGB(255, 255, 255); down.TextSize = 12
+    Instance.new("UICorner", down).CornerRadius = UDim.new(0, 4)
+
+    onof.Parent = Frame; onof.BackgroundColor3 = Color3.fromRGB(0, 120, 215)
+    onof.Position = UDim2.new(0.65, 0, 0.65, 0); onof.Size = UDim2.new(0, 60, 0, 25)
+    onof.Font = Enum.Font.GothamBold; onof.Text = "FLY"; onof.TextColor3 = Color3.fromRGB(255, 255, 255); onof.TextSize = 12
+    Instance.new("UICorner", onof).CornerRadius = UDim.new(0, 4)
+
+    plus.Parent = Frame; plus.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    plus.Position = UDim2.new(0.8, 0, 0.35, 0); plus.Size = UDim2.new(0, 30, 0, 25)
+    plus.Font = Enum.Font.GothamBold; plus.Text = "+"; plus.TextColor3 = Color3.fromRGB(0, 255, 0); plus.TextSize = 16
+    Instance.new("UICorner", plus).CornerRadius = UDim.new(0, 4)
+
+    speed.Parent = Frame; speed.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    speed.Position = UDim2.new(0.55, 0, 0.35, 0); speed.Size = UDim2.new(0, 40, 0, 25)
+    speed.Font = Enum.Font.GothamBold; speed.Text = "1"; speed.TextColor3 = Color3.fromRGB(255, 170, 0); speed.TextSize = 14
+    Instance.new("UICorner", speed).CornerRadius = UDim.new(0, 4)
+
+    mine.Parent = Frame; mine.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    mine.Position = UDim2.new(0.35, 0, 0.35, 0); mine.Size = UDim2.new(0, 30, 0, 25)
+    mine.Font = Enum.Font.GothamBold; mine.Text = "-"; mine.TextColor3 = Color3.fromRGB(255, 0, 0); mine.TextSize = 16
+    Instance.new("UICorner", mine).CornerRadius = UDim.new(0, 4)
+
+    closebutton.Parent = Frame; closebutton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+    closebutton.Position = UDim2.new(0.85, -5, -0.3, 0); closebutton.Size = UDim2.new(0, 25, 0, 25)
+    closebutton.Font = Enum.Font.GothamBold; closebutton.Text = "X"; closebutton.TextColor3 = Color3.fromRGB(255, 255, 255); closebutton.TextSize = 14
+    Instance.new("UICorner", closebutton).CornerRadius = UDim.new(0, 100)
+
+    mini.Parent = Frame; mini.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+    mini.Position = UDim2.new(0.7, -5, -0.3, 0); mini.Size = UDim2.new(0, 25, 0, 25)
+    mini.Font = Enum.Font.GothamBold; mini.Text = "-"; mini.TextColor3 = Color3.fromRGB(255, 255, 255); mini.TextSize = 18
+    Instance.new("UICorner", mini).CornerRadius = UDim.new(0, 100)
+
+    mini2.Parent = Frame; mini2.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+    mini2.Position = UDim2.new(0.7, -5, -0.3, 0); mini2.Size = UDim2.new(0, 25, 0, 25)
+    mini2.Font = Enum.Font.GothamBold; mini2.Text = "+"; mini2.TextColor3 = Color3.fromRGB(255, 255, 255); mini2.TextSize = 18
+    mini2.Visible = false
+    Instance.new("UICorner", mini2).CornerRadius = UDim.new(0, 100)
+
+    local speeds = 1
+    local speaker = game:GetService("Players").LocalPlayer
+    local nowe = false
+    local tpwalking = false
+
+    onof.MouseButton1Down:connect(function()
+        if nowe == true then
+            nowe = false
+            speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Climbing,true)
+            speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown,true)
+            speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Flying,true)
+            speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Freefall,true)
+            speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.GettingUp,true)
+            speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping,true)
+            speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Landed,true)
+            speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Physics,true)
+            speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.PlatformStanding,true)
+            speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll,true)
+            speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Running,true)
+            speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.RunningNoPhysics,true)
+            speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated,true)
+            speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.StrafingNoPhysics,true)
+            speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Swimming,true)
+            speaker.Character.Humanoid:ChangeState(Enum.HumanoidStateType.RunningNoPhysics)
+        else 
+            nowe = true
+            for i = 1, speeds do
+                spawn(function()
+                    local hb = game:GetService("RunService").Heartbeat  
+                    tpwalking = true
+                    local chr = game.Players.LocalPlayer.Character
+                    local hum = chr and chr:FindFirstChildWhichIsA("Humanoid")
+                    while tpwalking and hb:Wait() and chr and hum and hum.Parent do
+                        if hum.MoveDirection.Magnitude > 0 then
+                            chr:TranslateBy(hum.MoveDirection)
+                        end
+                    end
+                end)
+            end
+            speaker.Character.Animate.Disabled = true
+            local Hum = speaker.Character:FindFirstChildOfClass("Humanoid") or speaker.Character:FindFirstChildOfClass("AnimationController")
+            for i,v in next, Hum:GetPlayingAnimationTracks() do v:AdjustSpeed(0) end
+            speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Climbing,false)
+            speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown,false)
+            speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Flying,false)
+            speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Freefall,false)
+            speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.GettingUp,false)
+            speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping,false)
+            speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Landed,false)
+            speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Physics,false)
+            speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.PlatformStanding,false)
+            speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll,false)
+            speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Running,false)
+            speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.RunningNoPhysics,false)
+            speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated,false)
+            speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.StrafingNoPhysics,false)
+            speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Swimming,false)
+            speaker.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Swimming)
+        end
+
+        local torso = speaker.Character:FindFirstChild("Torso") or speaker.Character:FindFirstChild("UpperTorso")
+        if torso then
+            local ctrl = {f = 0, b = 0, l = 0, r = 0}
+            local lastctrl = {f = 0, b = 0, l = 0, r = 0}
+            local maxspeed = 50
+            local p_speed = 0
+            local bg = Instance.new("BodyGyro", torso)
+            bg.P = 9e4; bg.maxTorque = Vector3.new(9e9, 9e9, 9e9); bg.cframe = torso.CFrame
+            local bv = Instance.new("BodyVelocity", torso)
+            bv.velocity = Vector3.new(0,0.1,0); bv.maxForce = Vector3.new(9e9, 9e9, 9e9)
+            if nowe == true then speaker.Character.Humanoid.PlatformStand = true end
+            while nowe == true or speaker.Character.Humanoid.Health == 0 do
+                game:GetService("RunService").RenderStepped:Wait()
+                if ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0 then
+                    p_speed = p_speed+.5+(p_speed/maxspeed)
+                    if p_speed > maxspeed then p_speed = maxspeed end
+                elseif not (ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0) and p_speed ~= 0 then
+                    p_speed = p_speed-1
+                    if p_speed < 0 then p_speed = 0 end
+                end
+                if (ctrl.l + ctrl.r) ~= 0 or (ctrl.f + ctrl.b) ~= 0 then
+                    bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (ctrl.f+ctrl.b)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(ctrl.l+ctrl.r,(ctrl.f+ctrl.b)*.2,0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p))*p_speed
+                    lastctrl = {f = ctrl.f, b = ctrl.b, l = ctrl.l, r = ctrl.r}
+                elseif (ctrl.l + ctrl.r) == 0 and (ctrl.f + ctrl.b) == 0 and p_speed ~= 0 then
+                    bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (lastctrl.f+lastctrl.b)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(lastctrl.l+lastctrl.r,(lastctrl.f+lastctrl.b)*.2,0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p))*p_speed
+                else
+                    bv.velocity = Vector3.new(0,0,0)
+                end
+                bg.cframe = game.Workspace.CurrentCamera.CoordinateFrame * CFrame.Angles(-math.rad((ctrl.f+ctrl.b)*50*p_speed/maxspeed),0,0)
+            end
+            bg:Destroy(); bv:Destroy()
+            speaker.Character.Humanoid.PlatformStand = false
+            speaker.Character.Animate.Disabled = false
+            tpwalking = false
+        end
+    end)
+
+    local tis
+    up.MouseButton1Down:connect(function()
+        tis = up.MouseEnter:connect(function()
+            while tis do task.wait() speaker.Character.HumanoidRootPart.CFrame *= CFrame.new(0,1,0) end
+        end)
+    end)
+    up.MouseLeave:connect(function() if tis then tis:Disconnect() tis = nil end end)
+
+    local dis
+    down.MouseButton1Down:connect(function()
+        dis = down.MouseEnter:connect(function()
+            while dis do task.wait() speaker.Character.HumanoidRootPart.CFrame *= CFrame.new(0,-1,0) end
+        end)
+    end)
+    down.MouseLeave:connect(function() if dis then dis:Disconnect() dis = nil end end)
+
+    plus.MouseButton1Down:connect(function()
+        speeds = speeds + 1
+        speed.Text = tostring(speeds)
+    end)
+
+    mine.MouseButton1Down:connect(function()
+        if speeds > 1 then speeds = speeds - 1 end
+        speed.Text = tostring(speeds)
+    end)
+
+    closebutton.MouseButton1Click:Connect(function() main:Destroy() end)
+    mini.MouseButton1Click:Connect(function()
+        up.Visible = false; down.Visible = false; onof.Visible = false; plus.Visible = false; speed.Visible = false; mine.Visible = false
+        mini.Visible = false; mini2.Visible = true; Frame.BackgroundTransparency = 1; TextLabel.Visible = false
+    end)
+    mini2.MouseButton1Click:Connect(function()
+        up.Visible = true; down.Visible = true; onof.Visible = true; plus.Visible = true; speed.Visible = true; mine.Visible = true
+        mini.Visible = true; mini2.Visible = false; Frame.BackgroundTransparency = 0; TextLabel.Visible = true
+    end)
+    Rayfield:Notify({Title = "Thành Công", Content = "Đã mở giao diện Fly!", Duration = 2})
+end})
+
 TabOther:CreateToggle({Name = "Nhảy Vô Tận (Infinity Jump)", CurrentValue = false, Callback = function(v) InfJump = v end})
 UserInputService.JumpRequest:Connect(function() 
     if InfJump and LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then 
@@ -621,9 +862,7 @@ TabOther:CreateToggle({Name = "Ghi Hình Hành Động", CurrentValue = false, C
         RecData = {} 
         task.spawn(function() 
             while isRec do 
-                if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then 
-                    table.insert(RecData, LocalPlayer.Character.HumanoidRootPart.CFrame) 
-                end 
+                if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then table.insert(RecData, LocalPlayer.Character.HumanoidRootPart.CFrame) end 
                 task.wait(0.05) 
             end 
         end) 
@@ -632,10 +871,7 @@ end})
 
 TabOther:CreateButton({Name = "▶️ Phát Lại (Replay)", Callback = function() 
     if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then return end
-    for i = 1, #RecData do 
-        LocalPlayer.Character.HumanoidRootPart.CFrame = RecData[i] 
-        task.wait(0.05) 
-    end 
+    for i = 1, #RecData do LocalPlayer.Character.HumanoidRootPart.CFrame = RecData[i]; task.wait(0.05) end 
 end})
 
 TabOther:CreateButton({Name = "🪄 Lấy Gậy Dịch Chuyển (TP Tool)", Callback = function() 
@@ -690,9 +926,7 @@ TabOther:CreateInput({
     Name = "1. Nhập Tên Địa Điểm",
     PlaceholderText = "Nhập tên rồi bấm Enter...",
     RemoveTextAfterFocusLost = false,
-    Callback = function(Text)
-        CurrentWPName = Text
-    end,
+    Callback = function(Text) CurrentWPName = Text end,
 })
 
 local WPDropdown 
@@ -931,11 +1165,21 @@ local function TaoNut(btn, text, color)
     corner.Parent = btn
 end
 
- 
+TaoNut(BtnAura, "⚔️ Aura: OFF", Color3.fromRGB(200, 50, 50))
 TaoNut(BtnGhost, "👻 Ghost: OFF", Color3.fromRGB(100, 100, 100))
 TaoNut(BtnTelePlayer, "🚀 Bám Địch: OFF", Color3.fromRGB(100, 100, 100))
 TaoNut(BtnTeleWP, "📍 TP Tới Tọa Độ", Color3.fromRGB(200, 150, 0))
- 
+
+BtnAura.MouseButton1Click:Connect(function()
+    AuraOn = not AuraOn 
+    if AuraOn then
+        BtnAura.Text = "⚔️ Aura: ON"
+        BtnAura.BackgroundColor3 = Color3.fromRGB(50, 200, 50)
+    else
+        BtnAura.Text = "⚔️ Aura: OFF"
+        BtnAura.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+    end
+end)
 
 BtnGhost.MouseButton1Click:Connect(function()
     invisOn = not invisOn 
