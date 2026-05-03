@@ -1165,7 +1165,7 @@ local function TaoNut(btn, text, color)
     corner.Parent = btn
 end
 
-TaoNut(BtnAura, "⚔️ Aura: OFF", Color3.fromRGB(200, 50, 50))
+ 
 TaoNut(BtnGhost, "👻 Ghost: OFF", Color3.fromRGB(100, 100, 100))
 TaoNut(BtnTelePlayer, "🚀 Bám Địch: OFF", Color3.fromRGB(100, 100, 100))
 TaoNut(BtnTeleWP, "📍 TP Tới Tọa Độ", Color3.fromRGB(200, 150, 0))
