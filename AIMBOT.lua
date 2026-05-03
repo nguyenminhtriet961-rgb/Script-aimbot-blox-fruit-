@@ -1,7 +1,9 @@
 --[[
     👑 MTRIET VIP - ULTIMATE MASTER EDITION 👑
-    - Full Module: Hitbox Trắng, ESP, Ghost, Máy Lượm 4 Mode, Aura 3 Mode.
-    - Full Tiện ích: Bay, Jump, TP Người/Tọa độ, Xuất hồn, Lướt nhanh.
+    - Full Module: Hitbox Trắng, ESP, Ghost, Máy Lượm 4 Mode.
+    - Skill Aura Tối Thượng: Tách biệt Di chuyển & Tấn công, chọn số lượng VP, Auto Click/Skill.
+    - Full Tiện ích: Bay, Jump, TP Tọa độ, Xuất hồn, Lướt nhanh.
+    - NEW Săn Người: Bám Đuôi (Follow) tùy chỉnh Tầm & Hướng 360 độ.
     - Quick GUI nổi 4 nút cực xịn.
 ]]
 
@@ -26,7 +28,10 @@ local AFK_SkyPos = nil
 
 -- Biến Aura
 local AuraOn = false
-local AuraMode = "Chế độ 1: Đứng đỉnh đầu xả Skill"
+local AuraPosMode = "Đứng đỉnh đầu"
+local AuraMaxTools = 3
+local AuraAutoClick = true
+local AuraAutoSkills = false
 local AuraRange = 1000
 local AuraDistance = 5
 local AuraHeight = 10
@@ -43,13 +48,17 @@ local TOA_DO_3 = CFrame.new(1334.2, -115.2, 70.1)
 local TOA_DO_KHONG_GIAN = CFrame.new(391.8, 1285.3, 180.6)
 local BOSS_NAME = "King"
 
--- Biến Dịch Chuyển & Tiện Ích
+-- Biến Dịch Chuyển, Tiện Ích & Bám Đuôi
 local RecData, isRec, InfJump = {}, false, false
 local Waypoints = {}
 local CurrentWPName = "Chưa Đặt Tên"
 local SelectedWP = ""
 local RealBodyCFrame = nil 
+
 local TargetPlayerTP = ""
+local HuntOn = false
+local HuntDistance = 3
+local HuntDirection = "Sau Lưng"
 
 -- ==================== CÁC HÀM HỖ TRỢ ====================
 local function DungVatPham(myTool, mode)
@@ -373,25 +382,30 @@ task.spawn(function()
 end)
 
 -- ==========================================
--- ⚔️ TAB: KILL AURA
+-- ⚔️ TAB: KILL AURA 
 -- ==========================================
 local TabAura = Window:CreateTab("⚔️ Kill Aura")
 
 TabAura:CreateDropdown({
-    Name = "Chọn Chế Độ Đánh",
+    Name = "Vị Trí Bay Quanh Địch (Aura Position)",
     Options = {
-        "Chế độ 1: Đứng đỉnh đầu xả Skill", 
-        "Chế độ 2: Đánh Classic (Kiểu cũ)", 
-        "Chế độ 3: Xoay vòng tròn đánh thường"
+        "Đứng đỉnh đầu", 
+        "Bám sau lưng (Classic)", 
+        "Xoay vòng tròn (Orbit)"
     },
-    CurrentOption = {"Chế độ 1: Đứng đỉnh đầu xả Skill"},
-    Callback = function(Option) AuraMode = Option[1] end,
+    CurrentOption = {"Đứng đỉnh đầu"},
+    Callback = function(Option) AuraPosMode = Option[1] end,
 })
 
 TabAura:CreateSlider({Name = "Khoảng Cách (Xa/Gần)", Range = {0, 50}, Increment = 1, CurrentValue = 5, Callback = function(v) AuraDistance = v end})
 TabAura:CreateSlider({Name = "Chiều Cao (Trên đầu)", Range = {0, 50}, Increment = 1, CurrentValue = 10, Callback = function(v) AuraHeight = v end})
 TabAura:CreateSlider({Name = "Tốc Độ Đánh (Delay)", Range = {0.1, 3}, Increment = 0.1, CurrentValue = 0.5, Callback = function(v) AuraSpeed = v end})
 TabAura:CreateSlider({Name = "Tầm Quét Kẻ Địch (Range)", Range = {50, 5000}, Increment = 50, CurrentValue = 1000, Callback = function(v) AuraRange = v end})
+
+TabAura:CreateLabel("--- TÙY CHỈNH KỸ NĂNG & VŨ KHÍ ---")
+TabAura:CreateSlider({Name = "Số Lượng Vật Phẩm Dùng", Range = {1, 10}, Increment = 1, CurrentValue = 3, Callback = function(v) AuraMaxTools = v end})
+TabAura:CreateToggle({Name = "Tự Động Đánh Thường (Click)", CurrentValue = true, Callback = function(v) AuraAutoClick = v end})
+TabAura:CreateToggle({Name = "Tự Động Xả Phím Kỹ Năng (Z,X,C,V)", CurrentValue = false, Callback = function(v) AuraAutoSkills = v end})
 
 TabAura:CreateLabel("--- BỘ LỌC ĐỘ CAO MỤC TIÊU ---")
 TabAura:CreateSlider({Name = "Giới Hạn Cao Tối Đa (Max Y)", Range = {100, 2000}, Increment = 50, CurrentValue = 500, Callback = function(v) MaxTargetHeight = v end})
@@ -435,11 +449,11 @@ TabAura:CreateToggle({Name = "🚀 Bật Kill Aura", CurrentValue = false, Callb
                 local tPos = currentTarget.HumanoidRootPart.Position
                 hrp.Velocity = Vector3.zero 
                 
-                if AuraMode == "Chế độ 1: Đứng đỉnh đầu xả Skill" then
+                if AuraPosMode == "Đứng đỉnh đầu" then
                     hrp.CFrame = CFrame.new(tPos + Vector3.new(0, AuraHeight, 0), tPos)
-                elseif AuraMode == "Chế độ 2: Đánh Classic (Kiểu cũ)" then
+                elseif AuraPosMode == "Bám sau lưng (Classic)" then
                     hrp.CFrame = tCFrame * CFrame.new(0, AuraHeight, AuraDistance)
-                elseif AuraMode == "Chế độ 3: Xoay vòng tròn đánh thường" then
+                elseif AuraPosMode == "Xoay vòng tròn (Orbit)" then
                     OrbitAngle = OrbitAngle + math.rad(5)
                     local offset = Vector3.new(math.cos(OrbitAngle) * AuraDistance, AuraHeight, math.sin(OrbitAngle) * AuraDistance)
                     hrp.CFrame = CFrame.new(tPos + offset, tPos)
@@ -455,30 +469,17 @@ TabAura:CreateToggle({Name = "🚀 Bật Kill Aura", CurrentValue = false, Callb
                     for _, t in ipairs(LocalPlayer:WaitForChild("Backpack"):GetChildren()) do if t:IsA("Tool") then table.insert(tools, t) end end
                     for _, t in ipairs(char:GetChildren()) do if t:IsA("Tool") then table.insert(tools, t) end end
 
-                    if #tools > 0 then
-                        if AuraMode == "Chế độ 1: Đứng đỉnh đầu xả Skill" then
-                            for i = 1, math.min(3, #tools) do
-                                if not AuraOn or not currentTarget then break end
-                                local myTool = tools[i]
-                                char.Humanoid:EquipTool(myTool)
-                                task.wait(0.2)
-                                SpamSkillKeys() 
-                                task.wait(AuraSpeed)
-                            end
-                        elseif AuraMode == "Chế độ 2: Đánh Classic (Kiểu cũ)" then
-                            for _, myTool in ipairs(tools) do
-                                if not AuraOn or not currentTarget then break end
-                                char.Humanoid:EquipTool(myTool)
-                                task.wait(0.1)
-                                pcall(function() myTool:Activate() end)
-                                task.wait(AuraSpeed)
-                            end
-                        elseif AuraMode == "Chế độ 3: Xoay vòng tròn đánh thường" then
-                            local myTool = tools[2] or tools[1]
-                            if myTool then
-                                char.Humanoid:EquipTool(myTool)
-                                pcall(function() myTool:Activate() end)
-                            end
+                    local maxT = math.min(AuraMaxTools, #tools)
+                    if maxT > 0 then
+                        for i = 1, maxT do
+                            if not AuraOn or not currentTarget then break end
+                            local myTool = tools[i]
+                            char.Humanoid:EquipTool(myTool)
+                            task.wait(0.1)
+                            
+                            if AuraAutoClick then pcall(function() myTool:Activate() end) end
+                            if AuraAutoSkills then SpamSkillKeys() end
+                            
                             task.wait(AuraSpeed)
                         end
                     else
@@ -601,7 +602,7 @@ TabBoss:CreateToggle({
 })
 
 -- ==========================================
--- ⏳ TAB: TIỆN ÍCH (UTILITIES)
+-- ⏳ TAB: TIỆN ÍCH VIP 
 -- ==========================================
 local TabOther = Window:CreateTab("⏳ Tiện Ích VIP")
 
@@ -823,10 +824,10 @@ DelBtn = TabOther:CreateButton({
     end,
 })
 
-TabOther:CreateSection("⚔️ SĂN NGƯỜI CHƠI")
+TabOther:CreateSection("⚔️ SĂN NGƯỜI CHƠI (BÁM ĐUÔI)")
 
 TabOther:CreateDropdown({
-    Name = "Chọn Người Chơi Để Bay Tới",
+    Name = "Chọn Người Để Bám Theo",
     Options = {"Cập nhật danh sách..."},
     CurrentOption = {""},
     Flag = "Dropdown_TPPlayer",
@@ -834,7 +835,7 @@ TabOther:CreateDropdown({
 })
 
 TabOther:CreateButton({
-    Name = "🔄 Làm Mới Danh Sách Người Chơi",
+    Name = "🔄 Làm Mới Danh Sách",
     Callback = function()
         local list = {}
         for _, p in pairs(Players:GetPlayers()) do if p ~= LocalPlayer then table.insert(list, p.Name) end end
@@ -843,22 +844,47 @@ TabOther:CreateButton({
     end,
 })
 
-TabOther:CreateButton({
-    Name = "🚀 Bay Tới Kẻ Này Ngay",
-    Callback = function()
-        if TargetPlayerTP ~= "" and TargetPlayerTP ~= "Không có ai" then
-            local target = Players:FindFirstChild(TargetPlayerTP)
-            local char = LocalPlayer.Character
-            if target and target.Character and target.Character:FindFirstChild("HumanoidRootPart") and char and char:FindFirstChild("HumanoidRootPart") then
-                char.HumanoidRootPart.CFrame = target.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, 3)
-                Rayfield:Notify({Title = "Thành Công", Content = "Đã tập kích: " .. TargetPlayerTP, Duration = 2})
-            else
-                Rayfield:Notify({Title = "Lỗi", Content = "Mục tiêu đã chết hoặc rời server!", Duration = 2})
-            end
+TabOther:CreateSlider({Name = "Khoảng Cách Bám (Mét)", Range = {1, 50}, Increment = 1, CurrentValue = 3, Callback = function(v) HuntDistance = v end})
+
+TabOther:CreateDropdown({
+    Name = "Hướng Bám Theo",
+    Options = {"Sau Lưng", "Trước Mặt", "Bên Trái", "Bên Phải", "Trên Đầu"},
+    CurrentOption = {"Sau Lưng"},
+    Callback = function(Option) HuntDirection = Option[1] end,
+})
+
+TabOther:CreateToggle({
+    Name = "🚀 Bật/Tắt Bám Đuôi",
+    CurrentValue = false,
+    Callback = function(Value)
+        HuntOn = Value
+        if HuntOn then
+            HuntConnection = RunService.Heartbeat:Connect(function()
+                if TargetPlayerTP ~= "" and TargetPlayerTP ~= "Không có ai" then
+                    local target = Players:FindFirstChild(TargetPlayerTP)
+                    local char = LocalPlayer.Character
+                    if target and target.Character and target.Character:FindFirstChild("HumanoidRootPart") and char and char:FindFirstChild("HumanoidRootPart") then
+                        local hrp = char.HumanoidRootPart
+                        local tCFrame = target.Character.HumanoidRootPart.CFrame
+                        hrp.Velocity = Vector3.zero
+                        if HuntDirection == "Sau Lưng" then
+                            hrp.CFrame = tCFrame * CFrame.new(0, 0, HuntDistance)
+                        elseif HuntDirection == "Trước Mặt" then
+                            hrp.CFrame = tCFrame * CFrame.new(0, 0, -HuntDistance) * CFrame.Angles(0, math.rad(180), 0)
+                        elseif HuntDirection == "Bên Trái" then
+                            hrp.CFrame = tCFrame * CFrame.new(-HuntDistance, 0, 0) * CFrame.Angles(0, math.rad(-90), 0)
+                        elseif HuntDirection == "Bên Phải" then
+                            hrp.CFrame = tCFrame * CFrame.new(HuntDistance, 0, 0) * CFrame.Angles(0, math.rad(90), 0)
+                        elseif HuntDirection == "Trên Đầu" then
+                            hrp.CFrame = tCFrame * CFrame.new(0, HuntDistance, 0) * CFrame.Angles(math.rad(-90), 0, 0)
+                        end
+                    end
+                end
+            end)
         else
-            Rayfield:Notify({Title = "Lỗi", Content = "Chưa chọn ai cả!", Duration = 2})
+            if HuntConnection then HuntConnection:Disconnect() HuntConnection = nil end
         end
-    end,
+    end
 })
 
 -- ==============================================================================
@@ -905,21 +931,11 @@ local function TaoNut(btn, text, color)
     corner.Parent = btn
 end
 
-TaoNut(BtnAura, "⚔️ Aura: OFF", Color3.fromRGB(200, 50, 50))
+ 
 TaoNut(BtnGhost, "👻 Ghost: OFF", Color3.fromRGB(100, 100, 100))
-TaoNut(BtnTelePlayer, "🚀 TP Tới Kẻ Địch", Color3.fromRGB(0, 120, 215))
+TaoNut(BtnTelePlayer, "🚀 Bám Địch: OFF", Color3.fromRGB(100, 100, 100))
 TaoNut(BtnTeleWP, "📍 TP Tới Tọa Độ", Color3.fromRGB(200, 150, 0))
-
-BtnAura.MouseButton1Click:Connect(function()
-    AuraOn = not AuraOn 
-    if AuraOn then
-        BtnAura.Text = "⚔️ Aura: ON"
-        BtnAura.BackgroundColor3 = Color3.fromRGB(50, 200, 50)
-    else
-        BtnAura.Text = "⚔️ Aura: OFF"
-        BtnAura.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
-    end
-end)
+ 
 
 BtnGhost.MouseButton1Click:Connect(function()
     invisOn = not invisOn 
@@ -953,15 +969,42 @@ BtnGhost.MouseButton1Click:Connect(function()
 end)
 
 BtnTelePlayer.MouseButton1Click:Connect(function()
-    if TargetPlayerTP and TargetPlayerTP ~= "" and TargetPlayerTP ~= "Không có ai" then
-        local target = Players:FindFirstChild(TargetPlayerTP)
-        local char = LocalPlayer.Character
-        if target and target.Character and target.Character:FindFirstChild("HumanoidRootPart") and char and char:FindFirstChild("HumanoidRootPart") then
-            char.HumanoidRootPart.CFrame = target.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, 3)
-            Rayfield:Notify({Title = "Thành Công", Content = "Đã tập kích: " .. TargetPlayerTP, Duration = 2})
+    HuntOn = not HuntOn
+    if HuntOn then
+        if TargetPlayerTP == "" or TargetPlayerTP == "Không có ai" then
+            HuntOn = false
+            Rayfield:Notify({Title = "Lỗi", Content = "Hãy mở Hub và chọn mục tiêu trước!", Duration = 3})
+            return
         end
+        BtnTelePlayer.Text = "🚀 Bám Địch: ON"
+        BtnTelePlayer.BackgroundColor3 = Color3.fromRGB(50, 200, 50)
+        
+        HuntConnection = RunService.Heartbeat:Connect(function()
+            if TargetPlayerTP ~= "" and TargetPlayerTP ~= "Không có ai" then
+                local target = Players:FindFirstChild(TargetPlayerTP)
+                local char = LocalPlayer.Character
+                if target and target.Character and target.Character:FindFirstChild("HumanoidRootPart") and char and char:FindFirstChild("HumanoidRootPart") then
+                    local hrp = char.HumanoidRootPart
+                    local tCFrame = target.Character.HumanoidRootPart.CFrame
+                    hrp.Velocity = Vector3.zero
+                    if HuntDirection == "Sau Lưng" then
+                        hrp.CFrame = tCFrame * CFrame.new(0, 0, HuntDistance)
+                    elseif HuntDirection == "Trước Mặt" then
+                        hrp.CFrame = tCFrame * CFrame.new(0, 0, -HuntDistance) * CFrame.Angles(0, math.rad(180), 0)
+                    elseif HuntDirection == "Bên Trái" then
+                        hrp.CFrame = tCFrame * CFrame.new(-HuntDistance, 0, 0) * CFrame.Angles(0, math.rad(-90), 0)
+                    elseif HuntDirection == "Bên Phải" then
+                        hrp.CFrame = tCFrame * CFrame.new(HuntDistance, 0, 0) * CFrame.Angles(0, math.rad(90), 0)
+                    elseif HuntDirection == "Trên Đầu" then
+                        hrp.CFrame = tCFrame * CFrame.new(0, HuntDistance, 0) * CFrame.Angles(math.rad(-90), 0, 0)
+                    end
+                end
+            end
+        end)
     else
-        Rayfield:Notify({Title = "Lỗi", Content = "Hãy mở Hub và chọn người trong Tab Tiện Ích!", Duration = 3})
+        BtnTelePlayer.Text = "🚀 Bám Địch: OFF"
+        BtnTelePlayer.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+        if HuntConnection then HuntConnection:Disconnect() HuntConnection = nil end
     end
 end)
 
