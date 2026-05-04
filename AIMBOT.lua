@@ -1,12 +1,4 @@
---[[
-    👑 MTRIET VIP - ULTIMATE MASTER EDITION (BẢN HOÀN THIỆN NHẤT) 👑
-    - Full Module: Hitbox mờ tàng hình, ESP, Ghost, Máy Lượm 4 Mode.
-    - Skill Aura Tối Thượng: Đổi target gần nhất, bật/tắt Max Y, Chế độ 2 Yo-Yo Drop.
-    - Full Tiện ích: Fly GUI, Jump, TP Tọa độ, Xuất hồn, Lướt nhanh, Bám đuôi.
-    - Quick GUI nổi 4 nút cực xịn.
-]]
-
-local CoreGui = game:GetService("CoreGui")
+ local CoreGui = game:GetService("CoreGui")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
@@ -146,7 +138,7 @@ local Window = Rayfield:CreateWindow({
         FileName = "MinTHub_Key",
         SaveKey = true,
         GrabKeyFromSite = false,
-        Key = {"suculu197834"} 
+        Key = {"khonlangoccu"} 
     }
 })
 
