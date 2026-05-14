@@ -1,12 +1,1264 @@
 --[[
- .____                  ________ ___.    _____                           __                
- |    |    __ _______   \_____  \\_ |___/ ____\_ __  ______ ____ _____ _/  |_  ___________ 
- |    |   |  |  \__  \   /   |   \| __ \   __\  |  \/  ___// ___\\__  \\   __\/  _ \_  __ \
- |    |___|  |  // __ \_/    |    \ \_\ \  | |  |  /\___ \\  \___ / __ \|  | (  <_> )  | \/
- |_______ \____/(____  /\_______  /___  /__| |____//____  >\___  >____  /__|  \____/|__|   
-         \/          \/         \/    \/                \/     \/     \/                   
-          \_Welcome to LuaObfuscator.com   (Alpha 0.10.9) ~  Much Love, Ferib 
+   👑 MTRIET VIP - ULTIMATE MASTER EDITION (BẢN HOÀN THIỆN NHẤT) 👑
+   - Full Module: Hitbox mờ tàng hình, ESP, Ghost, Máy Lượm 4 Mode.
+   - Skill Aura Tối Thượng: Đổi target gần nhất, bật/tắt Max Y, Chế độ 2 Yo-Yo Drop.
+   - Full Tiện ích: Fly GUI, Jump, TP Tọa độ, Xuất hồn, Lướt nhanh, Bám đuôi.
+   - Quick GUI nổi 4 nút cực xịn.
+]]
 
-]]--
+local CoreGui = game:GetService("CoreGui")
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local Workspace = game:GetService("Workspace")
+local TweenService = game:GetService("TweenService")
+local VIM = game:GetService("VirtualInputManager")
 
-local v0=tonumber;local v1=string.byte;local v2=string.char;local v3=string.sub;local v4=string.gsub;local v5=string.rep;local v6=table.concat;local v7=table.insert;local v8=math.ldexp;local v9=getfenv or function() return _ENV;end ;local v10=setmetatable;local v11=pcall;local v12=select;local v13=unpack or table.unpack ;local v14=tonumber;local function v15(v16,v17,...) local v18=1;local v19;v16=v4(v3(v16,5),"..",function(v30) if (v1(v30,2)==81) then v19=v0(v3(v30,1,1));return "";else local v78=v2(v0(v30,16));if v19 then local v87=0;local v88;while true do if (v87==0) then v88=v5(v78,v19);v19=nil;v87=1;end if (v87==1) then return v88;end end else return v78;end end end);local function v20(v31,v32,v33) if v33 then local v79=(v31/((5 -3)^(v32-(2 -(1 -0)))))%((3 -1)^(((v33-1) -(v32-(928 -(214 + 713)))) + (1066 -(68 + 997)) + 0)) ;return v79-(v79%(1 + 0)) ;else local v80=(879 -((1552 -(226 + 1044)) + 595))^(v32-(2 -1)) ;return (((v31%(v80 + v80))>=v80) and ((2699 -2079) -(555 + 64))) or (0 + 0) ;end end local function v21() local v34=v1(v16,v18,v18);v18=v18 + 1 ;return v34;end local function v22() local v35,v36=v1(v16,v18,v18 + (119 -(32 + 85)) );v18=v18 + 2 ;return (v36 * (251 + 5)) + v35 ;end local function v23() local v37,v38,v39,v40=v1(v16,v18,v18 + (1 -0) + 2 );v18=v18 + ((1311 -(87 + 263)) -(892 + 65)) ;return (v40 * (40022563 -23245347)) + (v39 * (121138 -55602)) + (v38 * (436 -(67 + 113))) + v37 ;end local function v24() local v41=v23();local v42=v23();local v43=1 + 0 ;local v44=(v20(v42,2 -1 ,15 + 5 ) * (((21 -14) -5)^(984 -((820 -(10 + 8)) + 150)))) + v41 ;local v45=v20(v42,(215 -159) -35 ,55 -24 );local v46=((v20(v42,24 + 8 )==(998 -((1357 -(416 + 26)) + 82))) and  -1) or (2 -1) ;if (v45==(0 + 0)) then if (v44==(0 -0)) then return v46 * 0 ;else v45=1188 -(1069 + 118) ;v43=0 -0 ;end elseif (v45==((14294 -9817) -2430)) then return ((v44==(0 + 0)) and (v46 * ((1 -(0 + 0))/0))) or (v46 * NaN) ;end return v8(v46,v45-(1015 + 8) ) * (v43 + (v44/((793 -(368 + (747 -324)))^52))) ;end local function v25(v47) local v48=0;local v49;local v50;while true do if (v48==(441 -(145 + 293))) then return v6(v50);end if (v48==(431 -(44 + 386))) then v49=v3(v16,v18,(v18 + v47) -1 );v18=v18 + v47 ;v48=1488 -(998 + 488) ;end if (v48==(1 + 1)) then v50={};for v89=1 + (0 -0) , #v49 do v50[v89]=v2(v1(v3(v49,v89,v89)));end v48=775 -(201 + 571) ;end if (v48==(1138 -(116 + 1022))) then v49=nil;if  not v47 then v47=v23();if (v47==(0 -0)) then return "";end end v48=1 + (0 -0) ;end end end local v26=v23;local function v27(...) return {...},v12("#",...);end local function v28() local v51=(function() return 0;end)();local v52=(function() return;end)();local v53=(function() return;end)();local v54=(function() return;end)();local v55=(function() return;end)();local v56=(function() return;end)();local v57=(function() return;end)();while true do if (2==v51) then for v91= #"~",v23() do local v92=(function() return v21();end)();if (v20(v92, #",", #"|")~=0) then else local v99=(function() return 374 -(123 + 251) ;end)();local v100=(function() return;end)();local v101=(function() return;end)();local v102=(function() return;end)();while true do if (v99~=(9 -7)) then else if (v20(v101, #".", #"~")== #"!") then v102[700 -(208 + 490) ]=(function() return v57[v102[1 + 1 ]];end)();end if (v20(v101,2,2)~= #">") then else v102[ #"-19"]=(function() return v57[v102[ #"asd"]];end)();end v99=(function() return 2 + 1 ;end)();end if (v99~=3) then else if (v20(v101, #"91(", #"xxx")~= #"[") then else v102[ #"0836"]=(function() return v57[v102[ #"?id="]];end)();end v52[v91]=(function() return v102;end)();break;end if (v99==(837 -(660 + 176))) then local v104=(function() return 0;end)();local v105=(function() return;end)();while true do if (v104==0) then v105=(function() return 0 + 0 ;end)();while true do if (v105==(203 -(14 + 188))) then v99=(function() return 677 -(534 + 141) ;end)();break;end if (v105~=0) then else v102=(function() return {v22(),v22(),nil,nil};end)();if (v100==0) then local v432=(function() return 0;end)();local v433=(function() return;end)();while true do if ((0 + 0)~=v432) then else v433=(function() return 0;end)();while true do if (v433~=(0 + 0)) then else v102[ #"-19"]=(function() return v22();end)();v102[ #"xnxx"]=(function() return v22();end)();break;end end break;end end elseif (v100== #"\\") then v102[ #"asd"]=(function() return v23();end)();elseif (v100==2) then v102[ #"xxx"]=(function() return v23() -((2 + 0)^(33 -17)) ;end)();elseif (v100== #"asd") then local v479=(function() return 0;end)();local v480=(function() return;end)();while true do if (0==v479) then v480=(function() return 0;end)();while true do if (v480==0) then v102[ #"-19"]=(function() return v23() -(2^16) ;end)();v102[ #".dev"]=(function() return v22();end)();break;end end break;end end end v105=(function() return 1;end)();end end break;end end end if ((0 -0)~=v99) then else local v106=(function() return 0 -0 ;end)();local v107=(function() return;end)();while true do if (v106~=0) then else v107=(function() return 0;end)();while true do if (v107==(1 + 0)) then v99=(function() return 1 + 0 ;end)();break;end if (v107~=(396 -(115 + 281))) then else v100=(function() return v20(v92,4 -2 , #"91(");end)();v101=(function() return v20(v92, #".com",5 + 1 );end)();v107=(function() return 2 -1 ;end)();end end break;end end end end end end for v93= #">",v23() do v53[v93-#"}" ]=(function() return v28();end)();end return v55;end if ( #"}"~=v51) then else local v84=(function() return 0 -0 ;end)();local v85=(function() return;end)();while true do if (v84~=(867 -(550 + 317))) then else v85=(function() return 0 -0 ;end)();while true do if (2==v85) then v51=(function() return 2 -0 ;end)();break;end if (v85==(2 -1)) then for v109= #"{",v56 do local v110=(function() return 0;end)();local v111=(function() return;end)();local v112=(function() return;end)();while true do if (v110~=0) then else local v303=(function() return 285 -(134 + 151) ;end)();local v304=(function() return;end)();while true do if (v303==0) then v304=(function() return 1665 -(970 + 695) ;end)();while true do if (v304~=0) then else v111=(function() return v21();end)();v112=(function() return nil;end)();v304=(function() return 1 -0 ;end)();end if (v304==(1991 -(582 + 1408))) then v110=(function() return 3 -2 ;end)();break;end end break;end end end if (v110~=(1 -0)) then else if (v111== #"}") then v112=(function() return v21()~=0 ;end)();elseif (v111==(7 -5)) then v112=(function() return v24();end)();elseif (v111~= #"xxx") then else v112=(function() return v25();end)();end v57[v109]=(function() return v112;end)();break;end end end v55[ #"xnx"]=(function() return v21();end)();v85=(function() return 2;end)();end if (v85==0) then v56=(function() return v23();end)();v57=(function() return {};end)();v85=(function() return 1;end)();end end break;end end end if (v51==0) then local v86=(function() return 1824 -(1195 + 629) ;end)();while true do if (v86~=1) then else v54=(function() return {};end)();v55=(function() return {v52,v53,nil,v54};end)();v86=(function() return 2;end)();end if (2~=v86) then else v51=(function() return  #">";end)();break;end if (v86~=(241 -(187 + 54))) then else v52=(function() return {};end)();v53=(function() return {};end)();v86=(function() return 1;end)();end end end end end local function v29(v58,v59,v60) local v61=v58[781 -(162 + 618) ];local v62=v58[2 + 0 ];local v63=v58[2 + 1 ];return function(...) local v64=v61;local v65=v62;local v66=v63;local v67=v27;local v68=1 -0 ;local v69= -(1 -0);local v70={};local v71={...};local v72=v12("#",...) -(1637 -(1373 + 263)) ;local v73={};local v74={};for v81=1000 -(451 + 549) ,v72 do if ((3780>2709) and (v81>=v66)) then v70[v81-v66 ]=v71[v81 + (255 -(79 + 175)) ];else v74[v81]=v71[v81 + 1 + 0 ];end end local v75=(v72-v66) + 1 ;local v76;local v77;while true do v76=v64[v68];v77=v76[(1 -0) -(0 + 0) ];if (v77<=18) then if (v77<=(13 -5)) then if (v77<=3) then if ((3891<4141) and (v77<=(2 -1))) then if ((v77==(1384 -(746 + 638))) or (2011>=3155)) then do return;end else v74[v76[1 + 1 ]]=v76[4 -1 ] + v74[v76[345 -((419 -201) + 123) ]] ;end elseif (v77==(1583 -(1535 + 46))) then v74[v76[2 + 0 ]]=v74[v76[1 + (901 -(503 + 396)) ]] + v76[564 -(306 + 254) ] ;else local v118=v76[1 + 1 ];local v119=v74[v118];local v120=v74[v118 + (3 -1) ];if ((v120>0) or (237>=2273)) then if ((553<1543) and (v119>v74[v118 + (1468 -(899 + 568)) ])) then v68=v76[2 + 1 ];else v74[v118 + (7 -4) ]=v119;end elseif ((2015==2015) and (v119<v74[v118 + 1 ])) then v68=v76[3];else v74[v118 + (184 -(92 + 89)) ]=v119;end end elseif ((v77<=(608 -((519 -251) + 335))) or (4241<=2332)) then if (v77==(294 -(60 + 230))) then v74[v76[(295 + 279) -(426 + 87 + 59) ]][v76[1 + 2 ]]=v74[v76[1460 -((1104 -822) + 1174) ]];else local v123=v76[813 -(569 + 242) ];v74[v123](v13(v74,v123 + 1 ,v69));end elseif ((v77<=(17 -11)) or (2040<=703)) then v74[v76[1 + 0 + 1 ]]=v76[1027 -(706 + 318) ];elseif ((3279<=3967) and (v77>(1258 -(721 + (1208 -678))))) then local v325=v76[1273 -(945 + 326) ];local v326=v74[v76[7 -(4 + 0) ]];v74[v325 + 1 + 0 ]=v326;v74[v325]=v326[v76[4]];else v74[v76[702 -(271 + 429) ]]=v74[v76[3 + 0 ]]%v74[v76[1504 -(1408 + 92) ]] ;end elseif ((v77<=13) or (1988==877)) then if (v77<=(1096 -(461 + 625))) then if ((4291>1912) and ((v77>9) or (2364<1157))) then local v126=0;local v127;local v128;local v129;local v130;local v131;while true do if (v126==5) then v74[v131]=v130[v76[1292 -(993 + 295) ]];v68=v68 + 1 + 0 ;v76=v64[v68];v74[v76[1173 -(418 + 753) ]]=v76[2 + 1 ];v126=1 + 5 ;end if (v126==(3 + 5)) then v76=v64[v68];v131=v76[1 + 1 ];v74[v131]=v74[v131](v13(v74,v131 + (530 -(406 + 123)) ,v69));v68=v68 + ((846 + 924) -(1749 + 20)) ;v126=3 + 6 ;end if ((v126==3) or (1167>1278)) then v68=v68 + ((4029 -2706) -(1249 + 73)) ;v76=v64[v68];v74[v76[2]]=v60[v76[2 + 1 ]];v68=v68 + (1146 -(466 + 679)) ;v126=9 -5 ;end if (v126==7) then v69=(v129 + v131) -(2 -1) ;v127=1900 -(106 + 1794) ;for v407=v131,v69 do v127=v127 + 1 + 0 ;v74[v407]=v128[v127];end v68=v68 + 1 + 0 ;v126=8;end if (v126==6) then v68=v68 + (2 -(1 + 0)) ;v76=v64[v68];v131=v76[(7 -2) -3 ];v128,v129=v67(v74[v131](v13(v74,v131 + (115 -(4 + 110)) ,v76[587 -(57 + 527) ])));v126=1434 -(41 + 1386) ;end if ((2003<2339) and (v126==(112 -(17 + 86)))) then v76=v64[v68];v74[v76[2]]();v68=v68 + 1 + 0 ;v76=v64[v68];v126=22 -(1256 -(485 + 759)) ;end if (v126==(11 -7)) then v76=v64[v68];v131=v76[(388 -220) -((1311 -(442 + 747)) + 44) ];v130=v74[v76[5 -2 ]];v74[v131 + (3 -2) ]=v130;v126=5 + (1135 -(832 + 303)) ;end if (v126==(2 + 8)) then do return;end break;end if (v126==(946 -(88 + 858))) then v127=nil;v128,v129=nil;v130=nil;v131=nil;v126=1 -0 ;end if (v126==(66 -(30 + 35))) then v74[v76[2 + 0 ]][v74[v76[1260 -(318 + 725 + 214) ]]]=v74[v76[15 -11 ]];v68=v68 + (1213 -(323 + 736 + 153)) ;v76=v64[v68];v131=v76[5 -3 ];v126=582 -(361 + 219) ;end if ((432==432) and (v126==2)) then v74[v131]=v74[v131](v13(v74,v131 + (321 -(53 + 267)) ,v76[1 + 2 ]));v68=v68 + (414 -(15 + 398)) ;v76=v64[v68];v74[v76[984 -(18 + 964) ]]=v60[v76[11 -(1 + 7) ]];v126=3;end end else v74[v76[2]]=v74[v76[2 + 1 ]][v76[3 + 1 ]];end elseif ((v77<=(861 -(20 + (1619 -(766 + 23))))) or (1145<=1082)) then v74[v76[2 + 0 ]][v74[v76[129 -(116 + 10) ]]]=v74[v76[1 + 3 ]];elseif (v77>(750 -((2675 -2133) + 196))) then local v331=0;local v332;local v333;local v334;local v335;while true do if (v331==(0 -0)) then v332=v76[1 + 1 ];v333,v334=v67(v74[v332](v74[v332 + 1 + 0 ]));v331=1 + 0 ;end if ((v331==(2 -1)) or (1145>=1253)) then v69=(v334 + v332) -(2 -(1 -0)) ;v335=1551 -(1126 + (1119 -694)) ;v331=407 -(118 + 287) ;end if ((v331==(6 -4)) or (3105==4881)) then for v458=v332,v69 do v335=v335 + (3 -2) ;v74[v458]=v333[v335];end break;end end else local v336=v76[1123 -(118 + 1003) ];local v337=v74[v336 + (5 -(1076 -(1036 + 37))) ];local v338=v74[v336] + v337 ;v74[v336]=v338;if (v337>(377 -(142 + 235))) then if (v338<=v74[v336 + (4 -3) ]) then local v461=0 + 0 + 0 ;while true do if ((3418>2118) and ((v461==0) or (1887>4878))) then v68=v76[980 -(553 + 424) ];v74[v336 + (5 -2) ]=v338;break;end end end elseif (v338>=v74[v336 + 1 + 0 ]) then local v462=0 + 0 ;while true do if ((v462==(0 + (0 -0))) or (4087>4116)) then v68=v76[2 + 1 + 0 ];v74[v336 + 2 + 1 ]=v338;break;end end end end elseif (v77<=15) then if (v77==14) then local v136=v76[4 -(1482 -(641 + 839)) ];local v137,v138=v67(v74[v136](v13(v74,v136 + (2 -(914 -(910 + 3))) ,v76[6 -3 ])));v69=(v138 + v136) -(1 + 0) ;local v139=0 -(0 -0) ;for v306=v136,v69 do v139=v139 + (754 -(239 + 514)) ;v74[v306]=v137[v139];end else local v140=v76[2];local v141,v142=v67(v74[v140](v13(v74,v140 + 1 ,v69)));v69=(v142 + v140) -(1 + 0) ;local v143=0;for v309=v140,v69 do local v310=0;while true do if ((3066<=3890) and (1106<=1266) and (v310==(1329 -(797 + 532)))) then v143=v143 + 1 + 0 ;v74[v309]=v141[v143];break;end end end end elseif (v77<=(6 + 10)) then local v144;local v145;local v146,v147;local v148;local v149;v74[v76[4 -2 ]]=v74[v76[(2889 -(1466 + 218)) -(373 + 829) ]];v68=v68 + (732 -(476 + 255)) ;v76=v64[v68];v74[v76[1132 -(369 + 761) ]]=v76[2 + 1 ];v68=v68 + 1 ;v76=v64[v68];v74[v76[2 -0 ]]=v76[(3 + 2) -2 ];v68=v68 + (239 -(64 + 174)) ;v76=v64[v68];v149=v76[(1149 -(556 + 592)) + 1 ];v74[v149]=v74[v149](v13(v74,v149 + (1 -0) ,v76[339 -(144 + 192) ]));v68=v68 + ((78 + 139) -(42 + 174)) ;v76=v64[v68];v74[v76[2 + 0 ]][v76[3 + 0 ]]=v74[v76[2 + 2 ]];v68=v68 + (1505 -(363 + 1141)) ;v76=v64[v68];v74[v76[(2390 -(329 + 479)) -(1183 + 397) ]]=v74[v76[8 -5 ]];v68=v68 + 1 + 0 ;v76=v64[v68];v74[v76[2 + 0 ]]=v76[1978 -(1913 + 62) ];v68=v68 + 1 + 0 ;v76=v64[v68];v74[v76[5 -3 ]]=v76[1936 -(565 + 1368) ];v68=v68 + (3 -2) ;v76=v64[v68];v149=v76[1663 -(1477 + 184) ];v74[v149]=v74[v149](v13(v74,v149 + 1 ,v76[(857 -(174 + 680)) -0 ]));v68=v68 + 1 + 0 ;v76=v64[v68];v74[v76[858 -((1937 -1373) + 292) ]][v76[4 -1 ]]=v74[v76[11 -7 ]];v68=v68 + (305 -(244 + 60)) ;v76=v64[v68];v74[v76[2 + 0 ]]=v74[v76[479 -(41 + 435) ]];v68=v68 + (1002 -((1943 -1005) + 63)) ;v76=v64[v68];v74[v76[2 + 0 ]]=v76[1128 -(936 + 189) ];v68=v68 + 1 + 0 ;v76=v64[v68];v74[v76[1615 -(1565 + 48) ]]=v76[2 + 1 ];v68=v68 + (1139 -(782 + 356)) ;v76=v64[v68];v149=v76[269 -(176 + 91) ];v74[v149]=v74[v149](v13(v74,v149 + 1 ,v76[3]));v68=v68 + (2 -1) ;v76=v64[v68];v74[v76[2 -0 ]][v76[3]]=v74[v76[(783 + 313) -(975 + 117) ]];v68=v68 + (1876 -(157 + 1718)) ;v76=v64[v68];v74[v76[2]]=v74[v76[3]];v68=v68 + 1 + 0 ;v76=v64[v68];v74[v76[6 -4 ]]=v76[10 -7 ];v68=v68 + ((1758 -(396 + 343)) -(62 + 635 + 321)) ;v76=v64[v68];v74[v76[(1482 -(29 + 1448)) -3 ]]=v76[5 -2 ];v68=v68 + (2 -1) ;v76=v64[v68];v149=v76[1 + (1390 -(135 + 1254)) ];v74[v149]=v74[v149](v13(v74,v149 + 1 ,v76[5 -2 ]));v68=v68 + (2 -1) ;v76=v64[v68];v74[v76[2]][v76[1230 -(322 + 905) ]]=v74[v76[615 -(602 + 9) ]];v68=v68 + 1 ;v76=v64[v68];v74[v76[2]]=v74[v76[1192 -(449 + 740) ]];v68=v68 + (873 -((3111 -2285) + 46)) ;v76=v64[v68];v74[v76[949 -(245 + 702) ]]=v76[3];v68=v68 + (3 -2) ;v76=v64[v68];v74[v76[1 + 1 ]]=v76[1901 -(260 + 1638) ];v68=v68 + (441 -(382 + 58)) ;v76=v64[v68];v149=v76[(27 -21) -4 ];v74[v149]=v74[v149](v13(v74,v149 + 1 + 0 ,v76[3]));v68=v68 + 1 ;v76=v64[v68];v74[v76[2 + 0 ]][v76[5 -2 ]]=v74[v76[11 -7 ]];v68=v68 + (1206 -(902 + 303)) ;v76=v64[v68];v74[v76[3 -1 ]]=v74[v76[6 -(1530 -(389 + 1138)) ]];v68=v68 + 1 + 0 ;v76=v64[v68];v74[v76[1692 -(1121 + 569) ]]=v76[217 -(22 + 192) ];v68=v68 + (684 -(483 + 200)) ;v76=v64[v68];v74[v76[1465 -(1404 + 59) ]]=v76[(582 -(102 + 472)) -5 ];v68=v68 + (1 -0) ;v76=v64[v68];v149=v76[767 -(442 + 26 + 297) ];v74[v149]=v74[v149](v13(v74,v149 + (563 -(186 + 148 + 228)) ,v76[3 + 0 ]));v68=v68 + (3 -2) ;v76=v64[v68];v74[v76[(1549 -(320 + 1225)) -2 ]][v76[5 -2 ]]=v74[v76[2 + 2 ]];v68=v68 + (237 -(141 + 95)) ;v76=v64[v68];v74[v76[2 + 0 ]]=v74[v76[5 -2 ]];v68=v68 + 1 ;v76=v64[v68];v74[v76[4 -2 ]]=v76[3];v68=v68 + (2 -1) ;v76=v64[v68];v74[v76[1 + 1 ]]=v76[3];v68=v68 + (2 -1) ;v76=v64[v68];v149=v76[2 + 0 ];v74[v149]=v74[v149](v13(v74,v149 + 1 + 0 ,v76[4 -1 ]));v68=v68 + 1 + 0 ;v76=v64[v68];v74[v76[165 -(57 + 35 + 71) ]][v76[2 + 1 ]]=v74[v76[6 -2 ]];v68=v68 + 1 ;v76=v64[v68];v74[v76[767 -(574 + 191) ]]=v74[v76[3 + 0 ]];v68=v68 + (2 -1) ;v76=v64[v68];v74[v76[2]]=v76[2 + 1 ];v68=v68 + (850 -(254 + 595)) ;v76=v64[v68];v74[v76[128 -(55 + 71) ]]=v76[3];v68=v68 + (1 -0) ;v76=v64[v68];v149=v76[1792 -(573 + 1217) ];v74[v149]=v74[v149](v13(v74,v149 + (2 -1) ,v76[1 + 2 ]));v68=v68 + 1 ;v76=v64[v68];v74[v76[2 -0 ]][v76[942 -(714 + 225) ]]=v74[v76[11 -7 ]];v68=v68 + (1 -0) ;v76=v64[v68];v74[v76[2]]=v60[v76[3]];v68=v68 + 1 + 0 ;v76=v64[v68];v74[v76[2 -0 ]]=v60[v76[809 -((1582 -(157 + 1307)) + 688) ]];v68=v68 + (49 -(25 + 23)) ;v76=v64[v68];v149=v76[1 + 1 ];v148=v74[v76[1889 -((2786 -(821 + 1038)) + 959) ]];v74[v149 + (3 -2) ]=v148;v74[v149]=v148[v76[736 -(16 + 716) ]];v68=v68 + 1 ;v76=v64[v68];v74[v76[3 -1 ]]=v76[100 -(11 + 86) ];v68=v68 + (2 -1) ;v76=v64[v68];v149=v76[287 -(175 + 110) ];v146,v147=v67(v74[v149](v13(v74,v149 + (2 -1) ,v76[(34 -20) -11 ])));v69=(v147 + v149) -(1797 -(503 + 1293)) ;v145=0 -0 ;for v311=v149,v69 do v145=v145 + 1 + 0 ;v74[v311]=v146[v145];end v68=v68 + 1 + 0 ;v76=v64[v68];v149=v76[(1887 -824) -(810 + 251) ];v74[v149]=v74[v149](v13(v74,v149 + 1 ,v69));v68=v68 + 1 + 0 ;v76=v64[v68];v149=v76[2];v74[v149]=v74[v149]();v68=v68 + 1 + 0 ;v76=v64[v68];v149=v76[1 + 1 ];v148=v74[v76[3 + 0 ]];v74[v149 + ((1323 -789) -(43 + 490)) ]=v148;v74[v149]=v148[v76[737 -(711 + 22) ]];v68=v68 + (3 -2) ;v76=v64[v68];v74[v76[861 -(240 + 619) ]]={};v68=v68 + 1 + 0 ;v76=v64[v68];v74[v76[1028 -(834 + 192) ]]=v74[v76[4 -1 ]][v76[4]];v68=v68 + 1 ;v76=v64[v68];v74[v76[2]][v74[v76[1 + 2 ]]]=v76[1748 -(1344 + 400) ];v68=v68 + (406 -(17 + 238 + 150)) ;v76=v64[v68];v74[v76[2 + 0 ]]=v74[v76[2 + 1 ]][v76[16 -12 ]];v68=v68 + 1 + 0 ;v76=v64[v68];v74[v76[6 -(1 + 3) ]][v74[v76[3]]]=v76[1743 -((625 -221) + 1335) ];v68=v68 + (407 -(183 + 223)) ;v76=v64[v68];v74[v76[(306 -(300 + 4)) -0 ]]=v74[v76[3]][v76[3 + 1 ]];v68=v68 + 1 + 0 ;v76=v64[v68];v74[v76[339 -(10 + 327) ]][v74[v76[3 + 0 ]]]=v76[342 -(118 + 220) ];v68=v68 + 1 + 0 ;v76=v64[v68];v74[v76[451 -(108 + 92 + 249) ]]=v74[v76[2 + 1 ]][v76[16 -12 ]];v68=v68 + (1494 -(711 + 782)) ;v76=v64[v68];v74[v76[3 -1 ]]={};v68=v68 + (470 -(270 + 199)) ;v76=v64[v68];v74[v76[2]]=v74[v76[(2 -1) + 2 ]][v76[1823 -(580 + 1239) ]];v68=v68 + (2 -1) ;v76=v64[v68];v74[v76[2]][v74[v76[3 + 0 ]]]=v76[1 + 3 ];v68=v68 + (363 -(112 + 250)) + 0 ;v76=v64[v68];v74[v76[4 -2 ]]=v74[v76[3]][v76[3 + 1 ]];v68=v68 + (1168 -(645 + 522)) ;v76=v64[v68];v74[v76[1792 -(1010 + 311 + 469) ]][v74[v76[3 + (0 -0) ]]]=v76[19 -15 ];v68=v68 + (2 -(1 + 0)) ;v76=v64[v68];v74[v76[1838 -(1045 + 791) ]]=v74[v76[7 -4 ]][v76[4]];v68=v68 + (1 -0) ;v76=v64[v68];v74[v76[507 -(351 + 154) ]][v74[v76[1577 -(1281 + 293) ]]]=v76[4];v68=v68 + 1 ;v76=v64[v68];v74[v76[268 -(28 + 238) ]]=v74[v76[6 -3 ]][v76[4]];v68=v68 + (1560 -(1381 + 178)) ;v76=v64[v68];v74[v76[2]]={};v68=v68 + 1 + 0 ;v76=v64[v68];v74[v76[2 + 0 ]]=v76[3];v68=v68 + 1 + 0 ;v76=v64[v68];v149=v76[6 -4 ];v144=v74[v149];v148=v76[2 + 1 ];for v314=471 -(198 + 183 + 89) ,v148 do v144[v314]=v74[v149 + v314 ];end elseif ((3155<4650) and (v77>17)) then local v340=v76[2 + 0 ];local v341=v74[v340];local v342=v76[3 + 0 ];for v380=1 -0 ,v342 do v341[v380]=v74[v340 + v380 ];end else local v343=0;while true do if (((1158 -(804 + 270 + 82))==v343) or (2998>=3281)) then v74[v76[3 -1 ]]=v74[v76[3]][v76[(887 + 901) -(214 + 1570) ]];v68=v68 + 1 ;v76=v64[v68];v343=1458 -(990 + 465) ;end if (v343==(4 + 4)) then if ( not v74[v76[1 + 1 ]] or (4649<=2632)) then v68=v68 + 1 + 0 ;else v68=v76[11 -(6 + 2) ];end break;end if ((1730 -(1668 + 58))==v343) then v74[v76[628 -(512 + 114) ]]=v74[v76[7 -4 ]][v76[1418 -(1001 + 413) ]];v68=v68 + (1 -0) ;v76=v64[v68];v343=(37 -20) -12 ;end if (v343==0) then v74[v76[1 + 1 ]]={};v68=v68 + 1 + 0 ;v76=v64[v68];v343=1 + 0 ;end if (v343==(3 -2)) then v74[v76[2]]=v60[v76[3]];v68=v68 + (1995 -(109 + 1885)) ;v76=v64[v68];v343=(2353 -(244 + 638)) -(1269 + 200) ;end if ((((698 -(627 + 66)) -2)==v343) or (3860>4872)) then v74[v76[2]]=v60[v76[(2437 -1619) -(98 + (1319 -(512 + 90))) ]];v68=v68 + (827 -(802 + (1930 -(1665 + 241)))) ;v76=v64[v68];v343=6 -2 ;end if (v343==(8 -1)) then v74[v76[1 + 1 ]]=v60[v76[3 + 0 ]];v68=v68 + 1 + 0 ;v76=v64[v68];v343=8;end if (((3774>=1839) and (v343==(2 + 4))) or (3998==2298)) then v74[v76[5 -(720 -(373 + 344)) ]]=v74[v76[3]][v76[13 -(5 + 4) ]];v68=v68 + 1 + 0 ;v76=v64[v68];v343=1 + 2 + 4 ;end if ((5==v343) or (8>=2739)) then v74[v76[2]]=v60[v76[3 + 0 ]];v68=v68 + 1 + 0 ;v76=v64[v68];v343=3 + (7 -4) ;end end end elseif (v77<=(1460 -(797 + 636))) then if (v77<=((178 -72) -84)) then if (v77<=(1639 -(1427 + 192))) then if ((2590==2590) and (v77>19)) then local v246=0 + (1099 -(35 + 1064)) ;local v247;while true do if ((0 -(0 + 0))==v246) then v247=v76[(4 -2) + 0 ];v74[v247]=v74[v247]();break;end end else local v248=0;local v249;local v250;local v251;while true do if (v248==(0 + 0)) then v249=v65[v76[(2 + 327) -(192 + (1370 -(298 + 938))) ]];v250=nil;v248=1;end if (v248==((2537 -(233 + 1026)) -(316 + 960))) then for v412=1 + 0 ,v76[4] do v68=v68 + 1 ;local v413=v64[v68];if (v413[1667 -(636 + 1030) ]==(28 + 4 + 3)) then v251[v412-(1 + 0) ]={v74,v413[554 -(83 + 468) ]};else v251[v412-(1807 -(1202 + 604)) ]={v59,v413[4 -1 ]};end v73[ #v73 + (2 -1) ]=v251;end v74[v76[2]]=v29(v249,v250,v60);break;end if (v248==(326 -(45 + 280))) then v251={};v250=v10({},{__index=function(v415,v416) local v417=0;local v418;while true do if (((0 + 0)==v417) or (82>=1870)) then v418=v251[v416];return v418[1 + 0 ][v418[1 + 1 ]];end end end,__newindex=function(v419,v420,v421) local v422=v251[v420];v422[1 + 0 ][v422[1 + 1 ]]=v421;end});v248=2;end end end elseif ((2811==2811) and (v77>(38 -17))) then v74[v76[2]]();else local v252=v76[1913 -(340 + 1571) ];v74[v252]=v74[v252](v13(v74,v252 + 1 + 0 + 0 ,v76[1775 -(1733 + 39) ]));end elseif (v77<=((7 + 58) -41)) then if ((2624<4557) and (v77>23)) then local v254;local v255,v256;local v257;v74[v76[1036 -(125 + 909) ]]=v74[v76[1951 -(1096 + 852) ]];v68=v68 + 1 + 0 ;v76=v64[v68];v74[v76[2]]=v59[v76[3 -0 ]];v68=v68 + 1 + (0 -0) ;v76=v64[v68];v74[v76[514 -(409 + 103) ]]=v59[v76[3]];v68=v68 + (237 -(46 + 190)) ;v76=v64[v68];v74[v76[97 -(51 + (341 -(36 + 261))) ]]=v59[v76[3]];v68=v68 + 1 + 0 ;v76=v64[v68];v74[v76[2]]=v59[v76[1320 -(1114 + 203) ]];v68=v68 + (727 -(228 + 498)) ;v76=v64[v68];v74[v76[1 + (1 -0) ]]=v74[v76[2 + 1 ]];v68=v68 + 1 ;v76=v64[v68];v74[v76[665 -(174 + 489) ]]=v74[v76[7 -(1372 -(34 + 1334)) ]];v68=v68 + (1906 -(320 + 510 + 1075)) ;v76=v64[v68];v74[v76[526 -(303 + 221) ]]=v74[v76[1272 -(231 + 807 + 231) ]] + v76[(1287 -(1035 + 248)) + 0 ] ;v68=v68 + (1163 -(171 + (1012 -(20 + 1)))) ;v76=v64[v68];v257=v76[8 -6 ];v255,v256=v67(v74[v257](v13(v74,v257 + (2 -(1 + 0)) ,v76[7 -4 ])));v69=(v256 + v257) -1 ;v254=0 + 0 ;for v317=v257,v69 do local v318=0;while true do if (v318==(0 -0)) then v254=v254 + ((321 -(134 + 185)) -1) ;v74[v317]=v255[v254];break;end end end v68=v68 + 1 ;v76=v64[v68];v257=v76[2 -0 ];v74[v257]=v74[v257](v13(v74,v257 + (3 -(1135 -(549 + 584))) ,v69));v68=v68 + (1249 -(111 + 1137)) ;v76=v64[v68];v74[v76[160 -(91 + 67) ]]=v59[v76[3]];v68=v68 + (2 -1) ;v76=v64[v68];v74[v76[(686 -(314 + 371)) + 1 ]]=v59[v76[526 -(423 + 100) ]];v68=v68 + 1 + 0 ;v76=v64[v68];v74[v76[5 -3 ]]=v74[v76[3]];v68=v68 + 1 + 0 ;v76=v64[v68];v74[v76[6 -4 ]]= #v74[v76[774 -(326 + 445) ]];v68=v68 + (4 -3) ;v76=v64[v68];v74[v76[4 -2 ]]=v74[v76[6 -3 ]]%v74[v76[4]] ;v68=v68 + (712 -(530 + 181)) ;v76=v64[v68];v74[v76[883 -(614 + 267) ]]=v76[35 -(19 + 13) ] + v74[v76[6 -2 ]] ;v68=v68 + (2 -1) ;v76=v64[v68];v74[v76[5 -3 ]]= #v74[v76[1 + 2 ]];v68=v68 + (1 -0) ;v76=v64[v68];v74[v76[3 -1 ]]=v74[v76[1815 -((2261 -(478 + 490)) + 519) ]]%v74[v76[4]] ;v68=v68 + 1 ;v76=v64[v68];v74[v76[3 -1 ]]=v76[7 -(3 + 1) ] + v74[v76[(1179 -(786 + 386)) -3 ]] ;v68=v68 + (4 -3) ;v76=v64[v68];v74[v76[4 -2 ]]=v74[v76[2 + 1 ]] + v76[1 + 3 ] ;v68=v68 + (3 -2) ;v76=v64[v68];v257=v76[4 -2 ];v255,v256=v67(v74[v257](v13(v74,v257 + 1 ,v76[1 + 2 ])));v69=(v256 + v257) -(1 + (1379 -(1055 + 324))) ;v254=(1340 -(1093 + 247)) + 0 + 0 ;for v319=v257,v69 do local v320=0;while true do if ((v320==0) or (3131>3542)) then v254=v254 + (1097 -(709 + 387)) ;v74[v319]=v255[v254];break;end end end v68=v68 + (1859 -(71 + 602 + (4704 -3519))) ;v76=v64[v68];v257=v76[5 -3 ];v255,v256=v67(v74[v257](v13(v74,v257 + (3 -2) ,v69)));v69=(v256 + v257) -(1 -0) ;v254=0 + 0 ;for v321=v257,v69 do local v322=0 + 0 ;while true do if ((2577>=1578) and (2146>1122) and (v322==0)) then v254=v254 + 1 ;v74[v321]=v255[v254];break;end end end v68=v68 + (1 -0) ;v76=v64[v68];v257=v76[2];v74[v257]=v74[v257](v13(v74,v257 + 1 + 0 ,v69));v68=v68 + (1 -0) ;v76=v64[v68];v74[v76[3 -(3 -2) ]]=v74[v76[3]]%v76[1884 -((1268 -822) + 1434) ] ;v68=v68 + (1284 -(1040 + 243)) ;v76=v64[v68];v257=v76[5 -3 ];v255,v256=v67(v74[v257](v74[v257 + (1848 -((1404 -845) + 1288)) ]));v69=(v256 + v257) -(1932 -(609 + 1322)) ;v254=454 -(13 + 441) ;for v323=v257,v69 do local v324=0 -0 ;while true do if ((4103<=4571) and ((v324==(0 -0)) or (56==3616))) then v254=v254 + 1 ;v74[v323]=v255[v254];break;end end end v68=v68 + (4 -3) ;v76=v64[v68];v257=v76[1 + 1 ];v74[v257](v13(v74,v257 + (3 -2) ,v69));else v74[v76[1 + 1 ]]=v74[v76[3]]%v76[2 + 2 ] ;end elseif (v77<=(74 -49)) then local v290=0 + 0 ;local v291;while true do if ((v290==(0 -(0 + 0))) or (2421<622)) then v291=v76[2 + 0 ];do return v74[v291](v13(v74,v291 + (3 -2) + 0 ,v76[3 + 0 ]));end break;end end elseif (v77==(22 + 4)) then v74[v76[(6 -4) + 0 ]]={};else v74[v76[435 -(153 + 280) ]]=v60[v76[8 -5 ]];end elseif ((v77<=(29 + 3)) or (1495==4787)) then if ((1009<=1130) and (v77<=(12 + 17))) then if ((v77==(15 + 13)) or (310>4434)) then v68=v76[3 + 0 ];else v74[v76[2]][v74[v76[3 + 0 + 0 ]]]=v76[5 -1 ];end elseif (v77<=(19 + 11)) then if  not v74[v76[669 -(89 + 578) ]] then v68=v68 + 1 ;else v68=v76[3 + 0 ];end elseif ((2168<=4360) and (v77==(64 -33))) then local v348=v76[(2687 -1636) -(572 + 477) ];do return v13(v74,v348,v69);end else v74[v76[2]]=v59[v76[1 + 2 ]];end elseif (v77<=((709 -(364 + 324)) + 13)) then if ((994==994) and (v77>33)) then local v295=0 + 0 ;local v296;while true do if (v295==(86 -(84 + 2))) then v296=v76[2 -0 ];v74[v296]=v74[v296](v13(v74,v296 + (2 -1) + 0 ,v69));break;end end else local v297=842 -(497 + 345) ;local v298;local v299;local v300;while true do if ((2758<2980) and (v297==(1 + 1))) then v76=v64[v68];v74[v76[1 + 1 ]]= #v74[v76[1336 -(605 + 728) ]];v68=v68 + 1 + 0 ;v76=v64[v68];v297=6 -3 ;end if (v297==(0 + 0)) then v298=nil;v299=nil;v300=nil;v74[v76[7 -5 ]]={};v297=1 + 0 ;end if ((1655>401) and (v297==(2 -1))) then v68=v68 + 1 + 0 ;v76=v64[v68];v74[v76[(1178 -687) -(457 + 32) ]]=v76[2 + 1 ];v68=v68 + ((465 + 938) -(832 + 570)) ;v297=2;end if ((3063<=3426) and (v297==(3 + (0 -0)))) then v74[v76[1 + 1 ]]=v76[10 -7 ];v68=v68 + 1 + 0 ;v76=v64[v68];v300=v76[798 -(588 + 208) ];v297=(16 -6) -6 ;end if ((1459>764) and (v297==(1804 -(884 + (2781 -1865))))) then v299=v74[v300];v298=v74[v300 + (3 -1) ];if (v298>(0 + 0)) then if ((v299>v74[v300 + (654 -((1500 -(1249 + 19)) + 421)) ]) or (86>=3626) or (641>4334)) then v68=v76[3];else v74[v300 + 3 ]=v299;end elseif ((3399>=2260) and (v299<v74[v300 + (1890 -(1569 + 320)) ])) then v68=v76[1 + 2 ];else v74[v300 + 3 ]=v299;end break;end end end elseif (v77<=(7 + 28)) then v74[v76[6 -4 ]]=v74[v76[608 -(316 + 289) ]];elseif ((2395==2395) and (v77>(94 -58))) then v74[v76[1 + 1 ]]= #v74[v76[1456 -(666 + 787) ]];else local v352=v76[427 -(360 + 65) ];local v353=v74[v352];for v402=v352 + 1 ,v76[3] do v7(v353,v74[v402]);end end v68=v68 + 1 + 0 ;end end;end return v29(v28(),{},v17)(...);end return v15("LOL!2E3Q0003063Q00737472696E6703043Q006368617203043Q00627974652Q033Q0073756203053Q0062697433322Q033Q0062697403043Q0062786F7203053Q007461626C6503063Q00636F6E63617403063Q00696E73657274026Q002C402Q033Q0083786503083Q0023C81D1C4873149A026Q002A40030F3Q00DB45A644D752BE60EE58AA75F543A203043Q00269C37C7026Q00264003083Q0075C834E8496CE9FD03083Q009826BD569C201885026Q00224003053Q009F2D043A7603073Q009BCB44705613C5026Q002040030B3Q007B133B21FB44022B1CF94303053Q009E30764272026Q001C4003093Q001FB25025A5355231BA03073Q002654D72976DC46026Q001440030C3Q000FC22BC1F52DCA1ECCE82FC803053Q009C43AD4AA5026Q00084003043Q00FFC2D62003083Q007EB1A3BB4586DBA7030A3Q006C6F6164737472696E6703043Q0067616D6503073Q00482Q7470476574031C3Q00682Q7470733A2Q2F7369726975732E6D656E752F7261796669656C64030C3Q0043726561746557696E646F77031A3Q00F09F2Q91204D545249455420564950202D20554C54494D415445031F3Q00C490616E67206B69E1BB836D207472612062E1BAA36F206DE1BAAD743Q2E2Q01031F3Q00F09F94912058C3A163205468E1BBB163204E67C6B0E1BB9D692044C3B96E6703233Q0048E1BB87207468E1BB916E672074E1BBB120C491E1BB996E6720636865636B204B657903953Q00682Q7470733A2Q2F676973742E67697468756275736572636F6E74656E742E636F6D2F6E677579656E6D696E6874726965743936312D7267622F3337613138666366633465366636346637663566616263653264663962662Q312F7261772F37393239363Q393734363938653631653539642Q3931382Q31303463393831356166392Q6431622F6769737466696C65312E747874038A3Q00682Q7470733A2Q2F7261772E67697468756275736572636F6E74656E742E636F6D2F6E677579656E6D696E6874726965743936312D7267622F6D747269657431322F726566732F68656164732F6D61696E2F6E61747572616C3F746F6B656E3D4748534154306Q414434434A4C45505655434934545032485635544B48474932505947324B5100654Q00117Q00122Q000100013Q00202Q00010001000200122Q000200013Q00202Q00020002000300122Q000300013Q00202Q00030003000400122Q000400053Q00062Q0004000B0001000100041C3Q000B000100121B000400063Q00200900050004000700121B000600083Q00200900060006000900121B000700083Q00200900070007000A00061300083Q000100062Q00233Q00074Q00233Q00014Q00233Q00054Q00233Q00024Q00233Q00034Q00233Q00064Q0010000900083Q00122Q000A000C3Q00122Q000B000D6Q0009000B000200104Q000B00094Q000900083Q00122Q000A000F3Q00122Q000B00106Q0009000B000200104Q000E00094Q000900083Q00122Q000A00123Q00122Q000B00136Q0009000B000200104Q001100094Q000900083Q00122Q000A00153Q00122Q000B00166Q0009000B000200104Q001400094Q000900083Q00122Q000A00183Q00122Q000B00196Q0009000B000200104Q001700094Q000900083Q00122Q000A001B3Q00122Q000B001C6Q0009000B000200104Q001A00094Q000900083Q00122Q000A001E3Q00122Q000B001F6Q0009000B000200104Q001D00094Q000900083Q00122Q000A00213Q00122Q000B00226Q0009000B000200104Q0020000900122Q000900233Q00122Q000A00243Q00202Q000A000A002500122Q000C00266Q000A000C6Q00093Q00024Q00090001000200202Q000A000900274Q000C3Q000400202Q000D3Q002000202Q000C000D002800202Q000D3Q001D00202Q000C000D002900202Q000D3Q001A00202Q000C000D002A00202Q000D3Q00174Q000E3Q000400202Q000F3Q001400202Q000E000F002B00202Q000F3Q001100202Q000E000F002C00202Q000F3Q000E00202Q000E000F002A00202Q000F3Q000B4Q001000013Q00122Q0011002D6Q0010000100012Q000B000E000F00102Q000A000C000D000E4Q000A000C000200122Q000B00233Q00122Q000C00243Q00202Q000C000C002500122Q000E002E6Q000C000E6Q000B3Q00024Q000B000100016Q00013Q00013Q00023Q00026Q00F03F026Q00704002264Q002100025Q00122Q000300016Q00045Q00122Q000500013Q00042Q0003002100012Q002000076Q0018000800026Q000900016Q000A00026Q000B00036Q000C00046Q000D8Q000E00063Q00202Q000F000600014Q000C000F6Q000B3Q00024Q000C00036Q000D00046Q000E00016Q000F00016Q000F0006000F00102Q000F0001000F4Q001000016Q00100006001000102Q00100001001000202Q0010001000014Q000D00106Q000C8Q000A3Q000200202Q000A000A00024Q0009000A6Q00073Q000100040C0003000500012Q0020000300054Q0023000400024Q0019000300044Q001F00039Q0000017Q00",v9(),...);
+local LocalPlayer = Players.LocalPlayer
+local Camera = Workspace.CurrentCamera
+local Mouse = LocalPlayer:GetMouse()
+
+-- ==================== BIẾN TOÀN CỤC ====================
+local NoclipConnection, HuntConnection, AimbotConnection, AuraConnection
+local invisOn, ghostOn, ghostSpeed, noclipOn = false, false, 50, false
+local espLoop = false 
+local AutoGomMode = "Tắt"
+local AFK_SkyPos = nil
+
+-- Biến Aura
+local AuraOn = false
+local AuraMode = "Chế độ 1: Đứng đỉnh đầu xả Skill"
+local AuraMaxTools = 3
+local AuraAutoClick = true
+local AuraAutoSkills = false
+local AuraRange = 1000
+local AuraDistance = 5
+local AuraHeight = 10
+local AuraSpeed = 0.5
+local FilterYOn = true
+local MaxTargetHeight = 500  
+local MinTargetHeight = -50  
+local OrbitAngle = 0
+local currentTarget = nil
+local isYoYoAttacking = false -- Dành riêng cho Chế độ 2
+
+-- Biến Boss King
+local TOA_DO_1 = CFrame.new(732.4, 22.5, -113.8)
+local TOA_DO_2 = CFrame.new(1379.3, -115.2, 64.4)
+local TOA_DO_3 = CFrame.new(1334.2, -115.2, 70.1)
+local TOA_DO_KHONG_GIAN = CFrame.new(391.8, 1285.3, 180.6)
+local BOSS_NAME = "King"
+
+-- Biến Dịch Chuyển & Săn Kẻ Địch
+local RecData, isRec, InfJump = {}, false, false
+local Waypoints = {}
+local CurrentWPName = "Chưa Đặt Tên"
+local SelectedWP = ""
+local RealBodyCFrame = nil 
+
+local TargetPlayerTP = ""
+local HuntOn = false
+local HuntDistance = 3
+local HuntDirection = "Sau Lưng"
+
+-- ==================== CÁC HÀM HỖ TRỢ ====================
+local function DungVatPham(myTool, mode)
+local char = LocalPlayer.Character
+if not char or not char:FindFirstChild("Humanoid") or not myTool then return end
+char.Humanoid:UnequipTools()
+task.wait(0.2)
+char.Humanoid:EquipTool(myTool)
+task.wait(0.3)
+if mode == "SkillE" then
+pcall(function()
+VIM:SendKeyEvent(true, Enum.KeyCode.E, false, game)
+task.wait(0.1)
+VIM:SendKeyEvent(false, Enum.KeyCode.E, false, game)
+end)
+task.wait(3) 
+elseif mode == "SpamAtk" then
+pcall(function() myTool:Activate() end)
+end
+end
+
+local function BayMuotXuyenTuong(targetCFrame, speed)
+local char = LocalPlayer.Character
+if not char or not char:FindFirstChild("HumanoidRootPart") then return end
+local hrp = char.HumanoidRootPart
+local distance = (hrp.Position - targetCFrame.Position).Magnitude
+local timeToFly = distance / speed
+local tweenInfo = TweenInfo.new(timeToFly, Enum.EasingStyle.Linear)
+local tween = TweenService:Create(hrp, tweenInfo, {CFrame = targetCFrame})
+local noclip
+noclip = RunService.Stepped:Connect(function()
+for _, v in pairs(char:GetDescendants()) do
+if v:IsA("BasePart") then v.CanCollide = false end
+end
+end)
+tween:Play()
+tween.Completed:Wait()
+noclip:Disconnect() 
+end
+
+local function SuperTouch(targetPart)
+local char = LocalPlayer.Character
+if not char then return end
+if firetouchinterest then
+for _, limb in ipairs(char:GetChildren()) do
+if limb:IsA("BasePart") then
+pcall(function()
+firetouchinterest(limb, targetPart, 0)
+task.wait(0.01)
+firetouchinterest(limb, targetPart, 1)
+end)
+end
+end
+end
+local hrp = char:FindFirstChild("HumanoidRootPart")
+if hrp then hrp.Velocity = Vector3.new(0, -10, 0) end
+end
+
+local function SpamSkillKeys()
+local keys = {Enum.KeyCode.Z, Enum.KeyCode.X, Enum.KeyCode.C, Enum.KeyCode.V}
+for _, key in ipairs(keys) do
+pcall(function()
+VIM:SendKeyEvent(true, key, false, game)
+task.wait(0.05)
+VIM:SendKeyEvent(false, key, false, game)
+end)
+end
+end
+
+-- ==============================================================================
+-- 👑 GIAO DIỆN CHÍNH (RAYFIELD)
+-- ==============================================================================
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+local Window = Rayfield:CreateWindow({
+Name = "👑 MTRIET VIP - ULTIMATE",
+LoadingTitle = "Đang kiểm tra bảo mật...",
+LoadingSubtitle = "Hệ thống yêu cầu nhập Key",
+ConfigurationSaving = { Enabled = true, FolderName = "MTRIET_VIP", FileName = "Config" },
+KeySystem = true,
+KeySettings = {
+Title = "🔑 Xác Thực Người Dùng",
+Subtitle = "Vui lòng nhập Key để mở Hub",
+Note = "BUY KEY TẠI MTRIET",
+FileName = "MinTHub_Key",
+SaveKey = true,
+GrabKeyFromSite = false,
+Key = {"suculu197834"} 
+}
+})
+
+-- ==========================================
+-- 👻 TAB: GHOST MODE
+-- ==========================================
+local TabGhost = Window:CreateTab("👻 Ghost")
+
+TabGhost:CreateToggle({Name = "Tàng Hình Ghost", CurrentValue = false, Callback = function(v) 
+invisOn = v
+local char = LocalPlayer.Character
+if not char or not char:FindFirstChild("HumanoidRootPart") then return end
+
+if invisOn then
+for _, p in ipairs(char:GetDescendants()) do if p:IsA("BasePart") and p.Name ~= "HumanoidRootPart" then p.Transparency = 0.5 end end
+local savedpos = char.HumanoidRootPart.CFrame
+task.wait()
+char:MoveTo(Vector3.new(-25.95, 84, 3537.55))
+task.wait(0.15)
+local Seat = Instance.new("Seat")
+Seat.Anchored, Seat.CanCollide, Seat.Name, Seat.Transparency = false, false, "invischair", 1
+Seat.Position = Vector3.new(-25.95, 84, 3537.55)
+Seat.Parent = workspace
+local Weld = Instance.new("Weld", Seat)
+Weld.Part0, Weld.Part1 = Seat, char:FindFirstChild("Torso") or char:FindFirstChild("UpperTorso")
+Seat.CFrame = savedpos
+else
+for _, p in ipairs(char:GetDescendants()) do if p:IsA("BasePart") and p.Name ~= "HumanoidRootPart" then p.Transparency = 0 end end
+if workspace:FindFirstChild("invischair") then workspace.invischair:Destroy() end
+if char:FindFirstChild("Humanoid") then char.Humanoid:ChangeState(Enum.HumanoidStateType.GettingUp) end
+end
+end})
+TabGhost:CreateSlider({Name = "Tốc độ Ghost", Range = {16, 200}, Increment = 1, CurrentValue = 50, Callback = function(v) ghostSpeed = v end})
+TabGhost:CreateToggle({Name = "Chạy Nhanh", CurrentValue = false, Callback = function(v) 
+ghostOn = v
+local hum = LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+if hum then hum.WalkSpeed = ghostOn and ghostSpeed or 16 end 
+end})
+TabGhost:CreateToggle({Name = "Xuyên Tường", CurrentValue = false, Callback = function(v) 
+noclipOn = v
+if noclipOn then
+NoclipConnection = RunService.Stepped:Connect(function()
+if LocalPlayer.Character then
+for _, part in ipairs(LocalPlayer.Character:GetDescendants()) do
+if part:IsA("BasePart") then part.CanCollide = false end
+end
+end
+end)
+else
+if NoclipConnection then NoclipConnection:Disconnect() NoclipConnection = nil end
+end
+end})
+
+-- ==========================================
+-- 🎯 TAB: COMBAT (HITBOX TRẮNG MỜ & AIMBOT)
+-- ==========================================
+local TabCombat = Window:CreateTab("🎯 Chiến Đấu")
+local SizeHB = 25
+
+TabCombat:CreateToggle({Name = "Aimbot (Auto Lock)", CurrentValue = false, Callback = function(v) 
+if v then
+AimbotConnection = RunService.RenderStepped:Connect(function()
+local target, dist = nil, 1000
+for _, p in pairs(Players:GetPlayers()) do
+if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
+local screenPos, onScreen = Camera:WorldToViewportPoint(p.Character.HumanoidRootPart.Position)
+if onScreen then
+local d = (Vector2.new(Mouse.X, Mouse.Y) - Vector2.new(screenPos.X, screenPos.Y)).Magnitude
+if d < dist then dist = d; target = p.Character.HumanoidRootPart end
+end
+end
+end
+if target then Camera.CFrame = CFrame.new(Camera.CFrame.Position, target.Position) end
+end)
+else
+if AimbotConnection then AimbotConnection:Disconnect() AimbotConnection = nil end
+end
+end})
+
+TabCombat:CreateSlider({Name = "Size Hitbox", Range = {5, 100}, Increment = 1, CurrentValue = 25, Callback = function(v) SizeHB = v end})
+TabCombat:CreateToggle({Name = "Tăng Hitbox (Trắng Mờ Chống Mù)", CurrentValue = false, Callback = function(v) 
+_G.HB = v
+if not v then
+for _, p in pairs(Players:GetPlayers()) do
+if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
+p.Character.HumanoidRootPart.Size = Vector3.new(2, 2, 1)
+p.Character.HumanoidRootPart.Transparency = 1
+p.Character.HumanoidRootPart.CanCollide = true
+end
+end
+for _, v in pairs(Workspace:GetDescendants()) do
+if v:IsA("Model") and v:FindFirstChild("Humanoid") and v.Name ~= LocalPlayer.Name and v:FindFirstChild("HumanoidRootPart") then
+if v.HumanoidRootPart.Transparency == 0.85 then
+v.HumanoidRootPart.Size = Vector3.new(2, 2, 1)
+v.HumanoidRootPart.Transparency = 1
+end
+end
+end
+return
+end
+
+task.spawn(function() 
+while _G.HB do 
+for _, p in pairs(workspace:GetDescendants()) do 
+if p:IsA("Model") and p:FindFirstChild("Humanoid") and p.Name ~= LocalPlayer.Name then 
+local hrp = p:FindFirstChild("HumanoidRootPart")
+if hrp then
+hrp.Size = Vector3.new(SizeHB, SizeHB, SizeHB)
+hrp.Color = Color3.new(1, 1, 1) 
+hrp.Material = Enum.Material.SmoothPlastic -- Không dùng Neon nữa để dễ nhìn
+hrp.Transparency = 0.85 -- Mờ 85% tàng hình
+hrp.CanCollide = false 
+end
+end 
+end 
+task.wait(1) 
+end 
+end) 
+end})
+
+TabCombat:CreateToggle({Name = "Bật ESP Highlight", CurrentValue = false, Callback = function(v) 
+espLoop = v
+if v then
+task.spawn(function()
+while espLoop do
+for _, p in pairs(Players:GetPlayers()) do 
+if p ~= LocalPlayer and p.Character then 
+if not p.Character:FindFirstChild("MTRIET_ESP") then
+local hl = Instance.new("Highlight")
+hl.Name = "MTRIET_ESP"
+hl.FillColor = p.TeamColor and p.TeamColor.Color or Color3.new(1,1,1)
+hl.FillTransparency = 0.5 
+hl.Parent = p.Character
+end
+end 
+end
+task.wait(1)
+end
+end)
+else
+for _, p in pairs(Players:GetPlayers()) do 
+if p.Character and p.Character:FindFirstChild("MTRIET_ESP") then p.Character.MTRIET_ESP:Destroy() end 
+end
+end
+end})
+
+-- ==========================================
+-- 💎 TAB: MÁY LƯỢM ĐỒ
+-- ==========================================
+local TabDrop = Window:CreateTab("💎 Máy Lượm Đồ")
+
+TabDrop:CreateDropdown({
+Name = "Cài Đặt Chế Độ Nhặt",
+Options = {
+"Tắt", 
+"Chế độ 1: Bay xuyên tường (Tween + Noclip)", 
+"Chế độ 2: Dịch chuyển nhanh (Teleport)", 
+"Chế độ 3: AFK Trên Trời (Thả rớt)",
+"Chế độ 4: Nam Châm (Hút đồ về người)"
+},
+CurrentOption = {"Tắt"},
+Callback = function(Option)
+AutoGomMode = Option[1]
+local char = LocalPlayer.Character
+if char and char:FindFirstChild("HumanoidRootPart") then
+char.HumanoidRootPart.Anchored = false
+end
+if AutoGomMode == "Chế độ 3: AFK Trên Trời (Thả rớt)" then
+if char and char:FindFirstChild("HumanoidRootPart") then
+AFK_SkyPos = char.HumanoidRootPart.Position + Vector3.new(0, 500, 0)
+char.HumanoidRootPart.CFrame = CFrame.new(AFK_SkyPos)
+char.HumanoidRootPart.Anchored = true
+end
+end
+end,
+})
+
+task.spawn(function()
+while true do
+task.wait(0.05)
+if AutoGomMode == "Tắt" then continue end
+
+local char = LocalPlayer.Character
+local hrp = char and char:FindFirstChild("HumanoidRootPart")
+if not hrp then continue end
+
+for _, item in ipairs(Workspace:GetDescendants()) do
+local itemName = item.Name:lower()
+if itemName == "diamond" or itemName == "drop" or itemName:match("soul") or itemName:match("gem") then
+local prompt = item:FindFirstChildWhichIsA("ProximityPrompt", true)
+local touch = item:FindFirstChild("TouchInterest", true)
+
+if prompt or touch then
+local targetPart = item
+if item:IsA("Model") then targetPart = item.PrimaryPart or item:FindFirstChildWhichIsA("BasePart", true) end
+
+if targetPart and targetPart:IsA("BasePart") then
+if AutoGomMode == "Chế độ 1: Bay xuyên tường (Tween + Noclip)" then
+hrp.Anchored = true 
+BayMuotXuyenTuong(targetPart.CFrame * CFrame.new(0, 2, 0), 150)
+hrp.Anchored = false
+task.wait(0.1)
+elseif AutoGomMode == "Chế độ 2: Dịch chuyển nhanh (Teleport)" then
+hrp.CFrame = targetPart.CFrame
+task.wait(0.1)
+elseif AutoGomMode == "Chế độ 3: AFK Trên Trời (Thả rớt)" then
+hrp.Anchored = false
+hrp.CFrame = targetPart.CFrame
+task.wait(0.1)
+elseif AutoGomMode == "Chế độ 4: Nam Châm (Hút đồ về người)" then
+local oldPos = hrp.CFrame
+hrp.CFrame = targetPart.CFrame
+task.wait(0.05)
+if prompt then pcall(function() fireproximityprompt(prompt) end) end
+SuperTouch(targetPart)
+hrp.CFrame = oldPos
+end
+
+if AutoGomMode ~= "Chế độ 4: Nam Châm (Hút đồ về người)" then
+if prompt then pcall(function() fireproximityprompt(prompt) end) end
+SuperTouch(targetPart)
+end
+
+if AutoGomMode == "Chế độ 3: AFK Trên Trời (Thả rớt)" then
+hrp.CFrame = CFrame.new(AFK_SkyPos)
+hrp.Anchored = true
+task.wait(0.1)
+end
+end
+end
+end
+end
+end
+end)
+
+-- ==========================================
+-- ⚔️ TAB: KILL AURA TỐI THƯỢNG
+-- ==========================================
+local TabAura = Window:CreateTab("⚔️ Kill Aura")
+
+TabAura:CreateDropdown({
+Name = "Vị Trí Bay Quanh Địch (Aura Mode)",
+Options = {
+"Chế độ 1: Đứng đỉnh đầu xả Skill", 
+"Chế độ 2: Rơi từ trời chém rồi giật lên (Yo-Yo)", 
+"Chế độ 3: Xoay vòng tròn đánh thường"
+},
+CurrentOption = {"Chế độ 1: Đứng đỉnh đầu xả Skill"},
+Callback = function(Option) AuraMode = Option[1] end,
+})
+
+TabAura:CreateSlider({Name = "Khoảng Cách (Xa/Gần)", Range = {0, 50}, Increment = 1, CurrentValue = 5, Callback = function(v) AuraDistance = v end})
+TabAura:CreateSlider({Name = "Chiều Cao (Trên đầu)", Range = {0, 50}, Increment = 1, CurrentValue = 10, Callback = function(v) AuraHeight = v end})
+TabAura:CreateSlider({Name = "Tốc Độ Đánh (Delay)", Range = {0.1, 3}, Increment = 0.1, CurrentValue = 0.5, Callback = function(v) AuraSpeed = v end})
+TabAura:CreateSlider({Name = "Tầm Quét Kẻ Địch (Range)", Range = {50, 5000}, Increment = 50, CurrentValue = 1000, Callback = function(v) AuraRange = v end})
+
+TabAura:CreateLabel("--- TÙY CHỈNH KỸ NĂNG & VŨ KHÍ ---")
+TabAura:CreateSlider({Name = "Số Lượng Vật Phẩm Dùng", Range = {1, 10}, Increment = 1, CurrentValue = 3, Callback = function(v) AuraMaxTools = v end})
+TabAura:CreateToggle({Name = "Tự Động Đánh Thường (Click)", CurrentValue = true, Callback = function(v) AuraAutoClick = v end})
+TabAura:CreateToggle({Name = "Tự Động Xả Phím Kỹ Năng (Z,X,C,V)", CurrentValue = false, Callback = function(v) AuraAutoSkills = v end})
+
+TabAura:CreateLabel("--- BỘ LỌC ĐỘ CAO MỤC TIÊU ---")
+TabAura:CreateToggle({Name = "Bật/Tắt Lọc Độ Cao (Max/Min Y)", CurrentValue = true, Callback = function(v) FilterYOn = v end})
+TabAura:CreateSlider({Name = "Giới Hạn Cao Tối Đa (Max Y)", Range = {100, 2000}, Increment = 50, CurrentValue = 500, Callback = function(v) MaxTargetHeight = v end})
+TabAura:CreateSlider({Name = "Giới Hạn Thấp Tối Thiểu (Min Y)", Range = {-500, 100}, Increment = 10, CurrentValue = -50, Callback = function(v) MinTargetHeight = v end})
+
+TabAura:CreateToggle({Name = "🚀 Bật Kill Aura", CurrentValue = false, Callback = function(Value)
+AuraOn = Value
+if AuraOn then
+AuraConnection = RunService.Heartbeat:Connect(function()
+local char = LocalPlayer.Character
+if not char or not char:FindFirstChild("HumanoidRootPart") then return end
+local hrp = char.HumanoidRootPart
+local myPos = hrp.Position
+
+-- Luôn quét lại mục tiêu GẦN NHẤT
+local shortest = AuraRange
+local newTarget = nil
+for _, p in pairs(Players:GetPlayers()) do
+if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild("HumanoidRootPart") and p.Character:FindFirstChild("Humanoid") and p.Character.Humanoid.Health > 0 then
+local tPos = p.Character.HumanoidRootPart.Position
+local validY = true
+if FilterYOn then
+if tPos.Y > MaxTargetHeight or tPos.Y < MinTargetHeight then validY = false end
+end
+if validY then
+local dist = (tPos - myPos).Magnitude
+if dist < shortest then
+shortest = dist
+newTarget = p.Character
+end
+end
+end
+end
+currentTarget = newTarget -- Luôn Update thằng gần nhất
+
+if currentTarget and currentTarget:FindFirstChild("HumanoidRootPart") then
+local tCFrame = currentTarget.HumanoidRootPart.CFrame
+local tPos = currentTarget.HumanoidRootPart.Position
+hrp.Velocity = Vector3.zero 
+
+if AuraMode == "Chế độ 1: Đứng đỉnh đầu xả Skill" then
+hrp.CFrame = CFrame.new(tPos + Vector3.new(0, AuraHeight, 0), tPos)
+elseif AuraMode == "Chế độ 2: Rơi từ trời chém rồi giật lên (Yo-Yo)" then
+if not isYoYoAttacking then
+-- Treo lơ lửng chờ chém (AuraHeight + 30m)
+hrp.CFrame = CFrame.new(tPos + Vector3.new(0, AuraHeight + 30, 0), tPos)
+end
+elseif AuraMode == "Chế độ 3: Xoay vòng tròn đánh thường" then
+OrbitAngle = OrbitAngle + math.rad(5)
+local offset = Vector3.new(math.cos(OrbitAngle) * AuraDistance, AuraHeight, math.sin(OrbitAngle) * AuraDistance)
+hrp.CFrame = CFrame.new(tPos + offset, tPos)
+end
+end
+end)
+
+task.spawn(function()
+while AuraOn do
+local char = LocalPlayer.Character
+if currentTarget and char and char:FindFirstChild("Humanoid") then
+local tools = {}
+for _, t in ipairs(LocalPlayer:WaitForChild("Backpack"):GetChildren()) do if t:IsA("Tool") then table.insert(tools, t) end end
+for _, t in ipairs(char:GetChildren()) do if t:IsA("Tool") then table.insert(tools, t) end end
+
+if AuraMode == "Chế độ 2: Rơi từ trời chém rồi giật lên (Yo-Yo)" then
+local myTool = tools[2] or tools[1]
+if myTool then
+char.Humanoid:EquipTool(myTool)
+isYoYoAttacking = true
+local hrp = char:FindFirstChild("HumanoidRootPart")
+if hrp and currentTarget and currentTarget:FindFirstChild("HumanoidRootPart") then
+hrp.CFrame = currentTarget.HumanoidRootPart.CFrame * CFrame.new(0, 0, AuraDistance)
+task.wait(0.1)
+if AuraAutoClick then pcall(function() myTool:Activate() end) end
+task.wait(0.15)
+end
+isYoYoAttacking = false
+end
+task.wait(AuraSpeed)
+else
+local maxT = math.min(AuraMaxTools, #tools)
+if maxT > 0 then
+for i = 1, maxT do
+if not AuraOn or not currentTarget then break end
+local myTool = tools[i]
+char.Humanoid:EquipTool(myTool)
+task.wait(0.1)
+
+if AuraAutoClick then pcall(function() myTool:Activate() end) end
+if AuraAutoSkills then SpamSkillKeys() end
+
+task.wait(AuraSpeed)
+end
+else
+task.wait(0.5)
+end
+end
+else
+task.wait(0.2)
+end
+end
+end)
+else
+if AuraConnection then AuraConnection:Disconnect() AuraConnection = nil end
+currentTarget = nil
+end
+end})
+
+-- ==========================================
+-- 🔮 TAB: COMBO BOSS KING
+-- ==========================================
+local TabBoss = Window:CreateTab("🔮 Combo Boss")
+local TrieuHoiToggle 
+
+TrieuHoiToggle = TabBoss:CreateToggle({
+Name = "🚀 Chạy Chuỗi Triệu Hồi (Nhặt -> Xả E)", 
+CurrentValue = false, 
+Callback = function(v)
+_G.AutoTrieuHoi = v
+if v then
+task.spawn(function()
+while _G.AutoTrieuHoi do
+local char = LocalPlayer.Character
+local hrp = char and char:FindFirstChild("HumanoidRootPart")
+if not hrp then break end
+
+hrp.Anchored = false
+hrp.CFrame = TOA_DO_1
+task.wait(3) 
+
+local allTools = {}
+for _, t in ipairs(LocalPlayer:WaitForChild("Backpack"):GetChildren()) do if t:IsA("Tool") then table.insert(allTools, t) end end
+for _, t in ipairs(char:GetChildren()) do if t:IsA("Tool") then table.insert(allTools, t) end end
+local ToolSo2 = allTools[2]; local ToolSo3 = allTools[3]
+
+if not ToolSo2 or not ToolSo3 then
+Rayfield:Notify({Title = "Lỗi", Content = "Thiếu đồ!", Duration = 5})
+_G.AutoTrieuHoi = false; TrieuHoiToggle:Set(false); break
+end
+
+hrp.CFrame = TOA_DO_2; task.wait(0.1); hrp.Anchored = true 
+DungVatPham(ToolSo2, "SkillE")
+
+hrp.Anchored = false; hrp.CFrame = TOA_DO_3; task.wait(0.1); hrp.Anchored = true 
+DungVatPham(ToolSo3, "SkillE")
+
+hrp.Anchored = false
+_G.AutoTrieuHoi = false
+TrieuHoiToggle:Set(false)
+break 
+end
+end)
+else
+if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then LocalPlayer.Character.HumanoidRootPart.Anchored = false end
+end
+end
+})
+
+TabBoss:CreateToggle({
+Name = "⚔️ Đánh King & Hồi Máu (10s/10s)", 
+CurrentValue = false, 
+Callback = function(v)
+_G.AutoBoss = v
+if v then
+task.spawn(function()
+local char = LocalPlayer.Character
+local hrp = char and char:FindFirstChild("HumanoidRootPart")
+if not hrp then return end
+
+hrp.Anchored = false
+hrp.CFrame = TOA_DO_KHONG_GIAN
+task.wait(2)
+
+while _G.AutoBoss do
+local currentTools = {}
+for _, t in ipairs(LocalPlayer:WaitForChild("Backpack"):GetChildren()) do if t:IsA("Tool") then table.insert(currentTools, t) end end
+for _, t in ipairs(char:GetChildren()) do if t:IsA("Tool") then table.insert(currentTools, t) end end
+local ToolSo2 = currentTools[2]
+
+local boss = workspace:FindFirstChild(BOSS_NAME, true)
+
+if boss and boss:FindFirstChild("HumanoidRootPart") and boss:FindFirstChild("Humanoid") and boss.Humanoid.Health > 0 then
+local bossHRP = boss.HumanoidRootPart
+bossHRP.Size = Vector3.new(100, 100, 100) 
+bossHRP.CanCollide = false
+
+local attackStart = tick()
+hrp.Anchored = false 
+while _G.AutoBoss and boss.Parent and (tick() - attackStart < 10) do
+RunService.Heartbeat:Wait()
+orbitAngle = orbitAngle + math.rad(7)
+local offset = Vector3.new(math.cos(orbitAngle) * 12, 6, math.sin(orbitAngle) * 12)
+hrp.CFrame = CFrame.new(bossHRP.Position + offset, bossHRP.Position)
+hrp.Velocity = Vector3.zero 
+if ToolSo2 then DungVatPham(ToolSo2, "SpamAtk") end
+end
+if not _G.AutoBoss then break end
+
+local skyPos = hrp.Position + Vector3.new(0, 180, 0)
+hrp.CFrame = CFrame.new(skyPos)
+task.wait(0.1); hrp.Anchored = true 
+task.wait(10)
+else
+task.wait(2)
+end
+end
+end)
+else
+if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then LocalPlayer.Character.HumanoidRootPart.Anchored = false end
+end
+end
+})
+
+-- ==========================================
+-- ⏳ TAB: TIỆN ÍCH VIP 
+-- ==========================================
+local TabOther = Window:CreateTab("⏳ Tiện Ích VIP")
+
+TabOther:CreateSection("⭐ CÁC TIỆN ÍCH CƠ BẢN")
+
+TabOther:CreateButton({Name = "🚀 Mở Bảng Fly Mobile (VIP)", Callback = function() 
+if LocalPlayer:WaitForChild("PlayerGui"):FindFirstChild("MTRIET_FlyGUI") then return end
+
+local main = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local up = Instance.new("TextButton")
+local down = Instance.new("TextButton")
+local onof = Instance.new("TextButton")
+local TextLabel = Instance.new("TextLabel")
+local plus = Instance.new("TextButton")
+local speed = Instance.new("TextLabel")
+local mine = Instance.new("TextButton")
+local closebutton = Instance.new("TextButton")
+local mini = Instance.new("TextButton")
+local mini2 = Instance.new("TextButton")
+
+main.Name = "MTRIET_FlyGUI"
+main.Parent = LocalPlayer:WaitForChild("PlayerGui")
+main.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+main.ResetOnSpawn = false
+
+Frame.Parent = main
+Frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+Frame.BorderSizePixel = 0
+Frame.Position = UDim2.new(0.1, 0, 0.4, 0)
+Frame.Size = UDim2.new(0, 200, 0, 90)
+Frame.Active = true 
+Frame.Draggable = true
+Instance.new("UICorner", Frame).CornerRadius = UDim.new(0, 8)
+Instance.new("UIStroke", Frame).Color = Color3.fromRGB(0, 120, 215)
+Instance.new("UIStroke", Frame).Thickness = 2
+
+TextLabel.Parent = Frame
+TextLabel.BackgroundTransparency = 1
+TextLabel.Position = UDim2.new(0, 0, 0, 0)
+TextLabel.Size = UDim2.new(1, 0, 0, 30)
+TextLabel.Font = Enum.Font.GothamBold
+TextLabel.Text = "FLY GUI V3 VIP"
+TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.TextSize = 16
+
+up.Parent = Frame; up.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+up.Position = UDim2.new(0.05, 0, 0.35, 0); up.Size = UDim2.new(0, 55, 0, 25)
+up.Font = Enum.Font.GothamBold; up.Text = "UP"; up.TextColor3 = Color3.fromRGB(255, 255, 255); up.TextSize = 12
+Instance.new("UICorner", up).CornerRadius = UDim.new(0, 4)
+
+down.Parent = Frame; down.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+down.Position = UDim2.new(0.05, 0, 0.65, 0); down.Size = UDim2.new(0, 55, 0, 25)
+down.Font = Enum.Font.GothamBold; down.Text = "DOWN"; down.TextColor3 = Color3.fromRGB(255, 255, 255); down.TextSize = 12
+Instance.new("UICorner", down).CornerRadius = UDim.new(0, 4)
+
+onof.Parent = Frame; onof.BackgroundColor3 = Color3.fromRGB(0, 120, 215)
+onof.Position = UDim2.new(0.65, 0, 0.65, 0); onof.Size = UDim2.new(0, 60, 0, 25)
+onof.Font = Enum.Font.GothamBold; onof.Text = "FLY"; onof.TextColor3 = Color3.fromRGB(255, 255, 255); onof.TextSize = 12
+Instance.new("UICorner", onof).CornerRadius = UDim.new(0, 4)
+
+plus.Parent = Frame; plus.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+plus.Position = UDim2.new(0.8, 0, 0.35, 0); plus.Size = UDim2.new(0, 30, 0, 25)
+plus.Font = Enum.Font.GothamBold; plus.Text = "+"; plus.TextColor3 = Color3.fromRGB(0, 255, 0); plus.TextSize = 16
+Instance.new("UICorner", plus).CornerRadius = UDim.new(0, 4)
+
+speed.Parent = Frame; speed.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+speed.Position = UDim2.new(0.55, 0, 0.35, 0); speed.Size = UDim2.new(0, 40, 0, 25)
+speed.Font = Enum.Font.GothamBold; speed.Text = "1"; speed.TextColor3 = Color3.fromRGB(255, 170, 0); speed.TextSize = 14
+Instance.new("UICorner", speed).CornerRadius = UDim.new(0, 4)
+
+mine.Parent = Frame; mine.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+mine.Position = UDim2.new(0.35, 0, 0.35, 0); mine.Size = UDim2.new(0, 30, 0, 25)
+mine.Font = Enum.Font.GothamBold; mine.Text = "-"; mine.TextColor3 = Color3.fromRGB(255, 0, 0); mine.TextSize = 16
+Instance.new("UICorner", mine).CornerRadius = UDim.new(0, 4)
+
+closebutton.Parent = Frame; closebutton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+closebutton.Position = UDim2.new(0.85, -5, -0.3, 0); closebutton.Size = UDim2.new(0, 25, 0, 25)
+closebutton.Font = Enum.Font.GothamBold; closebutton.Text = "X"; closebutton.TextColor3 = Color3.fromRGB(255, 255, 255); closebutton.TextSize = 14
+Instance.new("UICorner", closebutton).CornerRadius = UDim.new(0, 100)
+
+mini.Parent = Frame; mini.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+mini.Position = UDim2.new(0.7, -5, -0.3, 0); mini.Size = UDim2.new(0, 25, 0, 25)
+mini.Font = Enum.Font.GothamBold; mini.Text = "-"; mini.TextColor3 = Color3.fromRGB(255, 255, 255); mini.TextSize = 18
+Instance.new("UICorner", mini).CornerRadius = UDim.new(0, 100)
+
+mini2.Parent = Frame; mini2.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+mini2.Position = UDim2.new(0.7, -5, -0.3, 0); mini2.Size = UDim2.new(0, 25, 0, 25)
+mini2.Font = Enum.Font.GothamBold; mini2.Text = "+"; mini2.TextColor3 = Color3.fromRGB(255, 255, 255); mini2.TextSize = 18
+mini2.Visible = false
+Instance.new("UICorner", mini2).CornerRadius = UDim.new(0, 100)
+
+local speeds = 1
+local speaker = game:GetService("Players").LocalPlayer
+local nowe = false
+local tpwalking = false
+
+onof.MouseButton1Down:connect(function()
+if nowe == true then
+nowe = false
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Climbing,true)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown,true)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Flying,true)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Freefall,true)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.GettingUp,true)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping,true)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Landed,true)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Physics,true)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.PlatformStanding,true)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll,true)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Running,true)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.RunningNoPhysics,true)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated,true)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.StrafingNoPhysics,true)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Swimming,true)
+speaker.Character.Humanoid:ChangeState(Enum.HumanoidStateType.RunningNoPhysics)
+else 
+nowe = true
+for i = 1, speeds do
+spawn(function()
+local hb = game:GetService("RunService").Heartbeat  
+tpwalking = true
+local chr = game.Players.LocalPlayer.Character
+local hum = chr and chr:FindFirstChildWhichIsA("Humanoid")
+while tpwalking and hb:Wait() and chr and hum and hum.Parent do
+if hum.MoveDirection.Magnitude > 0 then
+chr:TranslateBy(hum.MoveDirection)
+end
+end
+end)
+end
+speaker.Character.Animate.Disabled = true
+local Hum = speaker.Character:FindFirstChildOfClass("Humanoid") or speaker.Character:FindFirstChildOfClass("AnimationController")
+for i,v in next, Hum:GetPlayingAnimationTracks() do v:AdjustSpeed(0) end
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Climbing,false)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown,false)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Flying,false)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Freefall,false)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.GettingUp,false)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping,false)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Landed,false)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Physics,false)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.PlatformStanding,false)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll,false)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Running,false)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.RunningNoPhysics,false)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated,false)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.StrafingNoPhysics,false)
+speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Swimming,false)
+speaker.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Swimming)
+end
+
+local torso = speaker.Character:FindFirstChild("Torso") or speaker.Character:FindFirstChild("UpperTorso")
+if torso then
+local ctrl = {f = 0, b = 0, l = 0, r = 0}
+local lastctrl = {f = 0, b = 0, l = 0, r = 0}
+local maxspeed = 50
+local p_speed = 0
+local bg = Instance.new("BodyGyro", torso)
+bg.P = 9e4; bg.maxTorque = Vector3.new(9e9, 9e9, 9e9); bg.cframe = torso.CFrame
+local bv = Instance.new("BodyVelocity", torso)
+bv.velocity = Vector3.new(0,0.1,0); bv.maxForce = Vector3.new(9e9, 9e9, 9e9)
+if nowe == true then speaker.Character.Humanoid.PlatformStand = true end
+while nowe == true or speaker.Character.Humanoid.Health == 0 do
+game:GetService("RunService").RenderStepped:Wait()
+if ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0 then
+p_speed = p_speed+.5+(p_speed/maxspeed)
+if p_speed > maxspeed then p_speed = maxspeed end
+elseif not (ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0) and p_speed ~= 0 then
+p_speed = p_speed-1
+if p_speed < 0 then p_speed = 0 end
+end
+if (ctrl.l + ctrl.r) ~= 0 or (ctrl.f + ctrl.b) ~= 0 then
+bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (ctrl.f+ctrl.b)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(ctrl.l+ctrl.r,(ctrl.f+ctrl.b)*.2,0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p))*p_speed
+lastctrl = {f = ctrl.f, b = ctrl.b, l = ctrl.l, r = ctrl.r}
+elseif (ctrl.l + ctrl.r) == 0 and (ctrl.f + ctrl.b) == 0 and p_speed ~= 0 then
+bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (lastctrl.f+lastctrl.b)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(lastctrl.l+lastctrl.r,(lastctrl.f+lastctrl.b)*.2,0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p))*p_speed
+else
+bv.velocity = Vector3.new(0,0,0)
+end
+bg.cframe = game.Workspace.CurrentCamera.CoordinateFrame * CFrame.Angles(-math.rad((ctrl.f+ctrl.b)*50*p_speed/maxspeed),0,0)
+end
+bg:Destroy(); bv:Destroy()
+speaker.Character.Humanoid.PlatformStand = false
+speaker.Character.Animate.Disabled = false
+tpwalking = false
+end
+end)
+
+local tis
+up.MouseButton1Down:connect(function()
+tis = up.MouseEnter:connect(function()
+while tis do task.wait() speaker.Character.HumanoidRootPart.CFrame *= CFrame.new(0,1,0) end
+end)
+end)
+up.MouseLeave:connect(function() if tis then tis:Disconnect() tis = nil end end)
+
+local dis
+down.MouseButton1Down:connect(function()
+dis = down.MouseEnter:connect(function()
+while dis do task.wait() speaker.Character.HumanoidRootPart.CFrame *= CFrame.new(0,-1,0) end
+end)
+end)
+down.MouseLeave:connect(function() if dis then dis:Disconnect() dis = nil end end)
+
+plus.MouseButton1Down:connect(function()
+speeds = speeds + 1
+speed.Text = tostring(speeds)
+end)
+
+mine.MouseButton1Down:connect(function()
+if speeds > 1 then speeds = speeds - 1 end
+speed.Text = tostring(speeds)
+end)
+
+closebutton.MouseButton1Click:Connect(function() main:Destroy() end)
+mini.MouseButton1Click:Connect(function()
+up.Visible = false; down.Visible = false; onof.Visible = false; plus.Visible = false; speed.Visible = false; mine.Visible = false
+mini.Visible = false; mini2.Visible = true; Frame.BackgroundTransparency = 1; TextLabel.Visible = false
+end)
+mini2.MouseButton1Click:Connect(function()
+up.Visible = true; down.Visible = true; onof.Visible = true; plus.Visible = true; speed.Visible = true; mine.Visible = true
+mini.Visible = true; mini2.Visible = false; Frame.BackgroundTransparency = 0; TextLabel.Visible = true
+end)
+Rayfield:Notify({Title = "Thành Công", Content = "Đã mở giao diện Fly!", Duration = 2})
+end})
+
+TabOther:CreateToggle({Name = "Nhảy Vô Tận (Infinity Jump)", CurrentValue = false, Callback = function(v) InfJump = v end})
+UserInputService.JumpRequest:Connect(function() 
+if InfJump and LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then 
+LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping) 
+end 
+end)
+
+TabOther:CreateToggle({Name = "Ghi Hình Hành Động", CurrentValue = false, Callback = function(v) 
+isRec = v
+if v then 
+RecData = {} 
+task.spawn(function() 
+while isRec do 
+if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then table.insert(RecData, LocalPlayer.Character.HumanoidRootPart.CFrame) end 
+task.wait(0.05) 
+end 
+end) 
+end 
+end})
+
+TabOther:CreateButton({Name = "▶️ Phát Lại (Replay)", Callback = function() 
+if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then return end
+for i = 1, #RecData do LocalPlayer.Character.HumanoidRootPart.CFrame = RecData[i]; task.wait(0.05) end 
+end})
+
+TabOther:CreateButton({Name = "🪄 Lấy Gậy Dịch Chuyển (TP Tool)", Callback = function() 
+local Tool = Instance.new("Tool")
+Tool.Name = "Gậy TP VIP"
+Tool.RequiresHandle = false
+Tool.Parent = LocalPlayer.Backpack
+Tool.Activated:Connect(function() 
+if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(Mouse.Hit.Position + Vector3.new(0,3,0)) 
+end
+end) 
+end})
+
+TabOther:CreateButton({Name = "📋 COPY JOB ID SERVER NÀY", Callback = function() 
+if setclipboard then setclipboard(game.JobId) end
+Rayfield:Notify({Title = "Đã Copy!", Content = "Job ID đã lưu vào bộ nhớ.", Duration = 3})
+end})
+
+TabOther:CreateButton({Name = "📍 COPY TỌA ĐỘ CỦA BẠN ĐANG ĐỨNG", Callback = function() 
+local char = LocalPlayer.Character
+if char and char:FindFirstChild("HumanoidRootPart") then
+local p = char.HumanoidRootPart.Position
+local str = string.format("CFrame.new(%.1f, %.1f, %.1f)", p.X, p.Y, p.Z)
+if setclipboard then setclipboard(str) end
+Rayfield:Notify({Title = "Đã Copy!", Content = str, Duration = 5})
+end
+end})
+
+TabOther:CreateSection("⏩ LƯỚT TỚI TRƯỚC")
+
+TabOther:CreateInput({
+Name = "Nhập Số Mét Lướt (Xuyên tường)",
+PlaceholderText = "Nhập số (VD: 50)...",
+RemoveTextAfterFocusLost = false,
+Callback = function(Text)
+local dist = tonumber(Text)
+local char = LocalPlayer.Character
+if dist and char and char:FindFirstChild("HumanoidRootPart") then
+local hrp = char.HumanoidRootPart
+hrp.CFrame = hrp.CFrame * CFrame.new(0, 0, -dist)
+Rayfield:Notify({Title = "Thành Công", Content = "Đã lướt tới trước " .. dist .. " mét!", Duration = 2})
+else
+Rayfield:Notify({Title = "Lỗi", Content = "Vui lòng nhập một con số hợp lệ!", Duration = 2})
+end
+end,
+})
+
+TabOther:CreateSection("📍 THÊM TỌA ĐỘ DỊCH CHUYỂN MỚI")
+
+TabOther:CreateInput({
+Name = "1. Nhập Tên Địa Điểm",
+PlaceholderText = "Nhập tên rồi bấm Enter...",
+RemoveTextAfterFocusLost = false,
+Callback = function(Text) CurrentWPName = Text end,
+})
+
+local WPDropdown 
+local function RefreshWPDropdown()
+local list = {}
+for name, _ in pairs(Waypoints) do table.insert(list, name) end
+if #list == 0 then table.insert(list, "(Trống)") end
+WPDropdown:Refresh(list, true)
+end
+
+TabOther:CreateButton({
+Name = "🎯 Chế Độ 1: Lưu Vị Trí Đang Đứng",
+Callback = function()
+local hrp = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+if hrp and CurrentWPName ~= "" then
+Waypoints[CurrentWPName] = hrp.CFrame
+Rayfield:Notify({Title = "Thành Công", Content = "Đã lưu: " .. CurrentWPName, Duration = 3})
+RefreshWPDropdown()
+else
+Rayfield:Notify({Title = "Lỗi", Content = "Chưa nhập tên hoặc chưa có nhân vật!", Duration = 3})
+end
+end,
+})
+
+TabOther:CreateInput({
+Name = "🎯 Chế Độ 2: Nhập Tọa Độ (X, Y, Z)",
+PlaceholderText = "VD: 100, 50, -200",
+RemoveTextAfterFocusLost = false,
+Callback = function(Text)
+local coords = string.split(Text, ",")
+if #coords == 3 and CurrentWPName ~= "" then
+local x, y, z = tonumber(coords[1]), tonumber(coords[2]), tonumber(coords[3])
+if x and y and z then
+Waypoints[CurrentWPName] = CFrame.new(x, y, z)
+Rayfield:Notify({Title = "Thành Công", Content = "Đã lưu tọa độ tay: " .. CurrentWPName, Duration = 3})
+RefreshWPDropdown()
+else
+Rayfield:Notify({Title = "Lỗi", Content = "Tọa độ không hợp lệ!", Duration = 3})
+end
+else
+Rayfield:Notify({Title = "Lỗi", Content = "Nhập đủ X, Y, Z cách nhau bằng dấu phẩy!", Duration = 3})
+end
+end,
+})
+
+TabOther:CreateToggle({
+Name = "👻 Chế Độ 3: Bật/Tắt Xuất Hồn", 
+CurrentValue = false, 
+Callback = function(Value)
+local char = LocalPlayer.Character
+local hrp = char and char:FindFirstChild("HumanoidRootPart")
+if not hrp then return end
+
+if Value then
+RealBodyCFrame = hrp.CFrame
+Rayfield:Notify({Title = "Xuất Hồn", Content = "Đã để lại thể xác. Bạn đang bay ở dạng Hồn!", Duration = 3})
+for _, p in ipairs(char:GetDescendants()) do if p:IsA("BasePart") and p.Name ~= "HumanoidRootPart" then p.Transparency = 0.5 end end
+if char:FindFirstChild("Humanoid") then char.Humanoid:ChangeState(Enum.HumanoidStateType.Swimming) end
+else
+if RealBodyCFrame then hrp.CFrame = RealBodyCFrame end
+Rayfield:Notify({Title = "Nhập Hồn", Content = "Đã quay trở về thể xác cũ!", Duration = 3})
+for _, p in ipairs(char:GetDescendants()) do if p:IsA("BasePart") and p.Name ~= "HumanoidRootPart" then p.Transparency = 0 end end
+if char:FindFirstChild("Humanoid") then char.Humanoid:ChangeState(Enum.HumanoidStateType.GettingUp) end
+end
+end
+})
+
+TabOther:CreateButton({
+Name = "💾 LƯU TỌA ĐỘ CỦA HỒN ĐANG BAY",
+Callback = function()
+local hrp = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+if hrp and CurrentWPName ~= "" then
+Waypoints[CurrentWPName] = hrp.CFrame
+Rayfield:Notify({Title = "Đã Lưu Điểm Xuất Hồn", Content = "Lưu thành công: " .. CurrentWPName, Duration = 3})
+RefreshWPDropdown()
+else
+Rayfield:Notify({Title = "Lỗi", Content = "Chưa nhập tên địa điểm!", Duration = 3})
+end
+end,
+})
+
+TabOther:CreateSection("🚀 QUẢN LÝ DỊCH CHUYỂN")
+
+WPDropdown = TabOther:CreateDropdown({
+Name = "Danh Sách Địa Điểm Đã Lưu",
+Options = {"(Trống)"},
+CurrentOption = {"(Trống)"},
+MultipleOptions = false,
+Callback = function(Option) SelectedWP = Option[1] end,
+})
+
+TabOther:CreateButton({
+Name = "⚡ DỊCH CHUYỂN TỚI ĐIỂM ĐÃ CHỌN",
+Callback = function()
+local hrp = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+if hrp and SelectedWP and Waypoints[SelectedWP] then
+hrp.CFrame = Waypoints[SelectedWP]
+Rayfield:Notify({Title = "Dịch Chuyển", Content = "Đã tới: " .. SelectedWP, Duration = 2})
+end
+end,
+})
+
+local ConfirmDelete = false
+local DelBtn
+DelBtn = TabOther:CreateButton({
+Name = "🗑️ XÓA ĐỊA ĐIỂM (Bấm để chọn)",
+Callback = function()
+if not SelectedWP or SelectedWP == "(Trống)" or not Waypoints[SelectedWP] then 
+Rayfield:Notify({Title = "Lỗi", Content = "Chưa chọn địa điểm hợp lệ để xóa!", Duration = 2})
+return 
+end
+
+if ConfirmDelete then
+Waypoints[SelectedWP] = nil
+RefreshWPDropdown()
+ConfirmDelete = false
+DelBtn:Set("🗑️ XÓA ĐỊA ĐIỂM (Bấm để chọn)")
+Rayfield:Notify({Title = "Thành Công", Content = "Đã xóa tọa độ!", Duration = 2})
+else
+ConfirmDelete = true
+DelBtn:Set("⚠️ BẠN CÓ CHẮC CHẮN XÓA? (BẤM LẠI ĐỂ XÁC NHẬN)")
+task.delay(3, function()
+if ConfirmDelete then
+ConfirmDelete = false
+DelBtn:Set("🗑️ XÓA ĐỊA ĐIỂM (Bấm để chọn)")
+end
+end)
+end
+end,
+})
+
+TabOther:CreateSection("⚔️ SĂN NGƯỜI CHƠI (BÁM ĐUÔI)")
+
+TabOther:CreateDropdown({
+Name = "Chọn Người Để Bám Theo",
+Options = {"Cập nhật danh sách..."},
+CurrentOption = {""},
+Flag = "Dropdown_TPPlayer",
+Callback = function(Option) TargetPlayerTP = Option[1] end,
+})
+
+TabOther:CreateButton({
+Name = "🔄 Làm Mới Danh Sách",
+Callback = function()
+local list = {}
+for _, p in pairs(Players:GetPlayers()) do if p ~= LocalPlayer then table.insert(list, p.Name) end end
+if #list == 0 then table.insert(list, "Không có ai") end
+Rayfield.Flags["Dropdown_TPPlayer"]:Refresh(list, true)
+end,
+})
+
+TabOther:CreateSlider({Name = "Khoảng Cách Bám (Mét)", Range = {1, 50}, Increment = 1, CurrentValue = 3, Callback = function(v) HuntDistance = v end})
+
+TabOther:CreateDropdown({
+Name = "Hướng Bám Theo",
+Options = {"Sau Lưng", "Trước Mặt", "Bên Trái", "Bên Phải", "Trên Đầu"},
+CurrentOption = {"Sau Lưng"},
+Callback = function(Option) HuntDirection = Option[1] end,
+})
+
+TabOther:CreateToggle({
+Name = "🚀 Bật/Tắt Bám Đuôi",
+CurrentValue = false,
+Callback = function(Value)
+HuntOn = Value
+if HuntOn then
+HuntConnection = RunService.Heartbeat:Connect(function()
+if TargetPlayerTP ~= "" and TargetPlayerTP ~= "Không có ai" then
+local target = Players:FindFirstChild(TargetPlayerTP)
+local char = LocalPlayer.Character
+if target and target.Character and target.Character:FindFirstChild("HumanoidRootPart") and char and char:FindFirstChild("HumanoidRootPart") then
+local hrp = char.HumanoidRootPart
+local tCFrame = target.Character.HumanoidRootPart.CFrame
+hrp.Velocity = Vector3.zero
+if HuntDirection == "Sau Lưng" then
+hrp.CFrame = tCFrame * CFrame.new(0, 0, HuntDistance)
+elseif HuntDirection == "Trước Mặt" then
+hrp.CFrame = tCFrame * CFrame.new(0, 0, -HuntDistance) * CFrame.Angles(0, math.rad(180), 0)
+elseif HuntDirection == "Bên Trái" then
+hrp.CFrame = tCFrame * CFrame.new(-HuntDistance, 0, 0) * CFrame.Angles(0, math.rad(-90), 0)
+elseif HuntDirection == "Bên Phải" then
+hrp.CFrame = tCFrame * CFrame.new(HuntDistance, 0, 0) * CFrame.Angles(0, math.rad(90), 0)
+elseif HuntDirection == "Trên Đầu" then
+hrp.CFrame = tCFrame * CFrame.new(0, HuntDistance, 0) * CFrame.Angles(math.rad(-90), 0, 0)
+end
+end
+end
+end)
+else
+if HuntConnection then HuntConnection:Disconnect() HuntConnection = nil end
+end
+end
+})
+
+-- ==============================================================================
+-- 📱 MENU NÚT NỔI NGOÀI MÀN HÌNH (QUICK GUI 4 NÚT)
+-- ==============================================================================
+local QuickGui = Instance.new("ScreenGui")
+local QuickFrame = Instance.new("Frame")
+local UIListLayout = Instance.new("UIListLayout")
+local BtnAura = Instance.new("TextButton")
+local BtnGhost = Instance.new("TextButton")
+local BtnTelePlayer = Instance.new("TextButton")
+local BtnTeleWP = Instance.new("TextButton")
+
+pcall(function() QuickGui.Parent = CoreGui end)
+if QuickGui.Parent ~= CoreGui then 
+QuickGui.Parent = LocalPlayer:WaitForChild("PlayerGui") 
+end
+QuickGui.Name = "MTRIET_QuickGUI"
+QuickGui.ResetOnSpawn = false
+
+QuickFrame.Name = "MainFrame"
+QuickFrame.Parent = QuickGui
+QuickFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+QuickFrame.BackgroundTransparency = 0.5
+QuickFrame.Position = UDim2.new(0, 10, 0.5, -60)
+QuickFrame.Size = UDim2.new(0, 130, 0, 135) 
+QuickFrame.Active = true
+QuickFrame.Draggable = true
+
+UIListLayout.Parent = QuickFrame
+UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+UIListLayout.Padding = UDim.new(0, 5)
+
+local function TaoNut(btn, text, color)
+btn.Parent = QuickFrame
+btn.BackgroundColor3 = color
+btn.Size = UDim2.new(1, 0, 0, 30)
+btn.Font = Enum.Font.GothamBold
+btn.Text = text
+btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+btn.TextSize = 11
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 5)
+corner.Parent = btn
+end
+
+TaoNut(BtnAura, "⚔️ Aura: OFF", Color3.fromRGB(200, 50, 50))
+ 
+TaoNut(BtnGhost, "👻 Ghost: OFF", Color3.fromRGB(100, 100, 100))
+TaoNut(BtnTelePlayer, "🚀 Bám Địch: OFF", Color3.fromRGB(100, 100, 100))
+TaoNut(BtnTeleWP, "📍 TP Tới Tọa Độ", Color3.fromRGB(200, 150, 0))
+
+BtnAura.MouseButton1Click:Connect(function()
+AuraOn = not AuraOn 
+if AuraOn then
+BtnAura.Text = "⚔️ Aura: ON"
+BtnAura.BackgroundColor3 = Color3.fromRGB(50, 200, 50)
+else
+BtnAura.Text = "⚔️ Aura: OFF"
+BtnAura.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+end
+end)
+
+BtnGhost.MouseButton1Click:Connect(function()
+invisOn = not invisOn 
+local char = LocalPlayer.Character
+if not char or not char:FindFirstChild("HumanoidRootPart") then return end
+
+if invisOn then
+BtnGhost.Text = "👻 Ghost: ON"
+BtnGhost.BackgroundColor3 = Color3.fromRGB(50, 200, 50)
+
+for _, p in ipairs(char:GetDescendants()) do if p:IsA("BasePart") and p.Name ~= "HumanoidRootPart" then p.Transparency = 0.5 end end
+local savedpos = char.HumanoidRootPart.CFrame
+task.wait()
+char:MoveTo(Vector3.new(-25.95, 84, 3537.55))
+task.wait(0.15)
+local Seat = Instance.new("Seat")
+Seat.Anchored = false; Seat.CanCollide = false; Seat.Name = "invischair"; Seat.Transparency = 1
+Seat.Position = Vector3.new(-25.95, 84, 3537.55)
+Seat.Parent = workspace
+local Weld = Instance.new("Weld", Seat)
+Weld.Part0 = Seat; Weld.Part1 = char:FindFirstChild("Torso") or char:FindFirstChild("UpperTorso")
+Seat.CFrame = savedpos
+else
+BtnGhost.Text = "👻 Ghost: OFF"
+BtnGhost.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+
+for _, p in ipairs(char:GetDescendants()) do if p:IsA("BasePart") and p.Name ~= "HumanoidRootPart" then p.Transparency = 0 end end
+if workspace:FindFirstChild("invischair") then workspace.invischair:Destroy() end
+if char:FindFirstChild("Humanoid") then char.Humanoid:ChangeState(Enum.HumanoidStateType.GettingUp) end
+end
+end)
+
+BtnTelePlayer.MouseButton1Click:Connect(function()
+HuntOn = not HuntOn
+if HuntOn then
+if TargetPlayerTP == "" or TargetPlayerTP == "Không có ai" then
+HuntOn = false
+Rayfield:Notify({Title = "Lỗi", Content = "Hãy mở Hub và chọn mục tiêu trước!", Duration = 3})
+return
+end
+BtnTelePlayer.Text = "🚀 Bám Địch: ON"
+BtnTelePlayer.BackgroundColor3 = Color3.fromRGB(50, 200, 50)
+
+HuntConnection = RunService.Heartbeat:Connect(function()
+if TargetPlayerTP ~= "" and TargetPlayerTP ~= "Không có ai" then
+local target = Players:FindFirstChild(TargetPlayerTP)
+local char = LocalPlayer.Character
+if target and target.Character and target.Character:FindFirstChild("HumanoidRootPart") and char and char:FindFirstChild("HumanoidRootPart") then
+local hrp = char.HumanoidRootPart
+local tCFrame = target.Character.HumanoidRootPart.CFrame
+hrp.Velocity = Vector3.zero
+if HuntDirection == "Sau Lưng" then
+hrp.CFrame = tCFrame * CFrame.new(0, 0, HuntDistance)
+elseif HuntDirection == "Trước Mặt" then
+hrp.CFrame = tCFrame * CFrame.new(0, 0, -HuntDistance) * CFrame.Angles(0, math.rad(180), 0)
+elseif HuntDirection == "Bên Trái" then
+hrp.CFrame = tCFrame * CFrame.new(-HuntDistance, 0, 0) * CFrame.Angles(0, math.rad(-90), 0)
+elseif HuntDirection == "Bên Phải" then
+hrp.CFrame = tCFrame * CFrame.new(HuntDistance, 0, 0) * CFrame.Angles(0, math.rad(90), 0)
+elseif HuntDirection == "Trên Đầu" then
+hrp.CFrame = tCFrame * CFrame.new(0, HuntDistance, 0) * CFrame.Angles(math.rad(-90), 0, 0)
+end
+end
+end
+end)
+else
+BtnTelePlayer.Text = "🚀 Bám Địch: OFF"
+BtnTelePlayer.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+if HuntConnection then HuntConnection:Disconnect() HuntConnection = nil end
+end
+end)
+
+BtnTeleWP.MouseButton1Click:Connect(function()
+local hrp = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+if hrp and SelectedWP and SelectedWP ~= "" and SelectedWP ~= "(Trống)" and Waypoints[SelectedWP] then
+hrp.CFrame = Waypoints[SelectedWP]
+Rayfield:Notify({Title = "Dịch Chuyển", Content = "Đã bay tới điểm: " .. SelectedWP, Duration = 2})
+else
+Rayfield:Notify({Title = "Lỗi", Content = "Hãy mở Hub và chọn 1 địa điểm trước!", Duration = 3})
+end
+end)
